@@ -126,7 +126,7 @@ export const ShowEditProducts = () => {
                 {totalPages > 1 && (
                     <div className="w-full flex justify-between items-center gap-3 mt-5">
                         <button
-                            className={`${currentPage === 1 && "opacity-50 cursor-not-allowed"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
+                            className={`${currentPage === 1 && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
                         >Anterior
@@ -135,7 +135,7 @@ export const ShowEditProducts = () => {
                         <span>{currentPage} de {totalPages}</span>
 
                         <button
-                            className={`${currentPage === totalPages && "opacity-50 cursor-not-allowed"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
+                            className={`${currentPage === totalPages && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
                             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages}
                         >Próxima
