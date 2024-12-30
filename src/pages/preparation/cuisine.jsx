@@ -192,7 +192,7 @@ export const Cousine = () => {
             <Toaster />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
                 {oreders.length ? oreders.map((e) => (
-                    <div key={e.order_id} className={` flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/20 rounded-xl shadow-md`}>
+                    <div key={e.order_id} className={`flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/20 border rounded-xl shadow-md`}>
 
                         <h3 className="font-bold">{e.name_client}</h3>
 
