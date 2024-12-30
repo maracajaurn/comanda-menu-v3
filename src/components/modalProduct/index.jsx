@@ -37,14 +37,19 @@ export const ModalProduct = ({ action, id }) => {
             image: value.image,
         };
 
+        // TODO: Adicionar campo erro ao objeto de retorno da api
         ProductService.create(data)
             .then((result) => {
                 setToggleView(false);
-                toast(result.message);
 
-                setValue(prev => ({ ...prev, "product_name": "" }));
-                setValue(prev => ({ ...prev, "price": 0 }));
-                setValue(prev => ({ ...prev, "category": "Bebida" }));
+                toast.success(result.message);
+
+                setValue(prev => ({
+                    ...prev,
+                    "product_name": "",
+                    "price": 0,
+                    "category": "Bebida",
+                }));
             })
             .catch((error) => { return toast.error(error.message); })
     };
