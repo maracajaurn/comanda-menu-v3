@@ -18,14 +18,14 @@ export const Cousine = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getOrders();
-        getSetting();
-
         const get_func = localStorage.getItem("func");
         
         if (get_func !== "admin" && get_func !== "cozinha") {
-            navigate("/login");
+            return navigate("/login");
         };
+
+        getOrders();
+        getSetting();
     }, []);
 
     // lista_novo_pedido
@@ -154,8 +154,9 @@ export const Cousine = () => {
     // buscar todos pedidos
     const getOrders = useCallback(async () => {
         try {
-            await OrderService.get_orders_by_status(1)
+            await OrderService.get_orders_from_cozinha()
                 .then((result) => {
+                    console.log(result);
                     setOrders(result);
                 })
                 .catch((error) => { return toast.error(error) });

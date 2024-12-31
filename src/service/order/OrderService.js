@@ -11,6 +11,30 @@ const get_orders_by_status = async (status) => {
     }
 };
 
+const get_orders_from_cozinha = async () => {
+
+    console.log("entrou no get_orders_from_cozinha");
+    try {
+        const res = await API.get("order/cozinha");
+        if (res.data) return res.data;
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
+};
+
+const get_orders_from_barmen = async () => {
+    try {
+        const res = await API.get("order/barmen");
+        if (res.data) return res.data;
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
+};
+
 const get_order_by_id = async (order_id) => {
     try {
         const res = await API.get(`order/${order_id}`);
@@ -69,6 +93,8 @@ const delete_order = async (order_id, check_id) => {
 export const OrderService = {
     get_orders_by_status,
     get_orders_by_check,
+    get_orders_from_cozinha,
+    get_orders_from_barmen,
     get_order_by_id,
     create_order,
     update_order,

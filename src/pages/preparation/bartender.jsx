@@ -3,27 +3,29 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
-import { CheckService } from "../../service/check/CheckService";
+import { OrderService } from "../../service/order/OrderService";
+import { SettingService } from "../../service/setting/SettingService";
 import socket from "../../service/socket";
 
 export const Bartender = () => {
 
-    const [allChecks, setAllChecks] = useState([]);
-    const [allProduts, setAllProduts] = useState([]);
+    const [oreders, setOrders] = useState([]);
+    const [setting, setSetting] = useState({
+        setting_id: 0,
+        estabishment_name: "",
+    });
     const navigate = useNavigate();
 
     useEffect(() => {
-        getAllChecks();
-    }, []);
-
-    useEffect(() => {
-        listAllProducts();
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "barmen") {
-            navigate("/login");
+            return navigate("/login");
         };
-    }, [allChecks]);
+
+        getOrders();
+        getSetting();
+    }, []);
 
     // lista_novo_pedido
     useEffect(() => {
@@ -44,7 +46,7 @@ export const Bartender = () => {
                     </div>
                 ), { duration: 1000000 });
             };
-            getAllChecks();
+            getOrders();
         });
 
         return () => { socket.off("lista_novo_pedido") };
@@ -66,7 +68,7 @@ export const Bartender = () => {
                     </div>
                 ), { duration: 1000000 });
             };
-            getAllChecks();
+            getOrders();
         });
 
         return () => { socket.off("produto_removido") };
@@ -89,7 +91,7 @@ export const Bartender = () => {
                     </div>
                 ), { duration: 10000 });
             };
-            getAllChecks();
+            getOrders();
 
             return () => { socket.off("alterar_quantidade") };
         });
@@ -105,22 +107,9 @@ export const Bartender = () => {
             ), { duration: 2000 });
         });
 
-        getAllChecks();
+        getOrders();
 
         return () => { socket.off("comanda_cancelada") };
-    }, []);
-
-    // buscar todas as comandas
-    const getAllChecks = useCallback(async () => {
-        try {
-            await CheckService.getAll()
-                .then((result) => {
-                    setAllChecks(result.data);
-                })
-                .catch((error) => { return toast.error(error) });
-        } catch (error) {
-            return toast.error(error);
-        };
     }, []);
 
     // comanda_finalizada
@@ -129,66 +118,66 @@ export const Bartender = () => {
             toast((t) => (
                 <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
             ), { duration: 2000 });
-            getAllChecks();
+            getOrders();
         });
 
         return () => { socket.off("comanda_finalizada") };
     }, []);
 
-    // juntar todos os pedidos em um único array
-    const listAllProducts = () => {
+    // buscar configurações
+    const getSetting = useCallback(async () => {
+        try {
+            await SettingService.get()
+                .then((result) => {
+                    setSetting(result[0]);
+                })
+                .catch((error) => { return toast.error(error.message) });
 
-        let listProducts = [];
+        } catch (error) {
+            return toast.error(error.message);
+        };
+    }, []);
 
-        allChecks.forEach(item => {
-
-            // Verificando se existe pedidos em aberto na comanda
-            // e status da comanda
-            const hasProductWithTrueStatus = item.products.some(product => product.status);
-
-            if (!hasProductWithTrueStatus || !item.status) return;
-            // === //
-
-            let data = {
-                _id: item._id,
-                status: item.status,
-                products: item.products,
-                nameClient: item.nameClient,
-            };
-
-            listProducts.push(data);
-
-        });
-        setAllProduts(listProducts);
-    };
+    // buscar todos pedidos
+    const getOrders = useCallback(async () => {
+        try {
+            await OrderService.get_orders_from_barmen()
+                .then((result) => {
+                    console.log(result);
+                    setOrders(result);
+                })
+                .catch((error) => { return toast.error(error) });
+        } catch (error) {
+            return toast.error(error);
+        };
+    }, []);
 
     // sinalizar pedido pronto
-    const orderReady = (indexCheck, nameProduct, nameClient, indexProduct, _idComanda) => {
+    const orderReady = (
+        order_id,
+        name_client,
+        name_product,
 
-        const newList = [...allProduts[indexCheck].products];
+        check_id,
+        quantity,
+        obs,
+    ) => {
 
-        // verificando se o indice é válido
-        if (indexProduct >= 0 && indexProduct < newList.length) {
-            newList[indexProduct] = { ...newList[indexProduct], status: false };
-        } else {
-            return toast.error("Índice de produto inválido");
+        const order = {
+            check_id,
+            status: 0,
+            quantity,
+            obs,
         };
 
         try {
-            const data = {
-                products: newList,
-                status: true,
-            };
-
-            CheckService.updateById(_idComanda, data)
-                .then((result) => {
-                    if (result.status) {
-                        getAllChecks();
-                        return socket.emit("produto_pronto", { nameClient, nameProduct });
-                    };
+            OrderService.update_order(order_id, order)
+                .then(() => {
+                    getOrders();
+                    toast.success("Pedido pronto!");
+                    return socket.emit("produto_pronto", { name_client, name_product });
                 })
                 .catch((error) => { return toast.error(error) });
-
         } catch (error) {
             return toast.error(error);
         };
@@ -199,37 +188,34 @@ export const Bartender = () => {
             <Navbar title="Barmen" isLogout />
             <Toaster />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                {allProduts.length > 0 ? allProduts.map((e, indexCheck) => (
-                    <div key={e._id} className={` flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/20 rounded-xl shadow-md`}>
+                {oreders.length ? oreders.map((e) => (
+                    <div key={e.order_id} className={`flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/20 border rounded-xl shadow-md`}>
 
-                        <h3 className="font-bold">{e.nameClient}</h3>
+                        <h3 className="font-bold">{e.name_client}</h3>
 
-                        {e.products.map((item, index) => (
-                            <div key={index} className="flex justify-between items-center w-full">
+                        <div className="flex justify-between items-center w-full">
 
-                                {item.category === "Drink" && item.status ? (
+                            <div className="flex justify-between items-center w-full">
+                                <div className="flex flex-col mr-1">
+                                    <h3 className="text-slate-900 font-semibold flex gap-1">{e.quantity}x - {e.product_name}</h3>
 
-                                    <div className="flex justify-between items-center w-full mb-5 border-b-2 pb-2">
+                                    {e.obs && (
+                                        <h3 className="text-slate-500 text-[15px] font-semibold">
+                                            <span className="font-bold text-[#EB8F00]">OBS: </span>{e.obs}
+                                        </h3>
+                                    )}
+                                </div>
 
-                                        <div className="flex flex-col mr-1">
-                                            <h3 className="text-slate-900 font-semibold flex gap-1">{item.qnt}x - {item.nameProduct}</h3>
-
-                                            <h3 className="text-slate-500 text-[15px] font-semibold">{item.obs !== undefined && item.obs !== "" ? `OBS: ${item.obs}` : ""}</h3>
-                                        </div>
-
-                                        <div className=" flex gap-3 border-l-2 pl-3 text-white">
-                                            <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
-                                                disabled={!item.status}
-                                                onClick={() => orderReady(indexCheck, item.nameProduct, e.nameClient, index, e._id)}
-                                            >{item.status ? "Pronto" : "Finalizado"}</button>
-                                        </div>
-                                    </div>
-                                ) : false}
+                                <div className=" flex gap-3 border-l-2 pl-3 text-white">
+                                    <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                        disabled={!e.status}
+                                        onClick={() => orderReady(e.order_id, e.name_client, e.name_product, e.check_id, e.quantity, e.obs)}
+                                    >{e.status ? "Pronto" : "Finalizado"}</button>
+                                </div>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 )) : (
-
                     <div className="flex justify-between items-center my-3 px-5 py-3 w-full rounded-xl shadow-md">
 
                         <div className="flex flex-col">
