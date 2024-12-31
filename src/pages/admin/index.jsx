@@ -30,9 +30,13 @@ export const Admin = () => {
     useEffect(() => {
         getAllCashier();
         const today = new Date().toLocaleDateString("pt-BR");
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin") {
+            navigate("/login");
+        };
 
         setData(today);
-
     }, []);
 
     const getAllCashier = useCallback(async () => {
@@ -40,9 +44,9 @@ export const Admin = () => {
             .then((result) => {
                 setCashier(result[0]);
             })
-            .catch ((error) => {
-                 return toast.error(error.message);
-             });
+            .catch((error) => {
+                return toast.error(error.message);
+            });
     }, []);
 
     const closeCashier = () => {

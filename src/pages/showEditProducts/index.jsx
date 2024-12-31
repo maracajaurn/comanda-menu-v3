@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
@@ -16,12 +17,18 @@ export const ShowEditProducts = () => {
     const [idProduct, setIdProduct] = useState(null);
     const [action, setAction] = useState(null);
 
+    const navigate = useNavigate();
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
     useEffect(() => {
         getAllProducts();
+        const get_func = localStorage.getItem("func");
+        if (get_func !== "admin") {
+            navigate("/login");
+        };
     }, [toggleView]);
 
     const blobToBase64 = (blob) => {

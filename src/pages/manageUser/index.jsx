@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
@@ -26,8 +27,14 @@ export const ManageUser = () => {
         color: ""
     });
 
+    const navigate = useNavigate();
+    
     useEffect(() => {
         getAllUsers();
+        const get_func = localStorage.getItem("func");
+        if (get_func !== "admin") {
+            navigate("/login");
+        };
     }, [toggleView]);
 
     useEffect(() => {
@@ -123,8 +130,6 @@ export const ManageUser = () => {
             color: setting.color
         };
 
-
-
         if (!setting.setting_id) {
             return toast.error("Configurações não carregadas.");
         };
@@ -162,8 +167,8 @@ export const ManageUser = () => {
                     <ModalUser action={action} id={id} />
                     <Toaster />
 
-                    <div className="flex flex-col gap-1 mt-10 max-w-[300px]">
-                        <h2 className="w-[300px] text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                    <div className="w-full flex items-center flex-col gap-1 mt-10">
+                        <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
                         >Usuários</h2>
 
                         <div className="mb-5 overflow-x-auto shadow-md sm:rounded-lg rounded-md">
@@ -216,13 +221,13 @@ export const ManageUser = () => {
                             </table>
                         </div>
                     </div>
-                    <button className="flex gap-1 justify-center w-[250px] p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                    <button className="w-full flex items-center gap-1 justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
                         onClick={() => handleModal("new")}
                     ><Plus />Cadastrar usuário</button>
                 </div>
 
                 <div>
-                    <h2 className="w-[300px] text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                    <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
                     >Configurações</h2>
 
                     <div className="mt-5 flex flex-col gap-6">
@@ -303,7 +308,7 @@ export const ManageUser = () => {
                         </label>
 
                         <button
-                            className="flex gap-1 justify-center w-[250px] p-3 font-semibold text-white self-center mt-5
+                            className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
                             rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
                             onClick={() => updateSetting()}
                         ><Reflesh />Atualizar configurações</button>
