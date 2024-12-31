@@ -26,6 +26,7 @@ export const ShowEditProducts = () => {
     useEffect(() => {
         getAllProducts();
         const get_func = localStorage.getItem("func");
+        
         if (get_func !== "admin") {
             navigate("/login");
         };

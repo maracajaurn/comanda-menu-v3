@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
@@ -9,6 +10,7 @@ export const Bartender = () => {
 
     const [allChecks, setAllChecks] = useState([]);
     const [allProduts, setAllProduts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getAllChecks();
@@ -16,6 +18,11 @@ export const Bartender = () => {
 
     useEffect(() => {
         listAllProducts();
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin" && get_func !== "barmen") {
+            navigate("/login");
+        };
     }, [allChecks]);
 
     // lista_novo_pedido

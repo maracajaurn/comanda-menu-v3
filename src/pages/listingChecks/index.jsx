@@ -17,6 +17,12 @@ export const ListingChecks = () => {
 
     useEffect(() => {
         getCheckByStatus();
+
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin" && get_func !== "garcom") {
+            navigate("/login");
+        };
     }, [toggleView]);
 
     // lista_novo_pedido

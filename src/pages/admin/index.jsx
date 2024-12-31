@@ -30,6 +30,7 @@ export const Admin = () => {
     useEffect(() => {
         getAllCashier();
         const today = new Date().toLocaleDateString("pt-BR");
+        
         const get_func = localStorage.getItem("func");
         
         if (get_func !== "admin") {

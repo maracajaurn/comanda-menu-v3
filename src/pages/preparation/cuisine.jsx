@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
@@ -14,9 +15,17 @@ export const Cousine = () => {
         estabishment_name: "",
     });
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         getOrders();
         getSetting();
+
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin" && get_func !== "cozinha") {
+            navigate("/login");
+        };
     }, []);
 
     // lista_novo_pedido

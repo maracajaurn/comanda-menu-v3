@@ -31,7 +31,9 @@ export const ManageUser = () => {
     
     useEffect(() => {
         getAllUsers();
+
         const get_func = localStorage.getItem("func");
+        
         if (get_func !== "admin") {
             navigate("/login");
         };

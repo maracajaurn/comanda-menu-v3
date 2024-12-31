@@ -25,6 +25,12 @@ export const Waiter = () => {
     useEffect(() => {
         setToggleView(false);
         getCheckById();
+
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin" && get_func !== "garcom") {
+            navigate("/login");
+        };
     }, [totalPrice, id]);
 
     // lista_novo_pedido
