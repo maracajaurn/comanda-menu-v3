@@ -28,16 +28,15 @@ export const Admin = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getAllCashier();
-        const today = new Date().toLocaleDateString("pt-BR");
-        
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin") {
-            navigate("/login");
+            return navigate("/login");
         };
 
+        const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
+        getAllCashier();
     }, []);
 
     const getAllCashier = useCallback(async () => {
@@ -101,19 +100,31 @@ export const Admin = () => {
             <Navbar title={"Resumo do dia"} isLogout />
             <div className="w-full pt-5 flex flex-col items-center">
                 <Toaster />
-                <div className="flex justify-between bg-slate-100/20 py-5 px-1 w-[97%] my-10 rounded-md shadow-md gap-1">
+                <div className="flex justify-center flex-wrap bg-slate-100/20 py-5 px-1 w-[97%] my-10 rounded-md shadow-md gap-1">
+                    <div className="w-full flex justify-center gap-1">
+                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/produtos")}
+                        >Produtos</button>
 
-                    <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
-                        onClick={() => navigate("/produtos")}
-                    >Produtos</button>
+                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/usuarios")}
+                        >Configurações</button>
 
-                    <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
-                        onClick={() => navigate("/usuarios")}
-                    >Configurações</button>
+                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/garcom/comandas")}
+                        >Comandas</button>
+                    </div>
 
-                    <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
-                        onClick={() => navigate("/garcom/comandas")}
-                    >Comandas</button>
+                    <div className="w-full flex justify-center gap-1">
+
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/cozinha/producao")}
+                        >Cozinha</button>
+
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/barmen/producao")}
+                        >Bar</button>
+                    </div>
                 </div>
 
                 <main className="w-full my-10 pb-10 flex flex-col items-center gap-14" id="screenshotCashier">

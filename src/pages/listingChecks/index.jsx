@@ -16,13 +16,13 @@ export const ListingChecks = () => {
     const { toggleView, setToggleView } = useToggleView();
 
     useEffect(() => {
-        getCheckByStatus();
-
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "garcom") {
-            navigate("/login");
+            return navigate("/login");
         };
+
+        getCheckByStatus();
     }, [toggleView]);
 
     // lista_novo_pedido
@@ -148,8 +148,9 @@ export const ListingChecks = () => {
     const getCheckByStatus = useCallback(async () => {
         try {
             await CheckService.getByStatus(1)
-                .then((result) => { 
-                    setRows(result) })
+                .then((result) => {
+                    setRows(result)
+                })
                 .catch((error) => { return toast.error(error); });
         } catch (error) {
             return toast.error(error);

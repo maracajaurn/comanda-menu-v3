@@ -35,16 +35,15 @@ export const CloseCheck = () => {
     const [visibilityCalc, setVisibilityCal] = useState(false);
 
     useEffect(() => {
-        getCheck();
-        getOrders();
-        getSetting();
-
         const get_func = localStorage.getItem("func");
         
         if (get_func !== "admin" && get_func !== "garcom") {
-            navigate("/login");
+            return navigate("/login");
         };
-        
+
+        getCheck();
+        getOrders();
+        getSetting();
     }, []);
 
     const getCheck = useCallback(async () => {

@@ -35,15 +35,15 @@ export const ListingProducts = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        setToggleView(false);
-        getAllProducts();
-        getCheckById();
-
         const get_func = localStorage.getItem("func");
         
         if (get_func !== "admin" && get_func !== "garcom") {
-            navigate("/login");
+            return navigate("/login");
         };
+
+        setToggleView(false);
+        getAllProducts();
+        getCheckById();
     }, []);
 
     const getAllProducts = useCallback(async () => {

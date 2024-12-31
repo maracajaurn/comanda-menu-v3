@@ -12,6 +12,12 @@ export const ClosedChecks = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const get_func = localStorage.getItem("func");
+        
+        if (get_func !== "admin" && get_func !== "garcom") {
+            return navigate("/login");
+        };
+        
         getAllChecks();
     }, []);
 

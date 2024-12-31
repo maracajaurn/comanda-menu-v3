@@ -24,12 +24,13 @@ export const ShowEditProducts = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        getAllProducts();
         const get_func = localStorage.getItem("func");
         
         if (get_func !== "admin") {
-            navigate("/login");
+            return navigate("/login");
         };
+
+        getAllProducts();
     }, [toggleView]);
 
     const blobToBase64 = (blob) => {
