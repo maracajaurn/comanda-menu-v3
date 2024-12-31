@@ -12,53 +12,40 @@ export const Login = () => {
 
     const [value, setValue] = useState({
         email: "",
-        pass: ""
+        password: ""
     });
 
     const [setting, setSetting] = useState({
-        establishmentName: "",
+        estabishment_name: "",
     });
+
+    const handleInput = (field, event) => {
+        setValue(prev => ({ ...prev, [field]: event.target.value }));
+    };
 
     useEffect(() => {
         getSetting();
     }, []);
 
-    const getSetting =  useCallback(() => {
+    const getSetting = useCallback(() => {
         SettingService.get()
             .then((result) => {
-                setSetting(result);
+                setSetting(result[0]);
             })
-            .catch((error) => { return toast.error(error) });
+            .catch((error) => { return toast.error(error.message) });
     }, []);
-
-    const handleInput = (onChange, e) => {
-        switch (onChange) {
-            case "email":
-                setValue(prev => ({ ...prev, email: e.target.value }))
-                break;
-
-            case "pass":
-                setValue(prev => ({ ...prev, pass: e.target.value }))
-                break;
-
-            default: return;
-        };
-    };
 
     const login = async () => {
 
-        if (value.email === "" || value.pass === "") {
+        if (value.email === "" || value.password === "") {
             return toast.error("Preencha todos os campos corretamente!");
         };
 
-        try {
-
-            await LoginService.login(value)
-                .then((result) => {
-
-                    if (!result.status) {
-                        return toast.error(result.message)
-                    };
+        await LoginService.login(value)
+            .then((result) => {
+                if (result.status) {
+                    localStorage.setItem("token", result.token);
+                    localStorage.setItem("func", result.func);
 
                     if (result.func === "barmen" || result.func === "cozinha") {
                         navigate(`/${result.func}/producao`);
@@ -70,22 +57,16 @@ export const Login = () => {
                         navigate(`/${result.func}/comandas`);
                         return;
                     };
+                };
 
-                    setValue({
-                        email: "",
-                        pass: ""
-                    }); 
-                })
-                .catch((error) => { return toast.error(error) })
-
-        } catch (error) {
-            return toast.error(error)
-        };
+                return toast.error(result.message);
+            })
+            .catch((error) => { return toast.error(error.message) });
     };
 
     return (
         <div className="h-full w-full">
-            <Navbar title={setting.establishmentName} />
+            <Navbar title={setting.estabishment_name} />
             <div className="h-full flex justify-center items-center flex-col">
                 <Toaster />
                 <div className="mb-4">
@@ -110,8 +91,8 @@ export const Login = () => {
                             name="pass"
                             className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Senha"
-                            onChange={(e) => handleInput("pass", e)}
-                            value={value.pass}
+                            onChange={(e) => handleInput("password", e)}
+                            value={value.password}
                         />
                     </label>
                 </div>
