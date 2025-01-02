@@ -15,7 +15,7 @@ const get_orders_from_cozinha = async () => {
 
     console.log("entrou no get_orders_from_cozinha");
     try {
-        const res = await API.get("order/cozinha");
+        const res = await API.get("order/cuisine/1");
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -26,7 +26,7 @@ const get_orders_from_cozinha = async () => {
 
 const get_orders_from_barmen = async () => {
     try {
-        const res = await API.get("order/barmen");
+        const res = await API.get("order/barmen/1");
         if (res.data) return res.data;
 
         return new Error(res.message);
