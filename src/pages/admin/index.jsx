@@ -102,20 +102,19 @@ export const Admin = () => {
                 <Toaster />
                 <div className="flex justify-center flex-wrap bg-slate-100/20 py-5 px-1 w-[97%] my-10 rounded-md shadow-md gap-1">
                     <div className="w-full flex justify-center gap-1">
-                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                             onClick={() => navigate("/produtos")}
                         >Produtos</button>
 
-                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                             onClick={() => navigate("/usuarios")}
                         >Configurações</button>
-
-                        <button className="w-1/3 font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
-                            onClick={() => navigate("/garcom/comandas")}
-                        >Comandas</button>
                     </div>
 
                     <div className="w-full flex justify-center gap-1">
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/garcom/comandas")}
+                        >Comandas</button>
 
                         <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                             onClick={() => navigate("/cozinha/producao")}
