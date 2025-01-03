@@ -7,6 +7,7 @@ import { Navbar } from "../../components";
 import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons";
 import { CashierService } from "../../service/cashier/CashierService";
 import { CheckService } from "../../service/check/CheckService";
+import socket from "../../service/socket";
 
 export const Admin = () => {
 
@@ -37,6 +38,15 @@ export const Admin = () => {
         const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
         getAllCashier();
+    }, []);
+
+    // check_finished
+    useEffect(() => {
+        socket.on("check_finished", () => {
+            getAllCashier();
+        });
+
+        return () => { socket.off("check_finished") };
     }, []);
 
     const getAllCashier = useCallback(async () => {
