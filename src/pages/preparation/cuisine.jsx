@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
+
+import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
 import { SettingService } from "../../service/setting/SettingService";
-import socket from "../../service/socket";
 
 export const Cousine = () => {
 

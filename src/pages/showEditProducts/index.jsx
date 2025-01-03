@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
-import { useToggleView } from "../../contexts";
 import { ModalProduct } from "../../components";
+
+import { useToggleView } from "../../contexts";
+
 import { Delete, Edit, Close } from "../../libs/icons";
 import { ProductService } from "../../service/product/ProductService";
 

@@ -1,13 +1,16 @@
 import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+
 import html2canvas from 'html2canvas';
 
 import { Navbar } from "../../components";
+
 import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons";
-import { CashierService } from "../../service/cashier/CashierService";
-import { CheckService } from "../../service/check/CheckService";
+
 import socket from "../../service/socket";
+import { CheckService } from "../../service/check/CheckService";
+import { CashierService } from "../../service/cashier/CashierService";
 
 export const Admin = () => {
 

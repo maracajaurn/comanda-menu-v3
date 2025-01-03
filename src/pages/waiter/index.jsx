@@ -3,11 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { useToggleView } from "../../contexts";
+
 import { Navbar, Footer } from "../../components";
+
 import { Delete, Plus, Minus } from "../../libs/icons";
+
+import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
-import socket from "../../service/socket";
 
 export const Waiter = () => {
 

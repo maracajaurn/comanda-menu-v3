@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
-import { useToggleView } from "../../contexts";
-import { Delete, Edit, Plus, Reflesh } from "../../libs/icons";
-import { UsuarioService } from "../../service/usuario/UsuarioService";
-import { SettingService } from "../../service/setting/SettingService";
 import { ModalUser } from "../../components/modalUser";
+
+import { useToggleView } from "../../contexts";
+
+import { Delete, Edit, Plus, Reflesh } from "../../libs/icons";
+
+import { SettingService } from "../../service/setting/SettingService";
+import { UsuarioService } from "../../service/usuario/UsuarioService";
 
 export const ManageUser = () => {
     const { toggleView, setToggleView } = useToggleView();

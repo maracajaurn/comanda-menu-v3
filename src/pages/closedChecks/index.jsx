@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 import { Plus } from "../../libs/icons";
+
 import { Navbar } from "../../components";
-import toast, { Toaster } from "react-hot-toast";
+
 import { CheckService } from "../../service/check/CheckService";
 
 export const ClosedChecks = () => {

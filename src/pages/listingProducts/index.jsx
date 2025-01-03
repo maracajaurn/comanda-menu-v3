@@ -3,12 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components/navbar";
+import { ListinProductsForCheck } from "../../components/listinProductsForCheck";
+
 import { Plus, Delete, Minus, Close, ClipBoard } from "../../libs/icons";
-import { ProductService } from "../../service/product/ProductService";
+
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
+import { ProductService } from "../../service/product/ProductService";
+
 import socket from "../../service/socket";
-import { ListinProductsForCheck } from "../../components/listinProductsForCheck";
 import { useToggleView } from "../../contexts"
 
 export const ListingProducts = () => {
@@ -232,7 +235,7 @@ export const ListingProducts = () => {
                 {totalPages > 1 && (
                     <div className="w-full flex justify-between items-center gap-3 mt-5">
                         <button
-                            className={`${currentPage === 1 && "opacity-50 cursor-not-allowed"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
+                            className={`${currentPage === 1 && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
                         >Anterior
@@ -241,7 +244,7 @@ export const ListingProducts = () => {
                         <span>{currentPage} de {totalPages}</span>
 
                         <button
-                            className={`${currentPage === totalPages && "opacity-50 cursor-not-allowed"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
+                            className={`${currentPage === totalPages && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
                             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages}
                         >Próxima
