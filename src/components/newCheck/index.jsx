@@ -55,12 +55,13 @@ export const NewCheck = ({ is_client = false }) => {
                     if (result.status) {
 
                         if (is_client) {
-                            localStorage.setItem("check_id", result.check_id[0].check_id);
+                            localStorage.setItem("check_id", result.check_id);
 
-                            navigate(`/garcom/comanda/${result.check_id[0].check_id}`);
+                            navigate(`/garcom/comanda/${result.check_id}`);
                         } else {
                             setToggleView(false);
-                            navigate(`/garcom/comanda/${result.check_id[0].check_id}`);
+                            localStorage.removeItem("check_id");
+                            navigate(`/garcom/comanda/${result.check_id}`);
                         };
 
                         socket.emit("nova_comanda", data);
