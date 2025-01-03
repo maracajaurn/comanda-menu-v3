@@ -110,7 +110,7 @@ export const Admin = () => {
             <Navbar title={"Resumo do dia"} isLogout />
             <div className="w-full pt-5 flex flex-col items-center">
                 <Toaster />
-                <div className="flex justify-center flex-wrap bg-slate-100/20 py-5 px-1 w-[97%] my-10 rounded-md shadow-md gap-1">
+                <div className="flex justify-center flex-wrap bg-slate-100/50 py-5 px-1 w-[97%] my-10 rounded-md shadow-md gap-1">
                     <div className="w-full flex justify-center gap-1">
                         <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                             onClick={() => navigate("/produtos")}
@@ -143,12 +143,12 @@ export const Admin = () => {
 
                         <p className="text-2xl text-green-600">Receita</p>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <Money />
                             <div className="text-end">
                                 <p className="text-slate-400">Receita Total Gerada</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.total_value).toFixed(2).replace(".", ",") || "0,00"}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.total_value || 0).toFixed(2).replace(".", ",")}</p>
                             </div>
                         </div>
                     </div>
@@ -156,7 +156,7 @@ export const Admin = () => {
                     <div className="flex gap-10 flex-col">
                         <p className="text-2xl text-orange-600">Vendas</p>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20 cursor-pointer"
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50 cursor-pointer"
                             onClick={() => navigate("/comandasFinalizadas")}
                         >
 
@@ -167,7 +167,7 @@ export const Admin = () => {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <Grafic />
                             <div className="text-end">
@@ -180,39 +180,39 @@ export const Admin = () => {
                     <div className="flex gap-10 flex-col">
                         <p className="text-2xl text-orange-600">Vendas por categoria</p>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <Grafic />
                             <div className="text-end">
                                 <p className="text-slate-400">Pix</p>
-                                <p className="text-2xl">R$ {Number(cashier.pix).toFixed(2).replace(".", ",") || "0,00"}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.pix || 0).toFixed(2).replace(".", ",")}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <MoneyF />
                             <div className="text-end">
                                 <p className="text-slate-400">Dinheiro</p>
-                                <p className="text-2xl">R$ {Number(cashier.cash).toFixed(2).replace(".", ",") || "0,00"}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.cash || 0).toFixed(2).replace(".", ",")}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <Card />
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Crédito</p>
-                                <p className="text-2xl">R$ {Number(cashier.credit).toFixed(2).replace(".", ",") || "0,00"}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.credit || 0).toFixed(2).replace(".", ",")}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/20">
+                        <div className="flex items-center gap-5 min-w-[300px] rounded-lg shadow-md px-5 justify-between bg-slate-100/50">
 
                             <Card />
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Débito</p>
-                                <p className="text-2xl">R$ {Number(cashier.debit).toFixed(2).replace(".", ",") || "0,00"}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.debit || 0).toFixed(2).replace(".", ",")}</p>
                             </div>
                         </div>
                     </div>
