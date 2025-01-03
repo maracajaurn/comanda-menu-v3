@@ -249,7 +249,7 @@ export const Waiter = () => {
             <div className="w-[95%] min-h-[85vh] pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
                 <Toaster />
                 {listProducts.map((e, index) => (
-                    <div key={index} className="flex justify-between items-center px-3 py-1 w-full bg-slate-100/20 rounded-xl shadow-md">
+                    <div key={index} className="flex justify-between items-center px-3 py-1 w-full bg-slate-100/50 rounded-xl shadow-md">
                         <div className="flex flex-col mr-1">
                             <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x - </span> {e.product_name}</h3>
 

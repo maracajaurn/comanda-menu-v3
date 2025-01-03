@@ -185,9 +185,7 @@ export const ListingProducts = () => {
                 </div>
 
                 {currentItems.map((item, index) => (
-                    <div key={index} className={`
-                    ${[].findIndex(product => product.product_id === item.product_id) !== -1 ? "bg-green-100/30" : ""}
-                    flex justify-between items-center px-3 py-1 w-full rounded-xl shadow-md`}>
+                    <div key={index} className={`flex justify-between items-center px-3 py-1 w-full rounded-xl bg-slate-100/50 shadow-md`}>
 
                         <div className="w-2/3 flex flex-col items-start">
                             <h3 className="text-slate-900 font-bold">{item.product_name}</h3>

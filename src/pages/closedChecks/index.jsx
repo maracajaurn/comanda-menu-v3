@@ -40,14 +40,14 @@ export const ClosedChecks = () => {
             <div className="w-[95%] min-h-[90vh] py-3 px-5 rounded-xl flex items-center flex-col gap-5">
                 <Toaster />
                 {rows.length > 0 ? rows.map((e) => (
-                    <div className={` ${e.status ? "hidden" : "flex"}  justify-between items-center my-3 px-5 py-3 w-full rounded-xl bg-slate-100/20 shadow-md`}
-                        key={e._id}>
+                    <div className={` ${e.status ? "hidden" : "flex"}  justify-between items-center my-3 px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
+                        key={e.check_id}>
 
                         <div className="flex flex-col">
                             <h3 className="text-slate-900 font-bold">{e.name_client}</h3>
                             <h3 className="text-slate-400 font-semibold">{e.obs}</h3>
                             <h4 className="text-slate-500 text-[15px] font-semibold">
-                                <span className="font-bold text-[#EB8F00]">Total:</span> R$ {e.total_value.toFixed(2).replace(".", ",")}</h4>
+                                <span className="font-bold text-[#EB8F00]">Total:</span> R$ {parseFloat(e.total_value || 0).toFixed(2).replace(".", ",")}</h4>
                             <p className="text-slate-500 text-[15px] font-semibold">Pagamento:
                                 <span className="font-bold text-[#EB8F00]"> {
                                     e.pay_form === "credit" ? "Crédito" :

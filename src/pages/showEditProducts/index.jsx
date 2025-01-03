@@ -113,7 +113,7 @@ export const ShowEditProducts = () => {
                 )}
 
                 {currentItems.map((e) => (
-                    <div key={e.product_id} className="border flex justify-between gap-3 bg-slate-100/20 items-center px-3 py-2 w-full rounded-xl shadow-md">
+                    <div key={e.product_id} className="flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 w-full rounded-xl shadow-md">
                         <div className="w-2/3 flex flex-col items-start">
                             <h3 className="text-slate-900 font-bold">{e.product_name}</h3>
                             <h3 className="text-slate-500 text-[15px] font-semibold">R$ {e.price.toFixed(2).replace(".", ",")}</h3>
