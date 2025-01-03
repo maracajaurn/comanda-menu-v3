@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const getAll = async () => {
     try {
-        const res = await API.get("/product");
+        const res = await API.get("/api/product");
 
         if (res.data) return res.data;
 
@@ -14,7 +14,7 @@ const getAll = async () => {
 
 const getByPagenated = async (limit, page) => {
     try {
-        const res = await API.get(`/product/paginated?limit=${limit}&page=${page}`);
+        const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
 
         if (res.data) return res.data;
 
@@ -26,7 +26,7 @@ const getByPagenated = async (limit, page) => {
 
 const getById = async (id) => {
     try {
-        const res = await API.get(`/product/${id}`);
+        const res = await API.get(`/api/product/${id}`);
 
         if (res.data) return res.data;
 
@@ -38,7 +38,7 @@ const getById = async (id) => {
 
 const create = async (data) => {
     try {
-        const res = await API.post("/product", data);
+        const res = await API.post("/api/product", data);
 
         if (res.data) return res.data;
 
@@ -51,11 +51,11 @@ const create = async (data) => {
 const updateById = async (id, data) => {
     try {
 
-        const res = await API.put(`/product/${id}`, data);
+        const res = await API.put(`/api/product/${id}`, data);
 
         if (res.data) return res.data;
 
-        return new Error("Erro ao atualizar a product!");
+        return new Error("Erro ao atualizar a api/product!");
     } catch (error) {
         return new Error(error.message);
     };
@@ -63,11 +63,11 @@ const updateById = async (id, data) => {
 
 const deleteById = async (id) => {
     try {
-        const res = await API.delete(`/product/${id}`);
+        const res = await API.delete(`/api/product/${id}`);
 
         if (res.data) return res.data;
 
-        return new Error("Erro ao deletar product!");
+        return new Error("Erro ao deletar api/product!");
     } catch (error) {
         return new Error(error.message);
     };

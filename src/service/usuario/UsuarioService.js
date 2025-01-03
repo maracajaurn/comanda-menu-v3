@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const getAll = async () => {
     try {
-        const res = await API.get("/user");
+        const res = await API.get("/api/user");
         return res.data;
     } catch (error) {
         return new Error(error);
@@ -11,7 +11,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
     try {
-        const res = await API.get(`/user/${id}`);
+        const res = await API.get(`/api/user/${id}`);
 
         if (res.data) return res.data;
 
@@ -23,7 +23,7 @@ const getById = async (id) => {
 
 const create = async (data) => {
     try {
-        const res = await API.post("/user", data);
+        const res = await API.post("/api/user", data);
 
         if (res.data) return res.data;
 
@@ -36,7 +36,7 @@ const create = async (data) => {
 const updateById = async (id, data) => {
     try {
 
-        const res = await API.put(`/user/${id}`, data);
+        const res = await API.put(`/api/user/${id}`, data);
 
         if (res.data) return res.data;
 
@@ -48,7 +48,7 @@ const updateById = async (id, data) => {
 
 const deleteById = async (id) => {
     try {
-        const res = await API.delete(`/user/${id}`);
+        const res = await API.delete(`/api/user/${id}`);
 
         if (res.data) return res.data;
 

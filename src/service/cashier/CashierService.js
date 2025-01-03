@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const get = async () => {
     try {
-        const res = await API.get("/cashier");
+        const res = await API.get("/api/cashier");
 
         if (res.data) {
             return res.data;
@@ -16,7 +16,7 @@ const get = async () => {
 
 const getById = async (id) => {
     try {
-        const res = await API.get(`/cashier/${id}`);
+        const res = await API.get(`/api/cashier/${id}`);
 
         if (res.data) {
             return res.data;
@@ -30,7 +30,7 @@ const getById = async (id) => {
 
 const getByStatus = async (status) => {
     try {
-        const res = await API.get(`/cashier/status/${status}`);
+        const res = await API.get(`/api/cashier/status/${status}`);
 
         if (res.data) {
             return res.data;
@@ -44,7 +44,7 @@ const getByStatus = async (status) => {
 
 const update = async (id, data) => {
     try {
-        const res = await API.put(`/cashier/${id}`, data);
+        const res = await API.put(`/api/cashier/${id}`, data);
 
         if (res.data) {
             return res.data;
@@ -60,7 +60,7 @@ const update = async (id, data) => {
 
 const deleteById = async (id) => {
     try {
-        const res = await API.delete(`/cashier/${id}`);
+        const res = await API.delete(`/api/cashier/${id}`);
 
         if (res.data) {
             return res.data;

@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const  get = async () => {
     try {
-        const res = await API.get("/setting");
+        const res = await API.get("/api/setting");
 
         if (res.data) {
             return res.data;
@@ -16,7 +16,7 @@ const  get = async () => {
 
 const update = async (setting_id, data) => {
     try {
-        const res = await API.put(`/setting/${setting_id}`, data);
+        const res = await API.put(`/api/setting/${setting_id}`, data);
 
         if (res.data) {
             return res.data;

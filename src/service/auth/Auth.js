@@ -8,7 +8,7 @@ export const useAuth = () => {
         const fetchAuth = async () => {
             try {
                 
-                const response = await API.get("/check", {
+                const response = await API.get("/api/check", {
                     withCredentials: true,
                 });
 

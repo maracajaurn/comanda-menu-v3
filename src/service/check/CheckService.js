@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const getAll = async () => {
     try {
-        const res = await API.get("/check");
+        const res = await API.get("/api/check");
 
         if (res.data) return res.data;
 
@@ -14,7 +14,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
     try {
-        const res = await API.get(`/check/${id}`);
+        const res = await API.get(`/api/check/${id}`);
 
         if (res.data) return res.data;
 
@@ -26,7 +26,7 @@ const getById = async (id) => {
 
 const getByStatus = async (status) => {
     try {
-        const res = await API.get(`/check/status/${status}`);
+        const res = await API.get(`/api/check/status/${status}`);
 
         if (res.data) return res.data;
 
@@ -39,7 +39,7 @@ const getByStatus = async (status) => {
 const create = async (data) => {
 
     try {
-        const res = await API.post("/check", data);
+        const res = await API.post("/api/check", data);
 
         if (res.data) return res.data;
 
@@ -52,7 +52,7 @@ const create = async (data) => {
 const updateById = async (id, data) => {
     try {
 
-        const res = await API.put(`/check/${id}`, data);
+        const res = await API.put(`/api/check/${id}`, data);
 
         if (res.data) return res.data;
 
@@ -64,7 +64,7 @@ const updateById = async (id, data) => {
 
 const closeCheck = async (pay_form, check_id) => {
     try {
-        const res = await API.put(`/check/close/${check_id}`, { pay_form });
+        const res = await API.put(`/api/check/close/${check_id}`, { pay_form });
 
         if (res.data) {
             return res.data;
@@ -78,7 +78,7 @@ const closeCheck = async (pay_form, check_id) => {
 
 const deleteById = async (id) => {
     try {
-        const res = await API.delete(`/check/${id}`);
+        const res = await API.delete(`/api/check/${id}`);
 
         if (res.data) return res.data;
 
@@ -90,7 +90,7 @@ const deleteById = async (id) => {
 
 const deleteAll = async () => {
     try {
-        const res = await API.delete(`/check`);
+        const res = await API.delete(`/api/check`);
 
         if (res.data) return res.data;
 

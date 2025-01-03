@@ -2,7 +2,7 @@ import { API } from "../axiosConfig";
 
 const get_orders_by_status = async (status) => {
     try {
-        const res = await API.get(`order/status/${status}`);
+        const res = await API.get(`/api/order/status/${status}`);
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -12,10 +12,8 @@ const get_orders_by_status = async (status) => {
 };
 
 const get_orders_from_cozinha = async () => {
-
-    console.log("entrou no get_orders_from_cozinha");
     try {
-        const res = await API.get("order/cuisine/1");
+        const res = await API.get("/api/order/cuisine/1");
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -26,7 +24,7 @@ const get_orders_from_cozinha = async () => {
 
 const get_orders_from_barmen = async () => {
     try {
-        const res = await API.get("order/barmen/1");
+        const res = await API.get("/api/order/barmen/1");
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -37,7 +35,7 @@ const get_orders_from_barmen = async () => {
 
 const get_order_by_id = async (order_id) => {
     try {
-        const res = await API.get(`order/${order_id}`);
+        const res = await API.get(`/api/order/${order_id}`);
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -48,7 +46,7 @@ const get_order_by_id = async (order_id) => {
 
 const get_orders_by_check = async (check_id) => {
     try {
-        const res = await API.get(`order/check_id/${check_id}`);
+        const res = await API.get(`/api/order/check_id/${check_id}`);
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -59,7 +57,7 @@ const get_orders_by_check = async (check_id) => {
 
 const create_order = async (list_order) => {
     try {
-        const res = await API.post("order", list_order);
+        const res = await API.post("/api/order", list_order);
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -70,7 +68,7 @@ const create_order = async (list_order) => {
 
 const update_order = async (order_id, order) => {
     try {
-        const res = await API.put(`order/${order_id}`, order);
+        const res = await API.put(`/api/order/${order_id}`, order);
         if (res.data) return res.data;
 
         return new Error(res.message);
@@ -81,7 +79,7 @@ const update_order = async (order_id, order) => {
 
 const delete_order = async (order_id, check_id) => {
     try {
-        const res = await API.delete(`order/${order_id}?check_id=${check_id}`);
+        const res = await API.delete(`/api/order/${order_id}?check_id=${check_id}`);
         if (res.data) return res.data;
 
         return new Error(res.message);
