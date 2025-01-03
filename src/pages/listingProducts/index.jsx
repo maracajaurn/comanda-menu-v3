@@ -30,13 +30,17 @@ export const ListingProducts = () => {
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
 
+    // armazena um array com todos as categorias de produtos 
+    // que serão adicionados à comanda
+    const [categories, setCategories] = useState([]);
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
     useEffect(() => {
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "garcom") {
             return navigate("/login");
         };
@@ -63,10 +67,16 @@ export const ListingProducts = () => {
     }, [id]);
 
     // adicionar produtos
-    const addProduct = (product_id) => {
+    const addProduct = (product_id, category) => {
         if (selectedProduct.some((item) => item[1] === product_id)) {
             return toast("Produto já adicionado", { icon: "😐", duration: 1200 });
         };
+
+        const if_exists = categories.some((item) => item === category);
+        if (!if_exists) {
+            setCategories((prev) => [...prev, category]);
+        };
+
         setSelectedProduct((prev) => [...prev, [Number(id), product_id, 1, null]])
         return toast("Adicionado", { icon: "😉", duration: 1200 });
     };
@@ -110,15 +120,20 @@ export const ListingProducts = () => {
     };
 
     // enviar novos produtos para a comanda
-    const postProducts = async () => {
+    const postProducts = useCallback(async () => {
         await OrderService.create_order({ list_order: selectedProduct, check_id: id })
             .then(() => {
-                // TODO: Corrigir objeto do socket
-                socket.emit("novo_pedido", { data: "ok" });
+
+                const objSocket = {
+                    client,
+                    categories
+                };
+
+                socket.emit("new_order", objSocket);
                 navigate(-1);
             })
             .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado."); });
-    };
+    }, [categories]);
 
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
@@ -205,11 +220,11 @@ export const ListingProducts = () => {
 
                             <div className="flex gap-4 flex-col">
                                 <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-blue-500 hover:border-blue-500 transition-all delay-75"
-                                    onClick={() => addProduct(item.product_id)}
+                                    onClick={() => addProduct(item.product_id, item.category)}
                                 ><Plus /></button>
 
                                 <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                    onClick={() => removeProduct(item.product_id)}
+                                    onClick={() => removeProduct(item.product_id, item.category)}
                                 ><Delete /></button>
                             </div>
                         </div>

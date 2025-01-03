@@ -4,16 +4,12 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
 import { OrderService } from "../../service/order/OrderService";
-import { SettingService } from "../../service/setting/SettingService";
 import socket from "../../service/socket";
 
 export const Bartender = () => {
 
     const [oreders, setOrders] = useState([]);
-    const [setting, setSetting] = useState({
-        setting_id: 0,
-        estabishment_name: "",
-    });
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,15 +20,14 @@ export const Bartender = () => {
         };
 
         getOrders();
-        getSetting();
     }, []);
 
-    // lista_novo_pedido
+    // new_order - ok
     useEffect(() => {
-        socket.on("lista_novo_pedido", (data) => {
-
-            const verificationIfProcuctFromCategory = data.products.some((item) => item.category === "Drink");
-
+        socket.on("new_order", (data) => {
+            const verificationIfProcuctFromCategory = data.categories.some((item) =>
+                item === "Drink"
+            );
             if (verificationIfProcuctFromCategory) {
                 toast((t) => (
                     <div className="flex gap-3">
@@ -45,21 +40,24 @@ export const Bartender = () => {
                         >OK</button>
                     </div>
                 ), { duration: 1000000 });
+                getOrders();
             };
-            getOrders();
         });
 
-        return () => { socket.off("lista_novo_pedido") };
+        toast.dismiss();
+
+        return () => { socket.off("new_order") };
     }, []);
 
-    // produto_removido
+    // product_removed - ok
     useEffect(() => {
-        socket.on("produto_removido", (data) => {
-            if (data.product.category === "Drink") {
+        socket.on("product_removed", (data) => {
+            const verificationIfProcuctFromCategory = data.category === "Drink";
+            if (verificationIfProcuctFromCategory) {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold underline">{data.product.nameProduct}</span> cancelado na comanda</h6>
+                            <h6><span className="font-semibold underline">{data.product_name}</span> cancelado na comanda</h6>
                             <span className="font-semibold">{data.client}</span>
                         </div>
                         <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -67,22 +65,23 @@ export const Bartender = () => {
                         >OK</button>
                     </div>
                 ), { duration: 1000000 });
+                getOrders();
             };
-            getOrders();
         });
 
-        return () => { socket.off("produto_removido") };
+        toast.dismiss();
+
+        return () => { socket.off("product_removed") };
     }, []);
 
-    // alterar_quantidade
+    // alterar_quantidade - ok
     useEffect(() => {
-        socket.on("alterar_quantidade", (data) => {
-
-            if (data.product.category === "Drink") {
+        socket.on("quantity_change", (data) => {
+            if (data.category === "Drink") {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold">{data.action} {data.product.nameProduct}</span> na comanda</h6>
+                            <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
                             <span className="font-semibold">{data.client}</span>
                         </div>
                         <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -90,52 +89,43 @@ export const Bartender = () => {
                         >OK</button>
                     </div>
                 ), { duration: 10000 });
+                getOrders();
             };
-            getOrders();
-
-            return () => { socket.off("alterar_quantidade") };
         });
+
+        toast.dismiss();
+
+        return () => { socket.off("quantity_change") };
     }, []);
 
-    // comanda_cancelada
+    // check_canceled
     useEffect(() => {
-        socket.on("comanda_cancelada", (data) => {
+        socket.on("check_canceled", (data) => {
             toast((t) => (
                 <div>
                     <h5>Comanda <span className="font-semibold">{data.client}</span> cancelada</h5>
                 </div>
             ), { duration: 2000 });
+            getOrders();
         });
 
-        getOrders();
+        toast.dismiss();
 
-        return () => { socket.off("comanda_cancelada") };
+        return () => { socket.off("check_canceled") };
     }, []);
 
-    // comanda_finalizada
+    // check_finished
     useEffect(() => {
-        socket.on("comanda_finalizada", (data) => {
+        socket.on("check_finished", (data) => {
             toast((t) => (
-                <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
+                <h6>Comanda <span className="font-semibold">{data.client}</span> finalizada</h6>
             ), { duration: 2000 });
             getOrders();
         });
 
-        return () => { socket.off("comanda_finalizada") };
-    }, []);
+        toast.dismiss();
 
-    // buscar configurações
-    const getSetting = useCallback(async () => {
-        try {
-            await SettingService.get()
-                .then((result) => {
-                    setSetting(result[0]);
-                })
-                .catch((error) => { return toast.error(error.message) });
-
-        } catch (error) {
-            return toast.error(error.message);
-        };
+        return () => { socket.off("check_finished") };
     }, []);
 
     // buscar todos pedidos
@@ -143,7 +133,6 @@ export const Bartender = () => {
         try {
             await OrderService.get_orders_from_barmen()
                 .then((result) => {
-                    console.log(result);
                     setOrders(result);
                 })
                 .catch((error) => { return toast.error(error) });
@@ -172,10 +161,16 @@ export const Bartender = () => {
 
         try {
             OrderService.update_order(order_id, order)
-                .then(() => {
-                    getOrders();
-                    toast.success("Pedido pronto!");
-                    return socket.emit("produto_pronto", { name_client, name_product });
+                .then((result) => {
+                    if (result.status) {
+
+                        toast.success(result.message);
+                        socket.emit("order_ready", { client: name_client, product: name_product });
+                        getOrders();
+                        return
+                    } else {
+                        return toast.error(result.message);
+                    };
                 })
                 .catch((error) => { return toast.error(error) });
         } catch (error) {
@@ -209,7 +204,7 @@ export const Bartender = () => {
                                 <div className=" flex gap-3 border-l-2 pl-3 text-white">
                                     <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
                                         disabled={!e.status}
-                                        onClick={() => orderReady(e.order_id, e.name_client, e.name_product, e.check_id, e.quantity, e.obs)}
+                                        onClick={() => orderReady(e.order_id, e.name_client, e.product_name, e.check_id, e.quantity, e.obs)}
                                     >{e.status ? "Pronto" : "Finalizado"}</button>
                                 </div>
                             </div>

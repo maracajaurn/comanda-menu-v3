@@ -36,7 +36,7 @@ export const CloseCheck = () => {
 
     useEffect(() => {
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "garcom") {
             return navigate("/login");
         };
@@ -90,35 +90,35 @@ export const CloseCheck = () => {
     }, []);
 
     const closeCheck = useCallback(async () => {
-        const currentPayForm = document.querySelector('select[name="selPag"]').value;
-        CheckService.closeCheck(currentPayForm, id)
+        CheckService.closeCheck(check.pay_form, id)
             .then((result) => {
-                if (result) {
+                if (result.status) {
                     toast.success(result.message);
-
+                    socket.emit("check_finished", { client: check.name_client, id });
                     return navigate(-2);
                 } else {
-                    toast.error("Erro ao finalizar comanda!");
+                    toast.error(result.message);
                 };
             }).catch((error) => {
                 toast.error(error.message);
             });
-    }, []);
+    }, [check]);
 
-    const cancelCheck = () => {
-        CheckService.deleteById(id)
+    const cancelCheck = useCallback(async () => {
+        socket.emit("check_canceled", { client: check.name_client });
+        await CheckService.deleteById(id)
             .then((result) => {
-                toast.success(result.message);
-                return navigate(-2);
+                if (result.status) {
+                    toast.success(result.message);
+                    return navigate(-2);
+                } else {
+                    toast.error(result.message);
+                };
             })
             .catch((error) => {
                 toast.error(error.message);
             });
-    };
-
-    const alterVisibilityCalc = () => {
-        setVisibilityCal(oldValue => !oldValue)
-    };
+    }, [check]);
 
     return (
         <>
@@ -186,7 +186,7 @@ export const CloseCheck = () => {
                         type="radio"
                         value=""
                         name="default-radio"
-                        onClick={() => alterVisibilityCalc()}
+                        onClick={() => setVisibilityCal(oldValue => !oldValue)}
                         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500  focus:ring-2 " />
                     <label htmlFor="default-radio-2" className="ms-2 text-sm font-medium text-gray-900">{visibilityCalc ? 'Cal. Aberta' : 'Calc. Fechada'}</label>
                 </div>

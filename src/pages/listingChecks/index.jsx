@@ -25,9 +25,9 @@ export const ListingChecks = () => {
         getCheckByStatus();
     }, [toggleView]);
 
-    // lista_novo_pedido
+    // new_order
     useEffect(() => {
-        socket.on("lista_novo_pedido", (data) => {
+        socket.on("new_order", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -45,54 +45,61 @@ export const ListingChecks = () => {
             getCheckByStatus();
         });
 
-        return () => { socket.off("lista_novo_pedido") };
+        toast.dismiss();
+
+        return () => { socket.off("new_order") };
     }, []);
 
-    // nova_comanda
+    // new_check
     useEffect(() => {
-        socket.on("nova_comanda", () => {
+        socket.on("new_check", () => {
             toast("Nova comanda", { duration: 2000 });
             getCheckByStatus();
         });
 
-        return () => { socket.off("nova_comanda") };
+        toast.dismiss();
+
+        return () => { socket.off("new_check") };
     }, []);
 
-    // comanda_finalizada
+    // check_finished
     useEffect(() => {
-        socket.on("comanda_finalizada", (data) => {
+        socket.on("check_finished", (data) => {
             toast((t) => (
                 <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
             ), { duration: 2000 });
             getCheckByStatus();
         });
 
-        return () => { socket.off("comanda_finalizada") };
+        toast.dismiss();
+
+        return () => { socket.off("check_finished") };
     }, []);
 
-    // produto_pronto
+    // order_ready
     useEffect(() => {
-        socket.on("produto_pronto", (data) => {
+        socket.on("order_ready", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
-                        <h6 className="text-center">Pedido <span className="font-semibold">{data.nameProduct}</span> pronto na comanda</h6>
-                        <span className="font-semibold">{data.nameClient}</span>
+                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product}</span> pronto na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
                         onClick={() => toast.dismiss(t.id)}
                     >OK</button>
                 </div>
             ), { duration: 1000000 });
-            getCheckByStatus();
         });
 
-        return () => { socket.off("produto_pronto") };
+        toast.dismiss();
+
+        return () => { socket.off("order_ready") };
     }, []);
 
-    // produto_removido
+    // product_removed
     useEffect(() => {
-        socket.on("produto_removido", (data) => {
+        socket.on("product_removed", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
@@ -107,16 +114,18 @@ export const ListingChecks = () => {
             getCheckByStatus();
         });
 
-        return () => { socket.off("produto_removido") };
+        toast.dismiss();
+
+        return () => { socket.off("product_removed") };
     }, []);
 
-    // alterar_quantidade
+    // quantity_change
     useEffect(() => {
-        socket.on("alterar_quantidade", (data) => {
+        socket.on("quantity_change", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
-                        <h6><span className="font-semibold">{data.action} {data.product.nameProduct}</span> na comanda</h6>
+                        <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
                         <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -124,25 +133,28 @@ export const ListingChecks = () => {
                     >OK</button>
                 </div>
             ), { duration: 1000000 });
-
             getCheckByStatus();
-
-            return () => { socket.off("alterar_quantidade") };
         });
+
+        toast.dismiss();
+
+        return () => { socket.off("quantity_change") };
     }, []);
 
-    // comanda_cancelada
+    // check_canceled
     useEffect(() => {
-        socket.on("comanda_cancelada", (data) => {
+        socket.on("check_canceled", (data) => {
             toast(() => (
                 <div>
                     <h5>Comanda <span className="font-semibold">{data.client}</span> cancelada</h5>
                 </div>
             ), { duration: 2000 });
+            getCheckByStatus();
         });
 
-        getCheckByStatus();
-        return () => { socket.off("comanda_cancelada") };
+        toast.dismiss();
+
+        return () => { socket.off("check_canceled") };
     }, []);
 
     const getCheckByStatus = useCallback(async () => {

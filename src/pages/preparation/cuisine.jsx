@@ -19,7 +19,7 @@ export const Cousine = () => {
 
     useEffect(() => {
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "cozinha") {
             return navigate("/login");
         };
@@ -28,16 +28,12 @@ export const Cousine = () => {
         getSetting();
     }, []);
 
-    // lista_novo_pedido
+    // new_order - ok
     useEffect(() => {
-        socket.on("lista_novo_pedido", (data) => {
-
-            const verificationIfProcuctFromCategory = data.products.some((item) =>
-                (setting.estabishment_name !== "avanti" && item.category === "Drink") ||
-                item.category === "Porcao" ||
-                item.category === "Petisco" ||
-                item.category === "Refeicao" ||
-                item.category === "Salada");
+        socket.on("new_order", (data) => {
+            const verificationIfProcuctFromCategory = data.categories.some((item) =>
+                (setting.estabishment_name !== "avanti" && item === "Drink")
+                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category));
 
             if (verificationIfProcuctFromCategory) {
                 toast((t) => (
@@ -55,21 +51,20 @@ export const Cousine = () => {
             getOrders();
         });
 
-        return () => { socket.off("lista_novo_pedido") };
+        toast.dismiss();
+
+        return () => { socket.off("new_order") };
     }, []);
 
-    // produto_removido
+    // product_removed - ok
     useEffect(() => {
-        socket.on("produto_removido", (data) => {
-            if ((setting.estabishment_name !== "avanti" && data.product.category === "Drink") ||
-                data.product.category === "Porcao" ||
-                data.product.category === "Petisco" ||
-                data.product.category === "Refeicao" ||
-                data.product.category === "Salada") {
+        socket.on("product_removed", (data) => {
+            if ((setting.estabishment_name !== "avanti" && data.category === "Drink") ||
+                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category)) {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold underline">{data.product.nameProduct}</span> cancelado na comanda</h6>
+                            <h6><span className="font-semibold underline">{data.product_name}</span> cancelado na comanda</h6>
                             <span className="font-semibold">{data.client}</span>
                         </div>
                         <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -77,26 +72,25 @@ export const Cousine = () => {
                         >OK</button>
                     </div>
                 ), { duration: 1000000 });
+                getOrders();
             };
-            getOrders();
         });
 
-        return () => { socket.off("produto_removido") };
+        toast.dismiss();
+
+        return () => { socket.off("product_removed") };
     }, []);
 
-    // alterar_quantidade
+    // quantity_change - ok
     useEffect(() => {
-        socket.on("alterar_quantidade", (data) => {
+        socket.on("quantity_change", (data) => {
 
-            if ((setting.estabishment_name !== "avanti" && data.product.category === "Drink") ||
-                data.product.category === "Porcao" ||
-                data.product.category === "Petisco" ||
-                data.product.category === "Refeicao" ||
-                data.product.category === "Salada") {
+            if ((setting.estabishment_name !== "avanti" && data.category === "Drink") ||
+                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category)) {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold">{data.action} {data.product.nameProduct}</span> na comanda</h6>
+                            <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
                             <span className="font-semibold">{data.client}</span>
                         </div>
                         <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -104,38 +98,43 @@ export const Cousine = () => {
                         >OK</button>
                     </div>
                 ), { duration: 10000 });
+                getOrders();
             };
-            getOrders();
-
-            return () => { socket.off("alterar_quantidade") };
         });
+
+        toast.dismiss();
+
+        return () => { socket.off("quantity_change") };
     }, []);
 
-    // comanda_cancelada
+    // check_canceled
     useEffect(() => {
-        socket.on("comanda_cancelada", (data) => {
-            toast((t) => (
+        socket.on("check_canceled", (data) => {
+            toast(() => (
                 <div>
                     <h5>Comanda <span className="font-semibold">{data.client}</span> cancelada</h5>
                 </div>
             ), { duration: 2000 });
+            getOrders();
         });
 
-        getOrders();
+        toast.dismiss();
 
-        return () => { socket.off("comanda_cancelada") };
+        return () => { socket.off("check_canceled") };
     }, []);
 
-    // comanda_finalizada
+    // check_finished
     useEffect(() => {
-        socket.on("comanda_finalizada", (data) => {
+        socket.on("check_finished", (data) => {
             toast((t) => (
                 <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
             ), { duration: 2000 });
             getOrders();
         });
 
-        return () => { socket.off("comanda_finalizada") };
+        toast.dismiss();
+
+        return () => { socket.off("check_finished") };
     }, []);
 
     const getSetting = useCallback(async () => {
@@ -156,7 +155,6 @@ export const Cousine = () => {
         try {
             await OrderService.get_orders_from_cozinha()
                 .then((result) => {
-                    console.log(result);
                     setOrders(result);
                 })
                 .catch((error) => { return toast.error(error) });
@@ -185,10 +183,16 @@ export const Cousine = () => {
 
         try {
             OrderService.update_order(order_id, order)
-                .then(() => {
-                    getOrders();
-                    toast.success("Pedido pronto!");
-                    return socket.emit("produto_pronto", { name_client, name_product });
+            .then((result) => {
+                if (result.status) {
+                    
+                        socket.emit("order_ready", { client: name_client, product: name_product });
+                        toast.success(result.message);
+                        getOrders();
+                        return
+                    } else {
+                        return toast.error(result.message);
+                    };
                 })
                 .catch((error) => { return toast.error(error) });
         } catch (error) {
@@ -222,7 +226,7 @@ export const Cousine = () => {
                                 <div className=" flex gap-3 border-l-2 pl-3 text-white">
                                     <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
                                         disabled={!e.status}
-                                        onClick={() => orderReady(e.order_id, e.name_client, e.name_product, e.check_id, e.quantity, e.obs)}
+                                        onClick={() => orderReady(e.order_id, e.name_client, e.product_name, e.check_id, e.quantity, e.obs)}
                                     >{e.status ? "Pronto" : "Finalizado"}</button>
                                 </div>
                             </div>

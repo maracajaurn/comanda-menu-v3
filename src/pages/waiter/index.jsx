@@ -23,19 +23,19 @@ export const Waiter = () => {
     const [checkStatus, setCheckStatus] = useState(true);
 
     useEffect(() => {
-        setToggleView(false);
-        getCheckById();
-
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "garcom") {
             navigate("/login");
         };
+
+        setToggleView(false);
+        getCheckById();
     }, [totalPrice, id]);
 
-    // lista_novo_pedido
+    // new_order
     useEffect(() => {
-        socket.on("lista_novo_pedido", (data) => {
+        socket.on("new_order", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -50,39 +50,43 @@ export const Waiter = () => {
             getCheckById();
         });
 
-        return () => { socket.off("lista_novo_pedido") };
+        toast.dismiss();
+
+        return () => { socket.off("new_order") };
     }, []);
 
-    // nova_comanda
+    // new_check
     useEffect(() => {
-        socket.on("nova_comanda", () => {
+        socket.on("new_check", () => {
             toast("Nova comanda", { duration: 2000 });
-            getCheckById();
         });
 
-        return () => { socket.off("nova_comanda") };
+        toast.dismiss();
+
+        return () => { socket.off("new_check") };
     }, []);
 
-    // comanda_finalizada
+    // check_finished
     useEffect(() => {
-        socket.on("comanda_finalizada", (data) => {
+        socket.on("check_finished", (data) => {
             toast((t) => (
                 <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
             ), { duration: 2000 });
-            getCheckById();
         });
 
-        return () => { socket.off("comanda_finalizada") };
+        toast.dismiss();
+
+        return () => { socket.off("check_finished") };
     }, []);
 
-    // produto_pronto
+    // order_ready
     useEffect(() => {
-        socket.on("produto_pronto", (data) => {
+        socket.on("order_ready", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
-                        <h6 className="text-center">Pedido <span className="font-semibold">{data.nameProduct}</span> pronto na comanda</h6>
-                        <span className="font-semibold">{data.nameClient}</span>
+                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product}</span> pronto na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
                         onClick={() => toast.dismiss(t.id)}
@@ -92,12 +96,14 @@ export const Waiter = () => {
             getCheckById();
         });
 
-        return () => { socket.off("produto_pronto") };
+        toast.dismiss();
+
+        return () => { socket.off("order_ready") };
     }, []);
 
-    // produto_removido
+    // product_removed
     useEffect(() => {
-        socket.on("produto_removido", (data) => {
+        socket.on("product_removed", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -112,12 +118,14 @@ export const Waiter = () => {
             getCheckById();
         });
 
-        return () => { socket.off("produto_removido") };
+        toast.dismiss();
+        
+        return () => { socket.off("product_removed") };
     }, []);
 
-    // alterar_quantidade
+    // quantity_change
     useEffect(() => {
-        socket.on("alterar_quantidade", (data) => {
+        socket.on("quantity_change", (data) => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -129,16 +137,17 @@ export const Waiter = () => {
                     >OK</button>
                 </div>
             ), { duration: 1000000 });
-
             getCheckById();
-
-            return () => { socket.off("alterar_quantidade") };
         });
+
+        toast.dismiss();
+        
+        return () => { socket.off("quantity_change") };
     }, []);
 
-    // comanda_cancelada
+    // check_canceled
     useEffect(() => {
-        socket.on("comanda_cancelada", (data) => {
+        socket.on("check_canceled", (data) => {
             toast((t) => (
                 <div>
                     <h5>Comanda <span className="font-semibold">{data.client}</span> cancelada</h5>
@@ -148,10 +157,11 @@ export const Waiter = () => {
             if (data.id === id) {
                 navigate(`/garcom/comandas`);
             };
-            getCheckById();
         });
 
-        return () => { socket.off("comanda_cancelada") };
+        toast.dismiss();
+
+        return () => { socket.off("check_canceled") };
     }, []);
 
     const getCheckById = useCallback(async () => {
@@ -180,8 +190,7 @@ export const Waiter = () => {
     }, []);
 
     // Editar quantidade do produto na lista
-    const alterQnt = async (order_id, quantity, obs, action) => {
-
+    const alterQnt = async (order_id, quantity, obs, category, product_name, action) => {
         if (quantity > 0) {
             const data = {
                 check_id: id,
@@ -198,8 +207,21 @@ export const Waiter = () => {
 
             await OrderService.update_order(order_id, data)
                 .then((result) => {
-                    toast(result.message);
-                    getCheckById();
+                    if (result.status) {
+                        toast.success(result.message);
+
+                        const data = {
+                            category: category,
+                            action: action,
+                            product_name: product_name,
+                            client
+                        };
+
+                        socket.emit("quantity_change", data);
+                        return getCheckById();
+                    };
+
+                    return toast.error(result.message);
                 })
                 .catch((error) => {
                     return toast.error(error.message);
@@ -208,10 +230,12 @@ export const Waiter = () => {
     };
 
     // remover item da comanda pelo índice
-    const deleteItem = async (order_id) => {
+    const deleteItem = async (order_id, product_name, category) => {
         await OrderService.delete_order(order_id, id)
             .then(() => {
                 getCheckById();
+
+                socket.emit("product_removed", { product_name, client, category });
             })
             .catch((error) => {
                 toast.error(error.message);
@@ -245,13 +269,13 @@ export const Waiter = () => {
                             {e.status ? (
                                 <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
                                     <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, "-")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, "-")}
                                     ><Minus /></button>
 
                                     <p className="text-[#EB8F00] font-somibold">{e.quantity}</p>
 
                                     <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, "+")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, "+")}
                                     ><Plus /></button>
                                 </div>
                             ) : (
@@ -268,7 +292,7 @@ export const Waiter = () => {
                             )}
 
                             <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                onClick={() => deleteItem(e.order_id)}
+                                onClick={() => deleteItem(e.order_id, e.product_name, e.category)}
                             ><Delete /></button>
                         </div>
                     </div>
