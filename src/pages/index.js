@@ -1,15 +1,18 @@
-export { Admin } from "./admin";
 export { Login } from "./login";
-export { Waiter } from "./waiter";
+
+export { Admin } from "./admin";
 export { ManageUser } from "./manageUser";
-export { CloseCheck } from "./closeCheck";
-export { ClientMenu } from "./clientMenu";
 export { ClosedChecks } from "./closedChecks";
-export { Cousine } from "./preparation/cuisine";
-export { ListingChecks } from "./listingChecks";
-export { ListingProducts } from "./listingProducts";
-export { Bartender } from "./preparation/bartender";
 export { ShowEditProducts } from "./showEditProducts";
 
+export { Waiter } from "./waiter";
+export { CloseCheck } from "./closeCheck";
+export { ListingChecks } from "./listingChecks";
+export { ListingProducts } from "./listingProducts";
 
-export { Test } from "./test"
+export { Cousine } from "./preparation/cuisine";
+export { Bartender } from "./preparation/bartender";
+
+export { Proof } from "./clientMenu/proof";
+export { Payment } from "./clientMenu/payment";
+export { RegisterClient } from "./clientMenu/registerClient";
