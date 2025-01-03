@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -8,7 +9,9 @@ import { useToggleView } from "../../contexts";
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService"
 
-export const NewCheck = () => {
+export const NewCheck = ({ is_client = false }) => {
+
+    const navigate = useNavigate();
 
     const [value, setValue] = useState({
         name_client: "",
@@ -49,11 +52,25 @@ export const NewCheck = () => {
 
             CheckService.create(data)
                 .then((result) => {
-                    socket.emit("nova_comanda", data);
-                    setToggleView(false);
-                    toast.success(result.message);
-                    setValue(prev => ({ ...prev, name_client: "", obs: "" }));
-                    setLoading(false);
+                    if (result.status) {
+
+                        if (is_client) {
+                            localStorage.setItem("check_id", result.check_id[0].check_id);
+
+                            navigate(`/garcom/comanda/${result.check_id[0].check_id}`);
+                        } else {
+                            setToggleView(false);
+                            navigate(`/garcom/comanda/${result.check_id[0].check_id}`);
+                        };
+
+                        socket.emit("nova_comanda", data);
+                        toast.success(result.message);
+                        setValue(prev => ({ ...prev, name_client: "", obs: "" }));
+                        setLoading(false);
+                    } else {
+                        setLoading(false);
+                        return toast.error(result.message);
+                    };
                 }).catch((error) => {
                     setLoading(false);
                     return toast.error(error.message || "Ocorreu um erro ao criar a comanda.");
@@ -103,9 +120,11 @@ export const NewCheck = () => {
                 >Cadastrar</button>
             </div>
 
-            <button className="flex justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                onClick={() => setToggleView(false)}
-            ><Close /></button>
+            {!is_client && (
+                <button className="flex justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                    onClick={() => setToggleView(false)}
+                ><Close /></button>
+            )}
 
         </div>
     );
