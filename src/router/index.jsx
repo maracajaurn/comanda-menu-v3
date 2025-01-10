@@ -1,7 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import { PrivateRoute } from "./PrivateRoute";
-
 import {
     Login,
 
@@ -20,7 +18,8 @@ import {
 
     Proof,
     Payment,
-    RegisterClient
+    RegisterClient,
+    Menu
 } from "../pages";
 
 export const AppRoutes = () => {
@@ -30,41 +29,42 @@ export const AppRoutes = () => {
             <Route path="*" element={<Navigate to={"/login"} />} />
 
             <Route path={`/admin`} element={
-                <PrivateRoute><Admin /></PrivateRoute>
+                <Admin />
             } />
             <Route path={`/usuarios`} element={
-                <PrivateRoute><ManageUser /></PrivateRoute>
+                <ManageUser />
             } />
             <Route path={`/comandasFinalizadas`} element={
-                <PrivateRoute><ClosedChecks /></PrivateRoute>
+                <ClosedChecks />
             } />
             <Route path={`/produtos`} element={
-                <PrivateRoute><ShowEditProducts /></PrivateRoute>
+                <ShowEditProducts />
             } />
 
             <Route path={`/garcom/comanda/:id`} element={
-                <PrivateRoute><Waiter /></PrivateRoute>
+                <Waiter />
             } />
             <Route path={`/garcom/comandas`} element={
-                <PrivateRoute><ListingChecks /></PrivateRoute>
+                <ListingChecks />
             } />
             <Route path={`/garcom/comanda/:id/add-product`} element={
-                <PrivateRoute><ListingProducts /></PrivateRoute>
+                <ListingProducts />
             } />
             <Route path={`/garcom/comanda/:id/fechar-comanda`} element={
-                <PrivateRoute><CloseCheck /></PrivateRoute>
+                <CloseCheck />
             } />
 
             <Route path={`/cozinha/producao`} element={
-                <PrivateRoute><Cousine /></PrivateRoute>
+                <Cousine />
             } />
             <Route path={`/barmen/producao`} element={
-                <PrivateRoute><Bartender /></PrivateRoute>
+                <Bartender />
             } />
 
             <Route path={`/resister-client`} element={<RegisterClient />} />
-            <Route path={`/payment`} element={<Payment />} />
-            <Route path={`/proof`} element={<Proof />} />
+            <Route path={`/:id/products`} element={<Menu />} />
+            <Route path={`/:id/payment`} element={<Payment />} />
+            <Route path={`/:id/proof`} element={<Proof />} />
         </Routes>
     );
 };

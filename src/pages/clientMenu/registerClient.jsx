@@ -13,7 +13,7 @@ export const RegisterClient = () => {
     useEffect(() => {
         const check_id = localStorage.getItem("check_id");
         if (check_id) {
-            navigate(`/garcom/comanda/${check_id}`);
+            navigate(`/${check_id}/products`);
         };
 
         setToggleView(true);
