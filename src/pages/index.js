@@ -16,3 +16,4 @@ export { Bartender } from "./preparation/bartender";
 export { Proof } from "./clientMenu/proof";
 export { Payment } from "./clientMenu/payment";
 export { RegisterClient } from "./clientMenu/registerClient";
+export { Menu } from "./clientMenu/menu";
