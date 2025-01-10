@@ -15,25 +15,22 @@ export const Login = () => {
         password: ""
     });
 
-    const [setting, setSetting] = useState({
-        estabishment_name: "",
-    });
-
     const handleInput = (field, event) => {
         setValue(prev => ({ ...prev, [field]: event.target.value }));
     };
 
     useEffect(() => {
-        getSetting();
+        const get_func = localStorage.getItem("func");
+
+        if (get_func === "barmen" || get_func === "cozinha") {
+            navigate(`${get_func}/producao`)
+        } else if (get_func === "admin") {
+            navigate("/admin")
+        } else if (get_func === "garcom") {
+            navigate(`/${get_func}/comandas`)
+        };
     }, []);
 
-    const getSetting = useCallback(() => {
-        SettingService.get()
-            .then((result) => {
-                setSetting(result[0]);
-            })
-            .catch((error) => { return toast.error(error.message) });
-    }, []);
 
     const login = async () => {
 
@@ -44,7 +41,7 @@ export const Login = () => {
         await LoginService.login(value)
             .then((result) => {
                 if (result.status) {
-                    localStorage.setItem("token", result.token);
+                    sessionStorage.setItem("token", result.token);
                     localStorage.setItem("func", result.func);
 
                     if (result.func === "barmen" || result.func === "cozinha") {
@@ -66,7 +63,7 @@ export const Login = () => {
 
     return (
         <div className="h-full w-full">
-            <Navbar title={setting.estabishment_name} />
+            <Navbar title="Bem-vindo" />
             <div className="h-full flex justify-center items-center flex-col">
                 <Toaster />
                 <div className="mb-4">
