@@ -2,9 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar } from "../../components/navbar";
-import { ListinProductsForCheck } from "../../components/listinProductsForCheck";
-
 import { Plus, Minus, Close, Cart } from "../../libs/icons";
 
 import { ProductService } from "../../service/product/ProductService";
@@ -37,11 +34,6 @@ export const Menu = () => {
     useEffect(() => {
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
-        const if_selected_product = localStorage.getItem("selected_product");
-
-        if (if_selected_product) {
-            setSelectedProduct(JSON.parse(if_selected_product));
-        };
 
         if (get_func !== "admin" && !if_check_id) {
             navigate(-1);
@@ -157,6 +149,7 @@ export const Menu = () => {
     return (
         <>
             <nav className={`fixed top-0 w-full h-16 px-5 flex items-center justify-between bg-[#EB8F00] text-slate-100`}>
+                <Toaster />
                 <div>
                     {!isOnline ? (
                         <h2 className={`transition-all delay-200 uppercase bg-red-600 px-3 py-2 rounded-md font-bold text-white`}>Sem internet</h2>
@@ -172,15 +165,16 @@ export const Menu = () => {
                         </div>
                     )}
 
-                    <button className="w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                    <button className={`
+                        ${selectedProduct.length === 0 && "opacity-50 cursor-not-allowed -z-10"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
+                        bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75`}
                         onClick={() => { navidateToCart(); setToggleView(false) }}
+                        disabled={selectedProduct.length === 0}
                     ><Cart /></button>
                 </div>
             </nav>
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
-                <Toaster />
-                <ListinProductsForCheck products={selectedProduct} />
                 <div className="border px-3 py-5 w-full rounded-xl shadow-md">
                     <label className="flex gap-2 items-center">
                         <input
@@ -197,47 +191,46 @@ export const Menu = () => {
                 </div>
 
                 {currentItems.map((item, index) => (
-                    <div key={index} className={`flex flex-col justify-between items-center px-3 py-3 w-full rounded-xl bg-slate-100/50 shadow-md border`}>
+                    <div key={index} className={`flex flex-col justify-between items-center w-full rounded-xl bg-slate-100/50 shadow-md border`}>
 
-                        <div className="w-2/3 flex flex-col items-center gap-5">
+                        {item.image && (
+                            <div className="h-[300px] w-full rounded-md overflow-hidden"
+                                style={{
+                                    backgroundImage: `url(${item.image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}>
+                            </div>
+                        )}
 
-                            {item.image && (
-                                <div className="h-[150px] w-[150px] rounded-md"
-                                    style={{
-                                        backgroundImage: `url(${item.image})`,
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
-                                    }}>
-                                </div>
-                            )}
-
-                            <h3 className="text-slate-900 font-bold">{item.product_name}</h3>
-                            <h3 className="text-slate-500 text-[15px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
-                            {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
-                                <label >
-                                    <input
-                                        type="text" placeholder="Observação"
-                                        className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
-                                        onChange={(e) => obsProduct(item.product_id, e.target.value)}
-                                    />
-                                </label>
-                            )}
+                        <div className="w-full flex flex-col items-center justify-between gap-2 mt-3">
+                            <h3 className="text-slate-900 text-[25px] font-bold">{item.product_name}</h3>
+                            <p className="text-slate-500 text-[15px] font-semibold">{item.description}</p>
+                            <h3 className="text-slate-500 text-[30px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
                         </div>
 
-                        <div className="h-full ml-5 flex items-center justify-center gap-3 border-t-2 py-3">
-                            <div className="flex items-center gap-1 border-2 border-slate-500 rounded-md">
-                                <button className="p-1 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, "+")}
-                                ><Plus /></button>
+                        {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
+                            <label>
+                                <input
+                                    type="text" placeholder="Observação"
+                                    className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
+                                    onChange={(e) => obsProduct(item.product_id, e.target.value)}
+                                />
+                            </label>
+                        )}
 
-                                <p className="text-[#EB8F00] font-somibold">
-                                    {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
-                                </p>
+                        <div className="flex items-center gap-3 border-2 border-slate-500 rounded-md my-5">
+                            <button className="py-1 px-5 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                onClick={() => alterQnt(item.product_id, "+")}
+                            ><Plus /></button>
 
-                                <button className="p-1 border-l-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, "-")}
-                                ><Minus /></button>
-                            </div>
+                            <p className="text-[#EB8F00] font-somibold">
+                                {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
+                            </p>
+
+                            <button className="py-1 px-5 border-l-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                onClick={() => alterQnt(item.product_id, "-")}
+                            ><Minus /></button>
                         </div>
                     </div>
                 ))}
