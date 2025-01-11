@@ -16,10 +16,11 @@ import {
     Cousine,
     Bartender,
 
-    Proof,
-    Payment,
     RegisterClient,
-    Menu
+    Menu,
+    Cart,
+    Payment,
+    Proof,
 } from "../pages";
 
 export const AppRoutes = () => {
@@ -63,6 +64,7 @@ export const AppRoutes = () => {
 
             <Route path={`/resister-client`} element={<RegisterClient />} />
             <Route path={`/:id/products`} element={<Menu />} />
+            <Route path={`/:id/cart`} element={<Cart />} />
             <Route path={`/:id/payment`} element={<Payment />} />
             <Route path={`/:id/proof`} element={<Proof />} />
         </Routes>
