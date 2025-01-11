@@ -13,7 +13,8 @@ export { ListingProducts } from "./listingProducts";
 export { Cousine } from "./preparation/cuisine";
 export { Bartender } from "./preparation/bartender";
 
-export { Proof } from "./clientMenu/proof";
-export { Payment } from "./clientMenu/payment";
 export { RegisterClient } from "./clientMenu/registerClient";
 export { Menu } from "./clientMenu/menu";
+export { Cart } from "./clientMenu/cart";
+export { Payment } from "./clientMenu/payment";
+export { Proof } from "./clientMenu/proof";
