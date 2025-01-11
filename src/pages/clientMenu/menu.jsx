@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Plus, Minus, Close, Cart } from "../../libs/icons";
+import { Plus, Minus, Close, Cart, CheckProduct } from "../../libs/icons";
 
 import { ProductService } from "../../service/product/ProductService";
 
@@ -34,6 +34,11 @@ export const Menu = () => {
     useEffect(() => {
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
+        const if_selected_product = localStorage.getItem("selected_product");
+
+        if (if_selected_product) {
+            setSelectedProduct(JSON.parse(if_selected_product));
+        };
 
         if (get_func !== "admin" && !if_check_id) {
             navigate(-1);
@@ -43,9 +48,6 @@ export const Menu = () => {
         getAllProducts();
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem("selected_product", JSON.stringify(selectedProduct));
-    }, [selectedProduct]);
 
     const getAllProducts = useCallback(async () => {
         await ProductService.getAll()
@@ -93,14 +95,20 @@ export const Menu = () => {
         });
     };
 
+    // Wrapper para setSelectedProduct
+    const updateSelectedProduct = (newSelectedProduct) => {
+        setSelectedProduct(newSelectedProduct);
+        localStorage.setItem("selected_product", JSON.stringify(newSelectedProduct));
+    };
+
     // Adicionar obsevação a item
     const obsProduct = useCallback((product_id, value) => {
         const index_selected_product = selectedProduct.findIndex((item) => item[1] === product_id);
         if (index_selected_product !== -1) {
-            selectedProduct[index_selected_product][3] = value;
-            setSelectedProduct([...selectedProduct]);
+            const updatedProduct = [...selectedProduct];
+            updatedProduct[index_selected_product][3] = value;
 
-            localStorage.setItem("selected_product", JSON.stringify(selectedProduct));
+            updateSelectedProduct(updatedProduct);
         };
     }, [selectedProduct]);
 
@@ -112,11 +120,10 @@ export const Menu = () => {
             const qnt = selectedProduct[index][2];
             if (action === "+") {
                 selectedProduct[index][2] = qnt + 1;
-                setSelectedProduct([...selectedProduct])
             } else if (action === "-" && qnt >= 1) {
                 if (qnt === 1) {
                     const remove_product = selectedProduct.filter((item) => item[1] !== product_id);
-                    setSelectedProduct(remove_product);
+                    return updateSelectedProduct(remove_product);
                 } else {
                     selectedProduct[index][2] = qnt - 1;
                     setSelectedProduct([...selectedProduct]);
@@ -125,11 +132,14 @@ export const Menu = () => {
         } else if (action === "+") {
             const product = listProducts.find((item) => item.product_id === product_id);
             if (product) {
-                setSelectedProduct((prev) => ([...prev, [id, product_id, 1, null]]));
+                const newProduct = [...selectedProduct, [id, product_id, 1, null]];
+                return updateSelectedProduct(newProduct);
             } else {
                 toast.error("Produto não encontrado.");
             };
         };
+
+        updateSelectedProduct([...selectedProduct]);
     }, [listProducts, selectedProduct]);
 
     const navidateToCart = () => {
@@ -157,21 +167,6 @@ export const Menu = () => {
                         <h2 className="transition-all delay-200 font-bold uppercase text-[18px]">Menu</h2>
                     )}
                 </div>
-
-                <div className="flex gap-3 z-50 relative">
-                    {selectedProduct.length > 0 && (
-                        <div className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full absolute -top-1 -left-1 z-10">
-                            <h5 className="text-black">{selectedProduct.length}</h5>
-                        </div>
-                    )}
-
-                    <button className={`
-                        ${selectedProduct.length === 0 && "opacity-50 cursor-not-allowed -z-10"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
-                        bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75`}
-                        onClick={() => { navidateToCart(); setToggleView(false) }}
-                        disabled={selectedProduct.length === 0}
-                    ><Cart /></button>
-                </div>
             </nav>
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
@@ -192,14 +187,18 @@ export const Menu = () => {
 
                 {currentItems.map((item, index) => (
                     <div key={index} className={`flex flex-col justify-between items-center w-full rounded-xl bg-slate-100/50 shadow-md border`}>
-
                         {item.image && (
-                            <div className="h-[300px] w-full rounded-md overflow-hidden"
+                            <div className="h-[300px] w-full rounded-md"
                                 style={{
                                     backgroundImage: `url(${item.image})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                 }}>
+                                <div className={`
+                                    ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
+                                    w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3 z-10`}>
+                                    <h6 className="text-white"><CheckProduct /></h6>
+                                </div>
                             </div>
                         )}
 
@@ -209,15 +208,15 @@ export const Menu = () => {
                             <h3 className="text-slate-500 text-[30px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
                         </div>
 
-                        {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
-                            <label>
-                                <input
-                                    type="text" placeholder="Observação"
-                                    className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
-                                    onChange={(e) => obsProduct(item.product_id, e.target.value)}
-                                />
-                            </label>
-                        )}
+                        <label>
+                            <textarea 
+                                placeholder="Observação"
+                                className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
+                                onChange={(e) => obsProduct(item.product_id, e.target.value)}
+                                value={selectedProduct.find(product => product[1] === item.product_id)?.[3] || ""}
+                                disabled={selectedProduct.findIndex(product => product[1] === item.product_id) === -1}
+                            />
+                        </label>
 
                         <div className="flex items-center gap-3 border-2 border-slate-500 rounded-md my-5">
                             <button className="py-1 px-5 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
@@ -234,6 +233,23 @@ export const Menu = () => {
                         </div>
                     </div>
                 ))}
+
+                <div className="fixed bottom-0 right-0 p-5 flex justify-center items-center">
+                    <div className="flex gap-3 z-50 relative">
+                        {selectedProduct.length > 0 && (
+                            <div className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full absolute -top-1 -left-1 z-10">
+                                <h5 className="text-black">{selectedProduct.length}</h5>
+                            </div>
+                        )}
+
+                        <button className={`
+                        ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
+                        bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75`}
+                            onClick={() => { navidateToCart(); setToggleView(false) }}
+                            disabled={selectedProduct.length === 0}
+                        ><Cart /></button>
+                    </div>
+                </div>
 
                 {totalPages > 1 && (
                     <div className="w-full flex justify-between items-center gap-3 mt-5">
