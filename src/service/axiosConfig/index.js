@@ -14,13 +14,18 @@ API.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${token}`;
     };
     return config;
-}, (error) => {
-    if (error.response?.status === 401) {
-        sessionStorage.removeItem("token");
-        localStorage.removeItem("func");
-        window.location.href = "/login";
-    };
-    return Promise.reject(error);
-});
+}, (error) => Promise.reject(error));
+
+API.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            window.location.href = "/login";
+            sessionStorage.removeItem("token");
+            localStorage.removeItem("func");
+            localStorage.removeItem("selected_product");
+        };
+        return Promise.reject(error);
+    });
 
 export { API };
