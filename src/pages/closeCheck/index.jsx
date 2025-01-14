@@ -53,12 +53,12 @@ export const CloseCheck = () => {
                 if (result) {
                     setCheck((prev) => ({
                         ...prev,
-                        check_id: result[0].check_id,
-                        name_client: result[0].name_client,
-                        obs: result[0].obs,
-                        status: result[0].status,
-                        total_value: result[0].total_value || 0,
-                        pay_form: result[0].pay_form ? result[0].pay_form : "pix"
+                        check_id: result.check_id,
+                        name_client: result.name_client,
+                        obs: result.obs,
+                        status: result.status,
+                        total_value: result.total_value || 0,
+                        pay_form: result.pay_form ? result.pay_form : "pix"
                     }));
                     setDisabledButton(false);
                 } else {
@@ -86,7 +86,7 @@ export const CloseCheck = () => {
     const getSetting = useCallback(async () => {
         await SettingService.get()
             .then((result) => {
-                setSetting(result[0]);
+                setSetting(result);
             });
     }, []);
 

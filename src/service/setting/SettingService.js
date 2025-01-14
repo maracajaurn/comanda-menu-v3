@@ -5,7 +5,7 @@ const  get = async () => {
         const res = await API.get("/api/setting");
 
         if (res.data) {
-            return res.data;
+            return res.data[0];
         };
 
         return new Error(res.message);
