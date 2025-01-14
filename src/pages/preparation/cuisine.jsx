@@ -20,10 +20,10 @@ export const Cousine = () => {
 
     const navigate = useNavigate();
 
-    const { setLoafing } = useLoader();
+    const { setLoading } = useLoader();
 
     useEffect(() => {
-        setLoafing(true);
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "cozinha") {
@@ -188,22 +188,22 @@ export const Cousine = () => {
             obs,
         };
 
-        setLoafing(true);
+        setLoading(true);
         OrderService.update_order(order_id, order)
             .then((result) => {
                 if (result.status) {
-                    setLoafing(false);
+                    setLoading(false);
                     socket.emit("order_ready", { client: name_client, product: name_product });
                     toast.success(result.message);
                     getOrders();
                     return
                 }
-                setLoafing(false);
+                setLoading(false);
                 return toast.error(result.message);
 
             })
             .catch((error) => {
-                setLoafing(false);
+                setLoading(false);
                 return toast.error(error);
             });
     };
