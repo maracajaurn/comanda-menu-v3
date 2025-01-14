@@ -51,15 +51,14 @@ export const Menu = () => {
 
         setToggleView(false);
         getAllProducts();
-
-        setLoading(false);
     }, []);
 
 
     const getAllProducts = useCallback(async () => {
         await ProductService.getAll()
             .then((result) => {
-                mapProducts(result)
+                mapProducts(result);
+                setLoading(false);
             })
             .catch((error) => {
                 return toast.error(error.message || "Ocorreu um erro inesperado.");

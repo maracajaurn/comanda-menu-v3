@@ -48,10 +48,8 @@ export const CloseCheck = () => {
         };
 
         getCheck();
-        getOrders();
         getSetting();
-
-        setLoading(false);
+        getOrders();
     }, []);
 
     const getCheck = useCallback(async () => {
@@ -83,8 +81,10 @@ export const CloseCheck = () => {
             await OrderService.get_orders_by_check(id)
                 .then((result) => {
                     setProducts(result);
+                    setLoading(false);
                 });
         } catch (error) {
+            setLoading(false);
             toast.error(error);
             return navigate(-1);
         };

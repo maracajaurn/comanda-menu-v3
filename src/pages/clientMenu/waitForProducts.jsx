@@ -26,8 +26,6 @@ export const WaitForProducts = () => {
 
         getCheck();
         getOrders();
-
-        setLoading(false);
     }, [id]);
 
     const getOrders = useCallback(async () => {
@@ -36,8 +34,10 @@ export const WaitForProducts = () => {
                 .then((result) => {
                     console.log(result);
                     setProducts(result);
+                    setLoading(false);
                 });
         } catch (error) {
+            setLoading(false);
             toast.error(error);
             return navigate(-1);
         };

@@ -26,7 +26,6 @@ export const Bartender = () => {
         };
 
         getOrders();
-        setLoading(false);
     }, []);
 
     // new_order - ok
@@ -141,6 +140,7 @@ export const Bartender = () => {
             await OrderService.get_orders_from_barmen()
                 .then((result) => {
                     setOrders(result);
+                    setLoading(false);
                 })
                 .catch((error) => { return toast.error(error) });
         } catch (error) {

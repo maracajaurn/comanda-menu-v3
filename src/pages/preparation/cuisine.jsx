@@ -32,8 +32,6 @@ export const Cousine = () => {
 
         getOrders();
         getSetting();
-
-        setLoafing(false);
     }, []);
 
     // new_order - ok
@@ -164,6 +162,7 @@ export const Cousine = () => {
             await OrderService.get_orders_from_cozinha()
                 .then((result) => {
                     setOrders(result);
+                    setLoading(false);
                 })
                 .catch((error) => { return toast.error(error) });
         } catch (error) {

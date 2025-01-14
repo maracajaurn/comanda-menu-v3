@@ -45,7 +45,7 @@ export const Admin = () => {
         const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
         getAllCashier();
-        setLoading(false);
+        
     }, []);
 
     // check_finished
@@ -61,6 +61,7 @@ export const Admin = () => {
         await CashierService.getById(1)
             .then((result) => {
                 setCashier(result[0]);
+                setLoading(false);
             })
             .catch((error) => {
                 return toast.error(error.message);

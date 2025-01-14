@@ -53,8 +53,6 @@ export const ListingProducts = () => {
         setToggleView(false);
         getAllProducts();
         getCheckById();
-
-        setLoading(false);
     }, []);
 
     const getAllProducts = useCallback(async () => {
@@ -69,8 +67,12 @@ export const ListingProducts = () => {
         await CheckService.getById(id)
             .then((result) => {
                 setClient(result[0].name_client);
+                setLoading(false);
             })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado."); });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message || "Ocorreu um erro inesperado.");
+            });
     }, [id]);
 
     // adicionar produtos

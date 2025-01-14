@@ -27,6 +27,7 @@ export const Cart = () => {
         ProductService.getAll()
             .then(result => {
                 setProducts(result);
+                setLoading(false);
             })
             .catch(error => {
                 toast.error(error.message);
@@ -53,8 +54,6 @@ export const Cart = () => {
 
         getCheck();
         getProducts();
-
-        setLoading(false);
     }, [getProducts]);
 
     useEffect(() => {

@@ -45,8 +45,6 @@ export const ManageUser = () => {
         };
 
         getAllUsers();
-
-        setLoading(false);
     }, [toggleView]);
 
     useEffect(() => {
@@ -165,6 +163,7 @@ export const ManageUser = () => {
         await UsuarioService.getAll()
             .then((result) => {
                 setListUser(result);
+                setLoading(false);
             })
             .catch((error) => { return toast.error(error.message || "Ocoreu um erro ao realizar a operação.") });
     }, []);
