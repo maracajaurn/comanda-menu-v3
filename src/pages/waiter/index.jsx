@@ -172,12 +172,12 @@ export const Waiter = () => {
             await CheckService.getById(id)
                 .then((result) => {
 
-                    setClient(result[0].name_client);
+                    setClient(result.name_client);
 
-                    setTotalPrice(parseFloat(result[0].total_value || 0).toFixed(2).replace(".", ","));
+                    setTotalPrice(parseFloat(result.total_value || 0).toFixed(2).replace(".", ","));
 
                     // verificando status da comanda
-                    if (!result[0].status) {
+                    if (!result.status) {
                         setCheckStatus(false);
                     };
                 });
