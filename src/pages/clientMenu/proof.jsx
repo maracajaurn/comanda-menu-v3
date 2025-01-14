@@ -6,6 +6,7 @@ import { Navbar } from "../../components/navbar";
 import { CheckProduct } from "../../libs/icons";
 
 import { OrderService } from "../../service/order/OrderService";
+import socket from "../../service/socket";
 
 export const Proof = () => {
 
@@ -25,16 +26,26 @@ export const Proof = () => {
             createOrder();
         };
     }, [products]);
+    // TODO: criar controle limite de produtos por estoque
 
-    // TODO: disparar o evento via socket.io
     const createOrder = useCallback(async () => {
+        const objSocket = {
+            client: localStorage.getItem("client"),
+            categories: JSON.parse(localStorage.getItem("categories")),
+        };
+
+        if (objSocket.categories.length === 0) {
+            return
+        };
+        
         OrderService.create_order({ list_order: products, check_id: id })
             .then((res) => {
+
                 if (res.status) {
                     localStorage.removeItem("selected_product");
+                    socket.emit("new_order", objSocket);
                     return toast.success(res.message)
                 };
-
                 return toast.error(res.message);
             })
             .catch((error) => {
@@ -70,7 +81,7 @@ export const Proof = () => {
                         className="
                             bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] hover:border-[#1C1D26] text-white
                             p-2 text-[20px] font-bold rounded-xl border-2 border-transparent  transition-all delay-75"
-                            onClick={() => navigate(`/${id}/wait_for_product`)}
+                        onClick={() => navigate(`/${id}/wait_for_product`)}
                     >Aguardar preparo</button>
                 </div>
             </div>
