@@ -142,7 +142,7 @@ export const Cousine = () => {
         try {
             await SettingService.get()
                 .then((result) => {
-                    setSetting(result[0]);
+                    setSetting(result);
                 })
                 .catch((error) => { return toast.error(error.message) });
 
