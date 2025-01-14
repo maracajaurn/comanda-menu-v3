@@ -17,3 +17,5 @@ export { RegisterClient } from "./clientMenu/registerClient";
 export { Menu } from "./clientMenu/menu";
 export { Cart } from "./clientMenu/cart";
 export { Proof } from "./clientMenu/proof";
+export { PaymentFailure } from "./clientMenu/paymentFailure";
+export { WaitForProducts } from "./clientMenu/waitForProducts";
