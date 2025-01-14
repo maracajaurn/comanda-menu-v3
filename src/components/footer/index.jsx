@@ -5,7 +5,7 @@ export const Footer = ({ id, totalValue, checkStatus }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="fixed bottom-0 w-full h-[130px] flex flex-col justify-between items-center px-5 py-3 bg-[#EB8F00] text-slate-100">
+        <footer className="fixed bottom-0 w-full h-[130px] flex flex-col justify-between items-center px-5 py-3 bg-[#EB8F00] text-slate-100">
             <h4 className="text-[22px] font-bold text-white"
             >Valor Total: <span className="font-semibold text-[#1C1D26]">R$ {totalValue}</span></h4>
 
@@ -18,6 +18,6 @@ export const Footer = ({ id, totalValue, checkStatus }) => {
                     onClick={() => navigate(`/garcom/comanda/${id}/fechar-comanda`)}
                 >Atualizar</button>
             )}
-        </div>
+        </footer>
     );
 };
