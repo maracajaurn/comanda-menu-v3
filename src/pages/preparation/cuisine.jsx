@@ -32,11 +32,11 @@ export const Cousine = () => {
     // new_order - ok
     useEffect(() => {
         socket.on("new_order", (data) => {
-            const verificationIfProcuctFromCategory = data.categories.some((item) =>
-                (setting.estabishment_name !== "avanti" && item === "Drink")
-                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category));
+            const verificationIfProductFromCategory =
+                (setting.estabishment_name !== "avanti" && data.categories.includes("Drink")) ||
+                data.categories.some((item) => ["Porcao", "Petisco", "Refeicao", "Salada"].includes(item));
 
-            if (verificationIfProcuctFromCategory) {
+            if (verificationIfProductFromCategory) {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
@@ -184,9 +184,9 @@ export const Cousine = () => {
 
         try {
             OrderService.update_order(order_id, order)
-            .then((result) => {
-                if (result.status) {
-                    
+                .then((result) => {
+                    if (result.status) {
+
                         socket.emit("order_ready", { client: name_client, product: name_product });
                         toast.success(result.message);
                         getOrders();
