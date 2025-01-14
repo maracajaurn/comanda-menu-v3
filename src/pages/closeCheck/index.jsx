@@ -4,6 +4,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar, Calc } from "../../components";
 
+import { useLoader } from "../../contexts";
+
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
@@ -13,6 +15,8 @@ export const CloseCheck = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const { setLoading } = useLoader();
 
     const [disabledButton, setDisabledButton] = useState(true);
 
@@ -36,6 +40,7 @@ export const CloseCheck = () => {
     const [visibilityCalc, setVisibilityCal] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "garcom") {
@@ -45,6 +50,8 @@ export const CloseCheck = () => {
         getCheck();
         getOrders();
         getSetting();
+
+        setLoading(false);
     }, []);
 
     const getCheck = useCallback(async () => {
@@ -91,33 +98,39 @@ export const CloseCheck = () => {
     }, []);
 
     const closeCheck = useCallback(async () => {
+        setLoading(true);
         CheckService.closeCheck(check.pay_form, id)
             .then((result) => {
                 if (result.status) {
                     toast.success(result.message);
                     socket.emit("check_finished", { client: check.name_client, id });
                     return navigate(-2);
-                } else {
-                    toast.error(result.message);
                 };
+
+                setLoading(false);
+                return toast.error(result.message);
             }).catch((error) => {
-                toast.error(error.message);
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, [check]);
 
     const cancelCheck = useCallback(async () => {
-        socket.emit("check_canceled", { client: check.name_client });
+        setLoading(true);
         await CheckService.deleteById(id)
             .then((result) => {
                 if (result.status) {
+                    socket.emit("check_canceled", { client: check.name_client });
                     toast.success(result.message);
                     return navigate(-2);
-                } else {
-                    toast.error(result.message);
                 };
+
+                setLoading(false);
+                return toast.error(result.message);
             })
             .catch((error) => {
-                toast.error(error.message);
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, [check]);
 

@@ -4,6 +4,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
 
+import { useLoader } from "../../contexts";
+
 import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
 import { SettingService } from "../../service/setting/SettingService";
@@ -18,7 +20,10 @@ export const Cousine = () => {
 
     const navigate = useNavigate();
 
+    const { setLoafing } = useLoader();
+
     useEffect(() => {
+        setLoafing(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "cozinha") {
@@ -27,6 +32,8 @@ export const Cousine = () => {
 
         getOrders();
         getSetting();
+
+        setLoafing(false);
     }, []);
 
     // new_order - ok
@@ -182,23 +189,24 @@ export const Cousine = () => {
             obs,
         };
 
-        try {
-            OrderService.update_order(order_id, order)
-                .then((result) => {
-                    if (result.status) {
+        setLoafing(true);
+        OrderService.update_order(order_id, order)
+            .then((result) => {
+                if (result.status) {
+                    setLoafing(false);
+                    socket.emit("order_ready", { client: name_client, product: name_product });
+                    toast.success(result.message);
+                    getOrders();
+                    return
+                }
+                setLoafing(false);
+                return toast.error(result.message);
 
-                        socket.emit("order_ready", { client: name_client, product: name_product });
-                        toast.success(result.message);
-                        getOrders();
-                        return
-                    } else {
-                        return toast.error(result.message);
-                    };
-                })
-                .catch((error) => { return toast.error(error) });
-        } catch (error) {
-            return toast.error(error);
-        };
+            })
+            .catch((error) => {
+                setLoafing(false);
+                return toast.error(error);
+            });
     };
 
     return (

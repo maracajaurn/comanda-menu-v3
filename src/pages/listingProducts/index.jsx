@@ -12,11 +12,12 @@ import { OrderService } from "../../service/order/OrderService";
 import { ProductService } from "../../service/product/ProductService";
 
 import socket from "../../service/socket";
-import { useToggleView } from "../../contexts"
+import { useToggleView, useLoader } from "../../contexts"
 
 export const ListingProducts = () => {
 
     const { toggleView, setToggleView } = useToggleView()
+    const { setLoading } = useLoader();
 
     const navigate = useNavigate();
 
@@ -42,6 +43,7 @@ export const ListingProducts = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "garcom") {
@@ -51,6 +53,8 @@ export const ListingProducts = () => {
         setToggleView(false);
         getAllProducts();
         getCheckById();
+
+        setLoading(false);
     }, []);
 
     const getAllProducts = useCallback(async () => {
@@ -124,18 +128,26 @@ export const ListingProducts = () => {
 
     // enviar novos produtos para a comanda
     const postProducts = useCallback(async () => {
-        await OrderService.create_order({ list_order: selectedProduct, check_id: id })
-            .then(() => {
+        setLoading(true);
+        OrderService.create_order({ list_order: selectedProduct, check_id: id })
+            .then((result) => {
+                if (result.status) {
+                    const objSocket = {
+                        client,
+                        categories
+                    };
 
-                const objSocket = {
-                    client,
-                    categories
+                    socket.emit("new_order", objSocket);
+                    setLoading(false);
+                    return navigate(-1);
                 };
 
-                socket.emit("new_order", objSocket);
-                navigate(-1);
+                return toast.error(result.message || "Ocorreu um erro inesperado.")
             })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado."); });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message || "Ocorreu um erro inesperado.");
+            });
     }, [categories]);
 
     const itensFiltrados = listProducts.filter(item =>

@@ -4,6 +4,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
 
+import { useLoader } from "../../contexts";
+
 import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
 
@@ -13,7 +15,10 @@ export const Bartender = () => {
 
     const navigate = useNavigate();
 
+    const { setLoading } = useLoader();
+
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "barmen") {
@@ -21,6 +26,7 @@ export const Bartender = () => {
         };
 
         getOrders();
+        setLoading(false);
     }, []);
 
     // new_order - ok
@@ -160,23 +166,25 @@ export const Bartender = () => {
             obs,
         };
 
-        try {
-            OrderService.update_order(order_id, order)
-                .then((result) => {
-                    if (result.status) {
+        setLoading(true);
 
-                        toast.success(result.message);
-                        socket.emit("order_ready", { client: name_client, product: name_product });
-                        getOrders();
-                        return
-                    } else {
-                        return toast.error(result.message);
-                    };
-                })
-                .catch((error) => { return toast.error(error) });
-        } catch (error) {
-            return toast.error(error);
-        };
+        OrderService.update_order(order_id, order)
+            .then((result) => {
+                if (result.status) {
+                    setLoading(false);
+                    toast.success(result.message);
+                    socket.emit("order_ready", { client: name_client, product: name_product });
+                    getOrders();
+                    return
+                };
+
+                setLoading(false);
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error);
+            });
     };
 
     return (

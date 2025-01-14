@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { useToggleView } from "../../contexts";
+import { useToggleView, useLoader } from "../../contexts";
 
 import { Plus } from "../../libs/icons";
 
@@ -17,8 +17,10 @@ export const ListingChecks = () => {
     const [rows, setRows] = useState([]);
 
     const { toggleView, setToggleView } = useToggleView();
+    const { setLoading } = useLoader();
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "garcom") {
@@ -160,16 +162,17 @@ export const ListingChecks = () => {
         return () => { socket.off("check_canceled") };
     }, []);
 
+    // TODO: condicionar setar no state apenas se a requisição for bem sucedida | res.length > 0
     const getCheckByStatus = useCallback(async () => {
-        try {
-            await CheckService.getByStatus(1)
-                .then((result) => {
-                    setRows(result)
-                })
-                .catch((error) => { return toast.error(error); });
-        } catch (error) {
-            return toast.error(error);
-        };
+        CheckService.getByStatus(1)
+            .then((result) => {
+                setLoading(false);
+                setRows(result);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
     }, []);
 
     return (

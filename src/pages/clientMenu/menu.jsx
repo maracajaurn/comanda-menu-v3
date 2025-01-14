@@ -6,12 +6,14 @@ import { Plus, Minus, Close, Cart, CheckProduct } from "../../libs/icons";
 
 import { ProductService } from "../../service/product/ProductService";
 
-import { useToggleView } from "../../contexts"
+import { useToggleView, useLoader } from "../../contexts"
 import { useConnectionMonitor } from "../../hooks/connectionMonitor";
 
 export const Menu = () => {
 
     const { setToggleView } = useToggleView()
+    const { setLoading } = useLoader()
+
     const isOnline = useConnectionMonitor();
 
     const navigate = useNavigate();
@@ -32,10 +34,11 @@ export const Menu = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
         const if_selected_product = localStorage.getItem("selected_product");
-        
+
         localStorage.removeItem("categories");
 
         if (if_selected_product) {
@@ -48,6 +51,8 @@ export const Menu = () => {
 
         setToggleView(false);
         getAllProducts();
+
+        setLoading(false);
     }, []);
 
 
@@ -56,7 +61,9 @@ export const Menu = () => {
             .then((result) => {
                 mapProducts(result)
             })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado."); });
+            .catch((error) => {
+                return toast.error(error.message || "Ocorreu um erro inesperado.");
+            });
     }, []);
 
     const mapProducts = (list) => {
@@ -105,7 +112,7 @@ export const Menu = () => {
             return productData.category;
         });
 
-        
+
         const newCategories = selectedCategories.filter(
             (category) => category && !categories.includes(category)
         );
@@ -114,7 +121,7 @@ export const Menu = () => {
             const updatedCategories = [...newCategories];
             localStorage.setItem("categories", JSON.stringify(updatedCategories));
         }
-    },[selectedProduct, listProducts]);
+    }, [selectedProduct, listProducts]);
 
 
     // Wrapper para setSelectedProduct

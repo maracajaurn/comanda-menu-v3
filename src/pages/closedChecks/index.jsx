@@ -6,33 +6,38 @@ import { Plus } from "../../libs/icons";
 
 import { Navbar } from "../../components";
 
+import { useLoader } from "../../contexts";
+
 import { CheckService } from "../../service/check/CheckService";
 
 export const ClosedChecks = () => {
     const [rows, setRows] = useState([]);
+    const { setLoading } = useLoader();
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin" && get_func !== "garcom") {
             return navigate("/login");
         };
-        
+
         getAllChecks();
     }, []);
 
     const getAllChecks = useCallback(async () => {
-        try {
-            await CheckService.getByStatus(0)
-                .then((result) => {
-                    setRows(result)
-                });
-        } catch (error) {
-            toast.error(error);
-            return navigate(-1);
-        };
+        await CheckService.getByStatus(0)
+            .then((result) => {
+                setLoading(false);
+                setRows(result);
+            })
+            .catch((error) => {
+                setLoading(false);
+                toast.error(error.message);
+                return navigate(-1);
+            });
     }, []);
 
     return (

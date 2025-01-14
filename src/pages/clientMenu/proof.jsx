@@ -5,10 +5,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { Navbar } from "../../components/navbar";
 import { CheckProduct } from "../../libs/icons";
 
+import { useLoader } from "../../contexts";
+
 import { OrderService } from "../../service/order/OrderService";
 import socket from "../../service/socket";
 
 export const Proof = () => {
+
+    const { setLoading } = useLoader();
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -29,6 +33,8 @@ export const Proof = () => {
     // TODO: criar controle limite de produtos por estoque
 
     const createOrder = useCallback(async () => {
+        setLoading(true);
+
         const objSocket = {
             client: localStorage.getItem("client"),
             categories: JSON.parse(localStorage.getItem("categories")),
@@ -37,18 +43,22 @@ export const Proof = () => {
         if (objSocket.categories.length === 0) {
             return
         };
-        
-        OrderService.create_order({ list_order: products, check_id: id })
-            .then((res) => {
 
-                if (res.status) {
+        OrderService.create_order({ list_order: products, check_id: id })
+            .then((result) => {
+
+                if (result.status) {
                     localStorage.removeItem("selected_product");
                     socket.emit("new_order", objSocket);
-                    return toast.success(res.message)
+                    setLoading(false);
+                    return toast.success(result.message)
                 };
-                return toast.error(res.message);
+
+                setLoading(false);
+                return toast.error(result.message);
             })
             .catch((error) => {
+                setLoading(false);
                 return toast.error(error.message);
             });
     }, [products]);

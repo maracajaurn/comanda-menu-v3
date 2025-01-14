@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import html2canvas from 'html2canvas';
 
 import { Navbar } from "../../components";
+import { useLoader } from "../../contexts";
 
 import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons";
 
@@ -13,6 +14,8 @@ import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService";
 
 export const Admin = () => {
+
+    const { setLoading } = useLoader();
 
     const [cashier, setCashier] = useState({
         cashier_id: 0,
@@ -32,6 +35,7 @@ export const Admin = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin") {
@@ -41,6 +45,7 @@ export const Admin = () => {
         const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
         getAllCashier();
+        setLoading(false);
     }, []);
 
     // check_finished
@@ -63,11 +68,14 @@ export const Admin = () => {
     }, []);
 
     const closeCashier = () => {
+        setLoading(true);
         try {
             CashierService.deleteById(cashier.cashier_id);
             CheckService.deleteAll();
             CashierService.get();
             screenshotCashier();
+            setLoading(false);
+            toast.success("Caixa fechado com sucesso!");
         } catch (error) {
             return toast.error(error);
         };

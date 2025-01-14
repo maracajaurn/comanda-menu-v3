@@ -4,11 +4,15 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components/navbar";
 
+import { useLoader } from "../../contexts";
+
 import { CheckService } from "../../service/check/CheckService";
 import { ProductService } from "../../service/product/ProductService";
 import { PaymentService } from "../../service/payment/PaymentService";
 
 export const Cart = () => {
+
+    const { setLoading } = useLoader();
 
     const { id } = useParams();
 
@@ -20,12 +24,13 @@ export const Cart = () => {
     const [email, setEmail] = useState("");
 
     const getProducts = useCallback(async () => {
-        try {
-            const result = await ProductService.getAll();
-            setProducts(result);
-        } catch (error) {
-            console.error("Error fetching products", error);
-        };
+        ProductService.getAll()
+            .then(result => {
+                setProducts(result);
+            })
+            .catch(error => {
+                toast.error(error.message);
+            });
     }, []);
 
     const getCheck = async () => {
@@ -40,6 +45,7 @@ export const Cart = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         const selectedProducts = localStorage.getItem("selected_product");
         if (selectedProducts) {
             setProductsSelected(JSON.parse(selectedProducts));
@@ -47,6 +53,8 @@ export const Cart = () => {
 
         getCheck();
         getProducts();
+
+        setLoading(false);
     }, [getProducts]);
 
     useEffect(() => {
@@ -84,6 +92,7 @@ export const Cart = () => {
     // TODO: Atualizar a URL da notificação com ngrok
     // Front e Mercado Pago
     const payment = useCallback(() => {
+        setLoading(true);
         const paymentData = {
             transaction_amount: total_value,
             description: `Pagamento da comanda ${client}`,
@@ -126,13 +135,16 @@ export const Cart = () => {
         PaymentService.createPayment(paymentData)
             .then(response => {
                 if (response) {
+                    setLoading(false);
                     return window.location.href = response;
                 };
+
+                setLoading(false);
                 return toast.error("Erro ao processar pagamento");
             })
             .catch(error => {
-                console.error(error);
-                toast.error("Erro ao processar pagamento");
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, [total_value, client, email]);
 
@@ -196,7 +208,7 @@ export const Cart = () => {
                         w-2/3 px-1 py-2 text-[20px] font-bold rounded-xl border-2 border-transparent  transition-all delay-75`}
                         type="submit"
                         disabled={productsInCart.length === 0 || email === ""}
-                        onClick={() =>payment()}
+                        onClick={() => payment()}
                     >Pagar</button>
                 </div>
             </div>

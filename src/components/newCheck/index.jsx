@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Close } from "../../libs/icons";
+
+import { useLoader } from "../../contexts";
+
 import socket from "../../service/socket";
 import { useToggleView } from "../../contexts";
 import { CheckService } from "../../service/check/CheckService";
@@ -13,13 +16,13 @@ export const NewCheck = ({ is_client = false }) => {
 
     const navigate = useNavigate();
 
+    const { loading, setLoading } = useLoader();
+
     const [value, setValue] = useState({
         name_client: "",
         cashier_id: null,
         obs: ""
     });
-
-    const [loading, setLoading] = useState(false);
 
     const { toggleView, setToggleView } = useToggleView();
 
@@ -50,6 +53,8 @@ export const NewCheck = ({ is_client = false }) => {
                 obs: value.obs,
             };
 
+            setLoading(true);
+
             CheckService.create(data)
                 .then((result) => {
                     if (result.status) {
@@ -68,10 +73,9 @@ export const NewCheck = ({ is_client = false }) => {
                         toast.success(result.message);
                         setValue(prev => ({ ...prev, name_client: "", obs: "" }));
                         setLoading(false);
-                    } else {
-                        setLoading(false);
-                        return toast.error(result.message);
-                    };
+                    }
+                    setLoading(false);
+                    return toast.error(result.message);
                 }).catch((error) => {
                     setLoading(false);
                     return toast.error(error.message || "Ocorreu um erro ao criar a comanda.");

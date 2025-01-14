@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Navbar } from "../../components";
 import { ModalProduct } from "../../components";
 
-import { useToggleView } from "../../contexts";
+import { useToggleView, useLoader } from "../../contexts";
 
 import { Delete, Edit, Close } from "../../libs/icons";
 import { ProductService } from "../../service/product/ProductService";
@@ -14,6 +14,7 @@ export const ShowEditProducts = () => {
 
     const [listProducts, setListProducts] = useState([]);
     const { toggleView, setToggleView } = useToggleView();
+    const { setLoading } = useLoader();
 
     const [filtro, setFiltro] = useState("");
     const [idProduct, setIdProduct] = useState(null);
@@ -26,8 +27,9 @@ export const ShowEditProducts = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin") {
             return navigate("/login");
         };
@@ -55,23 +57,35 @@ export const ShowEditProducts = () => {
         ProductService.getAll()
             .then((result) => {
                 setListProducts(result);
+                setLoading(false);
             })
             .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado.") });
     }, []);
 
     const deleteById = (product_id) => {
+        setLoading(true);
         ProductService.deleteById(product_id)
             .then((result) => {
-                toast(result.message || "Produto deletado com sucesso.");
-                getAllProducts();
+                if (result.status) {
+                    setLoading(false);
+                    getAllProducts();
+                    return toast.success(result.message || "Produto deletado com sucesso.");
+                };
+
+                setLoading(false);
+                return toast.error(result.message || "Ocorreu um erro inesperado.");
             })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado.") });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message || "Ocorreu um erro inesperado.")
+            });
     };
 
     const haldletoggleViewModal = (action, _id) => {
         setAction(action);
         setIdProduct(_id);
         setToggleView(true);
+        setLoading(true);
     };
 
     const itensFiltrados = useMemo(() => {

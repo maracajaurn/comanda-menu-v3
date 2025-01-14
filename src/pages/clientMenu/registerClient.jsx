@@ -10,6 +10,7 @@ export const RegisterClient = () => {
 
     const { setToggleView } = useToggleView();
 
+    // TODO: criar comanda já fechada
     useEffect(() => {
         const check_id = localStorage.getItem("check_id");
         if (check_id) {

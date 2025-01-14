@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { useToggleView } from "../../contexts";
-
 import { Navbar, Footer } from "../../components";
+
+import { useToggleView, useLoader } from "../../contexts";
 
 import { Delete, Plus, Minus } from "../../libs/icons";
 
@@ -19,6 +19,7 @@ export const Waiter = () => {
     const { id } = useParams();
 
     const { setToggleView } = useToggleView();
+    const { setLoading } = useLoader();
 
     const [listProducts, setListProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -26,6 +27,7 @@ export const Waiter = () => {
     const [checkStatus, setCheckStatus] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         const get_func = localStorage.getItem("func");
 
         if (get_func !== "admin" && get_func !== "garcom") {
@@ -122,7 +124,7 @@ export const Waiter = () => {
         });
 
         toast.dismiss();
-        
+
         return () => { socket.off("product_removed") };
     }, []);
 
@@ -144,7 +146,7 @@ export const Waiter = () => {
         });
 
         toast.dismiss();
-        
+
         return () => { socket.off("quantity_change") };
     }, []);
 
@@ -168,32 +170,30 @@ export const Waiter = () => {
     }, []);
 
     const getCheckById = useCallback(async () => {
-        try {
-            await CheckService.getById(id)
-                .then((result) => {
+        await CheckService.getById(id)
+            .then((result) => {
 
-                    setClient(result.name_client);
+                setClient(result.name_client);
 
-                    setTotalPrice(parseFloat(result.total_value || 0).toFixed(2).replace(".", ","));
+                setTotalPrice(parseFloat(result.total_value || 0).toFixed(2).replace(".", ","));
 
-                    // verificando status da comanda
-                    if (!result.status) {
-                        setCheckStatus(false);
-                    };
-                });
+                // verificando status da comanda
+                if (!result.status) {
+                    setCheckStatus(false);
+                };
+            });
 
-            await OrderService.get_orders_by_check(id)
-                .then((result) => {
-                    setListProducts(result);
-                });
-        } catch (error) {
-            toast.error(error.message);
-            return navigate(-1);
-        };
+        await OrderService.get_orders_by_check(id)
+            .then((result) => {
+                setListProducts(result);
+            });
+
+        setLoading(false);
     }, []);
 
     // Editar quantidade do produto na lista
     const alterQnt = async (order_id, quantity, obs, category, product_name, action) => {
+        setLoading(true);
         if (quantity > 0) {
             const data = {
                 check_id: id,
@@ -220,10 +220,12 @@ export const Waiter = () => {
                             client
                         };
 
+                        setLoading(false);
                         socket.emit("quantity_change", data);
                         return getCheckById();
                     };
-
+                    
+                    setLoading(false);
                     return toast.error(result.message);
                 })
                 .catch((error) => {
@@ -234,14 +236,22 @@ export const Waiter = () => {
 
     // remover item da comanda pelo índice
     const deleteItem = async (order_id, product_name, category) => {
-        await OrderService.delete_order(order_id, id)
-            .then(() => {
-                getCheckById();
+        setLoading(true);
 
-                socket.emit("product_removed", { product_name, client, category });
+        await OrderService.delete_order(order_id, id)
+            .then((result) => {
+                if (result.status) {
+                    setLoading(false);
+                    getCheckById();
+                    socket.emit("product_removed", { product_name, client, category });
+                };
+
+                setLoading(false);
+                return toast.error(result.message);
             })
             .catch((error) => {
-                toast.error(error.message);
+                setLoading(false);
+                return toast.error(error.message);
             });
     };
 

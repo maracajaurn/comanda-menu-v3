@@ -9,11 +9,14 @@ import { useToggleView } from "../../contexts";
 
 import { Delete, Edit, Plus, Reflesh } from "../../libs/icons";
 
+import { useLoader } from "../../contexts";
+
 import { SettingService } from "../../service/setting/SettingService";
 import { UsuarioService } from "../../service/usuario/UsuarioService";
 
 export const ManageUser = () => {
     const { toggleView, setToggleView } = useToggleView();
+    const { setLoading } = useLoader();
 
     const [id, setId] = useState(null);
 
@@ -31,15 +34,19 @@ export const ManageUser = () => {
     });
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
+        setLoading(true);
+
         const get_func = localStorage.getItem("func");
-        
+
         if (get_func !== "admin") {
             return navigate("/login");
         };
 
         getAllUsers();
+
+        setLoading(false);
     }, [toggleView]);
 
     useEffect(() => {
@@ -82,15 +89,15 @@ export const ManageUser = () => {
     const blobToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-    
+
             reader.onloadend = () => {
                 resolve(reader.result);
             };
-    
+
             reader.onerror = (error) => {
                 reject('Erro ao ler o Blob: ' + error);
             };
-    
+
             reader.readAsDataURL(blob);
         });
     };
@@ -139,12 +146,19 @@ export const ManageUser = () => {
             return toast.error("Configurações não carregadas.");
         };
 
+        setLoading(true);
+
         await SettingService.update(setting.setting_id, payload)
             .then((result) => {
                 getSetting();
                 toast.success(result.message);
+                setLoading(false);
+                return
             })
-            .catch((error) => { return toast.error(error) });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error)
+            });
     }, [setting]);
 
     const getAllUsers = useCallback(async () => {
@@ -156,12 +170,21 @@ export const ManageUser = () => {
     }, []);
 
     const deleteUser = async (setting_id) => {
+        setLoading(true);
         await UsuarioService.deleteById(setting_id)
             .then((result) => {
-                toast.success(`${result.message || "Configurações atualizadas"}`);
-                getAllUsers()
+                if (result.status) {
+                    setLoading(false);
+                    toast.success(`${result.message || "Configurações atualizadas"}`);
+                    getAllUsers()
+                };
+
+                return toast.error(result.message || "Ocoreu um erro ao realizar a operação.")
             })
-            .catch((error) => { return toast.error(error.message || "Ocoreu um erro ao realizar a operação.") });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message || "Ocoreu um erro ao realizar a operação.")
+            });
     };
 
     return (

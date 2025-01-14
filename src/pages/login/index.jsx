@@ -1,14 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Navbar } from "../../components";
 import toast, { Toaster } from "react-hot-toast";
-import { SettingService } from "../../service/setting/SettingService";
+
+import { Navbar } from "../../components";
+
+import { useLoader } from "../../contexts";
 
 import { LoginService } from "../../service/login/LoginService";
 
 export const Login = () => {
 
     const navigate = useNavigate();
+
+    const { setLoading } = useLoader();
 
     const [value, setValue] = useState({
         email: "",
@@ -38,9 +42,13 @@ export const Login = () => {
             return toast.error("Preencha todos os campos corretamente!");
         };
 
+        setLoading(true);
         await LoginService.login(value)
             .then((result) => {
                 if (result.status) {
+
+                    setLoading(false);
+
                     sessionStorage.setItem("token", result.token);
                     localStorage.setItem("func", result.func);
 
@@ -56,9 +64,13 @@ export const Login = () => {
                     };
                 };
 
+                setLoading(false);
                 return toast.error(result.message);
             })
-            .catch((error) => { return toast.error(error.message) });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message)
+            });
     };
 
     return (

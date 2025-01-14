@@ -5,6 +5,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { Navbar } from "../../components/navbar";
 import { CheckProduct } from "../../libs/icons";
 
+import { useLoader } from "../../contexts";
+
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 
@@ -13,13 +15,19 @@ export const WaitForProducts = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const { setLoading } = useLoader();
+
     const [products, setProducts] = useState([]);
     const [total_value, setTotalValue] = useState(0);
     const [client, setClient] = useState("");
 
     useEffect(() => {
+        setLoading(true);
+
         getCheck();
         getOrders();
+
+        setLoading(false);
     }, [id]);
 
     const getOrders = useCallback(async () => {
