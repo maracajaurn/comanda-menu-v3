@@ -18,7 +18,6 @@ export const Cart = () => {
     const [total_value, setTotalValue] = useState(0);
     const [client, setClient] = useState("");
     const [email, setEmail] = useState("");
-    const [payment_method, setPaymentMethod] = useState(" " || "pix" || "credit_card");
 
     const getProducts = useCallback(async () => {
         try {
@@ -31,11 +30,12 @@ export const Cart = () => {
 
     const getCheck = async () => {
         CheckService.getById(id)
-            .then(response => {
-                setClient(response.name_client);
+            .then(result => {
+                setClient(result.name_client);
+                localStorage.setItem("client", result.name_client);
             })
             .catch(error => {
-                toast.error(error.message);
+                return toast.error(error.message);
             });
     };
 
@@ -113,13 +113,13 @@ export const Cart = () => {
                 ],
                 excluded_payment_methods: [
                     {
-                        id: '',
+                        id: 'credit_card',
                     },
                 ],
                 installments: 1,
                 default_installments: 1,
             },
-            notification_url: "https://2ba5-177-73-116-254.ngrok-free.app/api/webhook/payment",
+            notification_url: "https://5f9d-170-82-73-253.ngrok-free.app/api/webhook/payment",
             auto_return: "all",
         };
 
@@ -135,34 +135,6 @@ export const Cart = () => {
                 toast.error("Erro ao processar pagamento");
             });
     }, [total_value, client, email]);
-
-    const paymentPix = useCallback(() => {
-        const paymentData = {
-            transaction_amount: total_value,
-            description: `Pagamento da comanda ${client}`,
-            payment_method_id: "pix",
-            payer: {
-                email: email || "no-email@teste.com"
-            },
-            auto_return: "all",
-            notification_url: "https://2ba5-177-73-116-254.ngrok-free.app/api/webhook/payment",
-        };
-
-        PaymentService.createPaymentPix(paymentData)
-            .then(response => {
-                console.log(response)
-
-                if (response.ticket_url) {
-                    return window.location.href = response.ticket_url
-                };
-
-                return toast.error("Erro ao processar pagamento");
-            })
-            .catch(error => {
-                console.error(error);
-                toast.error("Erro ao processar pagamento");
-            });
-    }, [total_value, client]);
 
     return (
         <>
@@ -218,30 +190,13 @@ export const Cart = () => {
                     </label>
                 </div>
 
-                <div>
-                    <label>
-                        <select name="payment_method" id="payment_method"
-                            className="w-[250px] focus:border-slate-800 border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            onChange={(event) => setPaymentMethod(event.target.value)}
-                            value={payment_method} required
-                        >
-                            <option value=" ">Pagar com</option>
-                            <option value="pix">PIX</option>
-                            <option value="credit_card">Cartão de crédito</option>
-                        </select>
-                    </label>
-                </div>
-
                 <div className="fixed bottom-0 w-full flex flex-col justify-between items-center px-5 py-3 bg-[#EB8F00] text-slate-100">
                     <button className={
-                        `${(payment_method === "pix" || payment_method === "credit_card") && email !== "" ? "bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] hover:border-[#1C1D26]" : "bg-[#1C1D26]/50"}
+                        `${email !== "" ? "bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] hover:border-[#1C1D26]" : "bg-[#1C1D26]/50"}
                         w-2/3 px-1 py-2 text-[20px] font-bold rounded-xl border-2 border-transparent  transition-all delay-75`}
                         type="submit"
-                        disabled={productsInCart.length === 0 || email === "" || payment_method === " "}
-                        onClick={() =>
-                            payment_method === "pix" ? paymentPix()
-                                : payment_method === "credit_card" ? payment() : null
-                        }
+                        disabled={productsInCart.length === 0 || email === ""}
+                        onClick={() =>payment()}
                     >Pagar</button>
                 </div>
             </div>
