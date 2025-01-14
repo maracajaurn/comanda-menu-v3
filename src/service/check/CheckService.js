@@ -37,9 +37,20 @@ const getByStatus = async (status) => {
 };
 
 const create = async (data) => {
-
     try {
         const res = await API.post("/api/check", data);
+
+        if (res.data) return res.data;
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
+};
+
+const createClosed = async (data) => {
+    try {
+        const res = await API.post("/api/check/closed", data);
 
         if (res.data) return res.data;
 
@@ -102,11 +113,15 @@ const deleteAll = async () => {
 
 export const CheckService = {
     create,
+    createClosed,
+
     getAll,
     getById,
     getByStatus,
+
     updateById,
     closeCheck,
+
     deleteAll,
     deleteById,
 };
