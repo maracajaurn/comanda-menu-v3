@@ -24,6 +24,7 @@ export const Login = () => {
     };
 
     useEffect(() => {
+        setLoading(false);
         const get_func = localStorage.getItem("func");
 
         if (get_func === "barmen" || get_func === "cozinha") {
@@ -84,7 +85,7 @@ export const Login = () => {
                             type="email"
                             id="email"
                             name="email"
-                            className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="focus:border-slate-800 w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="E-mail"
                             onChange={(e) => handleInput("email", e)}
                             value={value.email}
@@ -98,7 +99,7 @@ export const Login = () => {
                             type="password"
                             id="pass"
                             name="pass"
-                            className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="focus:border-slate-800 w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Senha"
                             onChange={(e) => handleInput("password", e)}
                             value={value.password}
