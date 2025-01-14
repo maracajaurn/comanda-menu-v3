@@ -63,7 +63,7 @@ export const AppRoutes = () => {
                 <Bartender />
             } />
 
-            <Route path={`/resister-client`} element={<RegisterClient />} />
+            <Route path={`/resister_client`} element={<RegisterClient />} />
             <Route path={`/:id/products`} element={<Menu />} />
             <Route path={`/:id/cart`} element={<Cart />} />
             <Route path={`/:id/proof`} element={<Proof />} />
