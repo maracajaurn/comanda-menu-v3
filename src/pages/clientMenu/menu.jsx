@@ -53,7 +53,6 @@ export const Menu = () => {
         getAllProducts();
     }, []);
 
-
     const getAllProducts = useCallback(async () => {
         await ProductService.getAll()
             .then((result) => {
@@ -141,13 +140,17 @@ export const Menu = () => {
     }, [selectedProduct]);
 
     // Editando quantidade de cada item
-    const alterQnt = useCallback((product_id, action) => {
+    const alterQnt = useCallback((product_id, stock, action) => {
         const index = selectedProduct.findIndex((item) => item[1] === product_id);
 
         if (index !== -1) {
             const qnt = selectedProduct[index][2];
             if (action === "+") {
-                selectedProduct[index][2] = qnt + 1;
+                if (qnt >= stock) {
+                    return toast("Estoque insuficiente.", { icon: "😢" });
+                } else {
+                    selectedProduct[index][2] = qnt + 1;
+                };
             } else if (action === "-" && qnt >= 1) {
                 if (qnt === 1) {
                     const remove_product = selectedProduct.filter((item) => item[1] !== product_id);
@@ -250,7 +253,7 @@ export const Menu = () => {
 
                         <div className="flex items-center gap-3 border-2 border-slate-500 rounded-md my-5">
                             <button className="py-1 px-5 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => alterQnt(item.product_id, "+")}
+                                onClick={() => alterQnt(item.product_id, item.stock, "+")}
                             ><Plus /></button>
 
                             <p className="text-[#EB8F00] font-somibold">
@@ -258,7 +261,7 @@ export const Menu = () => {
                             </p>
 
                             <button className="py-1 px-5 border-l-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => alterQnt(item.product_id, "-")}
+                                onClick={() => alterQnt(item.product_id, item.stock, "-")}
                             ><Minus /></button>
                         </div>
                     </div>
