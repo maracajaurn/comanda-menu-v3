@@ -35,6 +35,8 @@ export const Menu = () => {
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
         const if_selected_product = localStorage.getItem("selected_product");
+        
+        localStorage.removeItem("categories");
 
         if (if_selected_product) {
             setSelectedProduct(JSON.parse(if_selected_product));
@@ -95,6 +97,26 @@ export const Menu = () => {
         });
     };
 
+    const handleCategories = useCallback(() => {
+        const categories = JSON.parse(localStorage.getItem("categories") || "[]");
+
+        const selectedCategories = selectedProduct.map((product) => {
+            const productData = listProducts.find((item) => item.product_id === product[1]);
+            return productData.category;
+        });
+
+        
+        const newCategories = selectedCategories.filter(
+            (category) => category && !categories.includes(category)
+        );
+
+        if (newCategories.length > 0) {
+            const updatedCategories = [...newCategories];
+            localStorage.setItem("categories", JSON.stringify(updatedCategories));
+        }
+    },[selectedProduct, listProducts]);
+
+
     // Wrapper para setSelectedProduct
     const updateSelectedProduct = (newSelectedProduct) => {
         setSelectedProduct(newSelectedProduct);
@@ -131,18 +153,20 @@ export const Menu = () => {
             };
         } else if (action === "+") {
             const product = listProducts.find((item) => item.product_id === product_id);
+
             if (product) {
                 const newProduct = [...selectedProduct, [id, product_id, 1, null]];
                 return updateSelectedProduct(newProduct);
             } else {
-                toast.error("Produto não encontrado.");
+                return toast.error("Produto não encontrado.");
             };
         };
 
-        updateSelectedProduct([...selectedProduct]);
+        return updateSelectedProduct([...selectedProduct]);
     }, [listProducts, selectedProduct]);
 
-    const navidateToCart = () => {
+    const navigateToCart = () => {
+        handleCategories();
         navigate(`/${id}/cart`);
     };
 
@@ -209,7 +233,7 @@ export const Menu = () => {
                         </div>
 
                         <label>
-                            <textarea 
+                            <textarea
                                 placeholder="Observação"
                                 className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
                                 onChange={(e) => obsProduct(item.product_id, e.target.value)}
@@ -245,7 +269,7 @@ export const Menu = () => {
                         <button className={`
                         ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
                         bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75`}
-                            onClick={() => { navidateToCart(); setToggleView(false) }}
+                            onClick={() => { navigateToCart(); setToggleView(false) }}
                             disabled={selectedProduct.length === 0}
                         ><Cart /></button>
                     </div>
