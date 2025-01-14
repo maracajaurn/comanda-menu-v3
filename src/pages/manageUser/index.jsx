@@ -98,7 +98,7 @@ export const ManageUser = () => {
     const getSetting = useCallback(async () => {
         await SettingService.get()
             .then((result) => {
-                const image = result[0].image_pix?.data;
+                const image = result.image_pix?.data;
 
                 if (image) {
                     const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
@@ -106,11 +106,11 @@ export const ManageUser = () => {
                         .then((base64Image) => {
                             setSetting((prev) => ({
                                 ...prev,
-                                setting_id: result[0].setting_id,
-                                estabishment_name: result[0].estabishment_name,
-                                serveice_change: result[0].serveice_change,
-                                service_change_percentage: result[0].service_change_percentage,
-                                color: result[0].color,
+                                setting_id: result.setting_id,
+                                estabishment_name: result.estabishment_name,
+                                serveice_change: result.serveice_change,
+                                service_change_percentage: result.service_change_percentage,
+                                color: result.color,
                                 image_pix: base64Image,
                             }));
                         })
@@ -118,7 +118,7 @@ export const ManageUser = () => {
                             toast.error('Erro ao converter a imagem: ' + error.message);
                         });
                 } else {
-                    setSetting(result[0]);
+                    setSetting(result);
                 }
             })
             .catch((error) => {
