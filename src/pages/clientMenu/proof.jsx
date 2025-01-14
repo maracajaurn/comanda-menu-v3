@@ -30,7 +30,6 @@ export const Proof = () => {
             createOrder();
         };
     }, [products]);
-    // TODO: criar controle limite de produtos por estoque
 
     const createOrder = useCallback(async () => {
         setLoading(true);
