@@ -205,7 +205,7 @@ export const CloseCheck = () => {
                                 Consumo: <span className="text-slate-500">R$ {parseFloat(check.total_value).toFixed(2).replace(".", ",")}</span>
                             </h2>
                             <h2 className="flex flex-col mt-5 text-center text-slate-900 font-bold text-[28px]">
-                                Total + {setting.service_change_percentage}%: <span className="text-slate-500">R$ {parseFloat(check.total_value + (check.total_value * setting.service_change_percentage / 100)).toFixed(2).replace(".", ",")}</span>
+                                Total + {setting.service_change_percentage}% <span className="text-slate-500">R$ {parseFloat(check.total_value + (check.total_value * setting.service_change_percentage / 100)).toFixed(2).replace(".", ",")}</span>
                             </h2>
                         </>
                     ) : (
