@@ -183,7 +183,7 @@ export const Waiter = () => {
                         setCheckStatus(false);
                     };
 
-                    return;
+                    return setLoading(false);
                 };
 
                 setLoading(false);
