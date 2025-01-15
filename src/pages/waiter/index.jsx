@@ -195,8 +195,6 @@ export const Waiter = () => {
             });
     }, []);
 
-
-    // TODO: Aplicar essa lógica às outras listagens
     const getOrdersByCheck = useCallback(() => {
         OrderService.get_orders_by_check(id)
             .then((result) => {
