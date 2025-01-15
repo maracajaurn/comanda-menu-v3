@@ -58,16 +58,9 @@ export const NewCheck = ({ is_client = false }) => {
             CheckService.create(data)
                 .then((result) => {
                     if (result.status) {
-
-                        if (is_client) {
-                            localStorage.setItem("check_id", result.check_id);
-
-                            navigate(`/garcom/comanda/${result.check_id}`);
-                        } else {
-                            setToggleView(false);
-                            localStorage.removeItem("check_id");
-                            navigate(`/garcom/comanda/${result.check_id}`);
-                        };
+                        setToggleView(false);
+                        localStorage.removeItem("check_id");
+                        navigate(`/garcom/comanda/${result.check_id}`);
 
                         socket.emit("nova_comanda", data);
                         toast.success(result.message);
@@ -79,7 +72,7 @@ export const NewCheck = ({ is_client = false }) => {
                     return toast.error(result.message);
                 }).catch((error) => {
                     setLoading(false);
-                    return toast.error(error.message || "Ocorreu um erro ao criar a comanda.");
+                    return toast.error(error.message);
                 });
         };
     };
