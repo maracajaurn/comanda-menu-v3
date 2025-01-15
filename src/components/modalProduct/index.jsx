@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-import { useToggleView } from "../../contexts";
+import { useToggleView, useLoader } from "../../contexts";
 import { Plus, Close, Delete } from "../../libs/icons";
 import { ProductService } from "../../service/product/ProductService";
 
@@ -18,11 +18,14 @@ export const ModalProduct = ({ action, id }) => {
 
     const { toggleView, setToggleView } = useToggleView();
 
+    const { setLoading } = useLoader();
+
     const handleInput = (field, event) => {
         setValue(prev => ({ ...prev, [field]: event.target.value }));
     };
 
     const createProduct = () => {
+        setLoading(true);
 
         if (value.product_name === "" || value.category === "" || value.price === 0) {
             return toast.error("preencha todos os campos");
@@ -39,7 +42,6 @@ export const ModalProduct = ({ action, id }) => {
 
         ProductService.create(data)
             .then((result) => {
-                setToggleView(false);
 
                 if (!result.status) {
                     return toast.error(result.message);
@@ -52,9 +54,14 @@ export const ModalProduct = ({ action, id }) => {
                     "category": "Bebida",
                 }));
 
+                setToggleView(false);
+                setLoading(false);
                 return toast.success(result.message);
             })
-            .catch((error) => { return toast.error(error.message); })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
     };
 
     const updateById = () => {
@@ -62,6 +69,8 @@ export const ModalProduct = ({ action, id }) => {
         if (value.product_name === "" || value.category === "" || value.price === 0) {
             return toast.error("preencha todos os campos");
         };
+
+        setLoading(true);
 
         const data = {
             product_name: value.product_name,
@@ -74,7 +83,6 @@ export const ModalProduct = ({ action, id }) => {
 
         ProductService.updateById(id, data)
             .then((result) => {
-                setToggleView(false);
                 
                 if (!result.status) {
                     return toast.error(result.message);
@@ -86,10 +94,15 @@ export const ModalProduct = ({ action, id }) => {
                     "price": 0,
                     "category": "Bebida",
                 }));
-
+                
+                setToggleView(false);
+                setLoading(false);
                 return toast.success(result.message);
             })
-            .catch((error) => { return toast.error(error.message); })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
     };
 
     const handleImageUpload = (e) => {
@@ -100,7 +113,7 @@ export const ModalProduct = ({ action, id }) => {
             const validTypes = ["image/jpeg", "image/png", "image/jpg"];
             if (!validTypes.includes(file.type)) {
                 return toast.error("Apenas arquivos de imagem (JPG, PNG) são permitidos.");
-            }
+            };
 
             // Verifica se o tamanho do arquivo é maior que 5 mb
             if (file.size > 16 * 1024 * 1024) {
