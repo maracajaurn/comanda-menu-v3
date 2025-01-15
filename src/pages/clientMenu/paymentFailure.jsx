@@ -2,7 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useLoader } from "../../contexts";
 
-import { Navbar } from "../../components/navbar";
+import { Navbar, Footer } from "../../components";
+
 import { XError } from "../../libs/icons";
 
 export const PaymentFailure = () => {
@@ -47,30 +48,7 @@ export const PaymentFailure = () => {
                 </div>
             </div>
 
-            <footer className="fixed bottom-0 w-full h-[130px] flex items-center px-5 py-3 bg-[#EB8F00] text-slate-100">
-                <div className="container mx-auto text-center">
-                    <p className="text-sm">Desenvolvido por <strong>Jackson Souza</strong></p>
-                    <p className="text-sm">© 2025 - Todos os direitos reservados.</p>
-                    <div className="flex justify-center space-x-4 mt-3">
-                        <a
-                            href="https://instagram.com/jackssads"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:underline bg-slate-900 rounded-md p-3"
-                        >
-                            Instagram
-                        </a>
-                        <a
-                            href="https://linkedin.com/in/jackssads"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:underline bg-slate-900 rounded-md p-3"
-                        >
-                            Linkedin
-                        </a>
-                    </div>
-                </div>
-            </footer>
+            <Footer is_client />
         </>
     );
 };

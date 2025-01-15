@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar } from "../../components/navbar";
+import { Navbar } from "../../components";
 
 import { useLoader } from "../../contexts";
 
@@ -142,7 +142,7 @@ export const Cart = () => {
                 installments: 1,
                 default_installments: 1,
             },
-            notification_url: "https://5f9d-170-82-73-253.ngrok-free.app/api/webhook/payment",
+            notification_url: "https://d9c5-170-82-72-249.ngrok-free.app/api/webhook/payment",
             auto_return: "all",
         };
 
@@ -163,8 +163,8 @@ export const Cart = () => {
 
     return (
         <>
-            <Navbar title="Meu carrinho" />
-            <div className="flex flex-col items-center gap-10">
+            <Navbar title="Meu carrinho" url />
+            <div className="flex flex-col items-center gap-10 pb-[100px]">
                 <Toaster />
                 <div className="px-10 py-14 shadow-xl bg-[#D39825]/10">
 

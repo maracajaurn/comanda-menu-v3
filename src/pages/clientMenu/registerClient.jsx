@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
 
-import { Navbar } from "../../components";
+import { Navbar, Footer } from "../../components";
 
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService"
@@ -27,7 +27,7 @@ export const RegisterClient = () => {
         if (check_id) {
             navigate(`/${check_id}/products`);
         };
-        
+
         localStorage.setItem("client", ".");
     }, []);
 
@@ -90,47 +90,50 @@ export const RegisterClient = () => {
     };
 
     return (
-        <div className={`flex justify-center items-center`}>
-            <Navbar title="Bem-vindo" />
-            <Toaster />
-            <div className="h-[300px] w-[300px] rounded-md border shadow-md shadow-slate-500 bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
-                <div className="p-5 bg-[#EB8F00] w-full">
-                    <h6 className="text-white text-center font-bold uppercase text-[18px]">Cliente</h6>
+        <>
+            <div className={`flex justify-center items-center`}>
+                <Navbar title="Bem-vindo" />
+                <Toaster />
+                <div className="h-[300px] w-[300px] rounded-md border shadow-md shadow-slate-500 bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
+                    <div className="p-5 bg-[#EB8F00] w-full">
+                        <h6 className="text-white text-center font-bold uppercase text-[18px]">Cliente</h6>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+
+                        <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
+                            <input
+                                className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
+                                type="text"
+                                id="name_client"
+                                name="name_client"
+                                required
+                                placeholder="Nome do cliente"
+                                onChange={(e) => handleInput("name_client", e)}
+                                value={value.name_client}
+                            />
+                        </label>
+
+                        <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
+                            <input
+                                className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
+                                type="text"
+                                id="indicacao"
+                                name="obs"
+                                required
+                                placeholder="Observação"
+                                onChange={(e) => handleInput("obs", e)}
+                                value={value.obs}
+                            />
+                        </label>
+                    </div>
+
+                    <button onClick={() => createCheck()}
+                        disabled={loading}
+                        className="w-[270px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
+                    >Cadastrar</button>
                 </div>
-                <div className="flex flex-col items-center gap-3">
-
-                    <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
-                        <input
-                            className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            id="name_client"
-                            name="name_client"
-                            required
-                            placeholder="Nome do cliente"
-                            onChange={(e) => handleInput("name_client", e)}
-                            value={value.name_client}
-                        />
-                    </label>
-
-                    <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
-                        <input
-                            className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            id="indicacao"
-                            name="obs"
-                            required
-                            placeholder="Observação"
-                            onChange={(e) => handleInput("obs", e)}
-                            value={value.obs}
-                        />
-                    </label>
-                </div>
-
-                <button onClick={() => createCheck()}
-                    disabled={loading}
-                    className="w-[270px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
-                >Cadastrar</button>
             </div>
-        </div>
+            <Footer is_client />
+        </>
     );
 };

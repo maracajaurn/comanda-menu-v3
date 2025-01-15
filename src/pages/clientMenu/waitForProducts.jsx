@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar } from "../../components/navbar";
+import { Navbar, Footer } from "../../components";
 import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
@@ -40,7 +40,7 @@ export const WaitForProducts = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -69,8 +69,8 @@ export const WaitForProducts = () => {
 
     return (
         <>
-            <Navbar title="Esperando ficar pronto ..." />
-            <div className="flex flex-col items-center gap-10">
+            <Navbar title="Em preparação" url />
+            <div className="flex flex-col items-center gap-10 pb-[200px]">
                 <Toaster />
                 <div className=" flex flex-col justify-center items-center gap-5 px-10 py-14 shadow-xl bg-[#D39825]/10">
 
@@ -124,6 +124,8 @@ export const WaitForProducts = () => {
                     >Adicionar outros produtos</button>
                 </div>
             </div>
+            
+            <Footer is_client />
         </>
     );
 };
