@@ -47,9 +47,9 @@ export const Cart = () => {
     const getCheck = useCallback(() => {
         CheckService.getById(id)
             .then(result => {
-                if (result) {
-                    setClient(result.name_client);
-                    localStorage.setItem("client", result.name_client);
+                if (result.length > 0) {
+                    setClient(result[0].name_client);
+                    localStorage.setItem("client", result[0].name_client);
                     return;
                 };
 
@@ -149,7 +149,6 @@ export const Cart = () => {
         PaymentService.createPayment(paymentData)
             .then((result) => {
                 if (result) {
-                    setLoading(false);
                     return window.location.href = result;
                 };
 

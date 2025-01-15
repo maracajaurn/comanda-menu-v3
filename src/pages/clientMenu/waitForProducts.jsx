@@ -52,9 +52,9 @@ export const WaitForProducts = () => {
     const getCheck = useCallback(() => {
         CheckService.getById(id)
             .then(result => {
-                if (result) {
-                    setClient(result.name_client);
-                    setTotalValue(result.total_value);
+                if (result.length > 0) {
+                    setClient(result[0].name_client);
+                    setTotalValue(result[0].total_value);
                     return;
                 };
 
