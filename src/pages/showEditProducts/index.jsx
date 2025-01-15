@@ -117,7 +117,7 @@ export const ShowEditProducts = () => {
             <Navbar title={"Meus Produtos"} url />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-6">
                 <ModalProduct action={action} id={idProduct} />
-                <div className="border flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl shadow-md">
+                <div className="border flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl  shadow-md">
                     <Toaster />
                     <label className="flex gap-2 items-center">
                         <input
@@ -143,7 +143,7 @@ export const ShowEditProducts = () => {
                 {currentItems.map((e) => (
                     <div key={e.product_id} className="flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 w-full rounded-xl shadow-md">
                         <div className="w-2/3 flex flex-col items-start">
-                            <h3 className="text-slate-900 font-bold">{e.product_name}</h3>
+                            <h3 className="text-slate-900 font-bold">{e.stock} - {e.product_name}</h3>
                             <h3 className="text-slate-500 text-[15px] font-semibold">R$ {e.price.toFixed(2).replace(".", ",")}</h3>
                             <h3 className="text-[#EB8F00] text-[15px]">{e.category}</h3>
                         </div>
