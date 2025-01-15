@@ -103,8 +103,8 @@ export const ManageUser = () => {
     const getSetting = useCallback(() => {
         SettingService.get()
             .then((result) => {
-                if (result) {
-                    const image = result.image_pix?.data;
+                if (result[0]) {
+                    const image = result[0].image_pix?.data;
 
                     if (image) {
                         const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
@@ -112,11 +112,11 @@ export const ManageUser = () => {
                             .then((base64Image) => {
                                 setSetting((prev) => ({
                                     ...prev,
-                                    setting_id: result.setting_id,
-                                    estabishment_name: result.estabishment_name,
-                                    serveice_change: result.serveice_change,
-                                    service_change_percentage: result.service_change_percentage,
-                                    color: result.color,
+                                    setting_id: result[0].setting_id,
+                                    estabishment_name: result[0].estabishment_name,
+                                    serveice_change: result[0].serveice_change,
+                                    service_change_percentage: result[0].service_change_percentage,
+                                    color: result[0].color,
                                     image_pix: base64Image,
                                 }));
 
@@ -126,7 +126,7 @@ export const ManageUser = () => {
                                 return toast.error('Erro ao converter a imagem: ' + error.message);
                             });
                     } else {
-                        return setSetting(result);
+                        return setSetting(result[0]);
                     };
                 };
 
@@ -297,7 +297,7 @@ export const ManageUser = () => {
                             <select className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 id="serviceCharge"
                                 name="serviceCharge"
-                                value={setting.serveice_change ? "1" : "0"}
+                                value={setting.serveice_change}
                                 onChange={(e) => handleSetting("serveice_change", e)}>
                                 <option value="1" >Sim</option>
                                 <option value="0" >Não</option>
