@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 
+import { useLoader } from "../../contexts";
+
 import { Navbar } from "../../components/navbar";
 import { XError } from "../../libs/icons";
 
@@ -8,6 +10,10 @@ export const PaymentFailure = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
+    const { setLoading } = useLoader();
+
+    setLoading(false);
+    
     return (
         <>
             <Navbar title="Falha com pagamento" />
