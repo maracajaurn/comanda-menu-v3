@@ -167,6 +167,7 @@ export const CloseCheck = () => {
                 <Toaster />
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
+                    {/* // TODO: Função para alterar o nome do cliente */}
                     <h1 className="text-center text-slate-900 font-bold text-[32px]">{check.name_client}</h1>
 
                     <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">

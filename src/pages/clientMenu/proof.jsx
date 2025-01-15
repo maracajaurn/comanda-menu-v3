@@ -31,6 +31,7 @@ export const Proof = () => {
         };
     }, [products]);
 
+    // TODO: Atualizar o estoque dos produtos
     const createOrder = useCallback(() => {
         setLoading(true);
 
