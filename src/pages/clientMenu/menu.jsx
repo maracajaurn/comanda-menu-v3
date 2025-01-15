@@ -4,17 +4,16 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { Plus, Minus, Close, Cart, CheckProduct } from "../../libs/icons";
 
+import { Navbar } from "../../components";
+
 import { ProductService } from "../../service/product/ProductService";
 
 import { useToggleView, useLoader } from "../../contexts"
-import { useConnectionMonitor } from "../../hooks/connectionMonitor";
 
 export const Menu = () => {
 
     const { setToggleView } = useToggleView()
     const { setLoading } = useLoader()
-
-    const isOnline = useConnectionMonitor();
 
     const navigate = useNavigate();
 
@@ -201,18 +200,10 @@ export const Menu = () => {
 
     return (
         <>
-            <nav className={`fixed top-0 w-full h-16 px-5 flex items-center justify-between bg-[#EB8F00] text-slate-100`}>
-                <Toaster />
-                <div>
-                    {!isOnline ? (
-                        <h2 className={`transition-all delay-200 uppercase bg-red-600 px-3 py-2 rounded-md font-bold text-white`}>Sem internet</h2>
-                    ) : (
-                        <h2 className="transition-all delay-200 font-bold uppercase text-[18px]">Menu</h2>
-                    )}
-                </div>
-            </nav>
+            <Navbar title="Menu" url />
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
+                <Toaster />
                 <div className="border px-3 py-5 w-full rounded-xl shadow-md">
                     <label className="flex gap-2 items-center">
                         <input
