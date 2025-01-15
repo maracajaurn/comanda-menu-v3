@@ -27,6 +27,8 @@ export const RegisterClient = () => {
         if (check_id) {
             navigate(`/${check_id}/products`);
         };
+        
+        localStorage.setItem("client", ".");
     }, []);
 
     const handleInput = (field, event) => {
@@ -38,14 +40,14 @@ export const RegisterClient = () => {
             .then((result) => {
                 if (result.length > 0) {
                     setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
-                    setLoading(false);
+                    return setLoading(false);
                 };
 
                 setLoading(false);
                 return toast.error(result.message);
             }).catch((error) => {
                 setLoading(false);
-                return toast.error(error.message || "Ocorreu um erro ao buscar o caixa.");
+                return toast.error(error.message);
             });
     }, []);
 
@@ -64,6 +66,8 @@ export const RegisterClient = () => {
             };
 
             setLoading(true);
+
+            localStorage.setItem("client", value.name_client);
 
             CheckService.createClosed(data)
                 .then((result) => {
