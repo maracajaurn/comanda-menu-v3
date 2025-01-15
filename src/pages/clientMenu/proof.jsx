@@ -31,7 +31,7 @@ export const Proof = () => {
         };
     }, [products]);
 
-    const createOrder = useCallback(async () => {
+    const createOrder = useCallback(() => {
         setLoading(true);
 
         const objSocket = {

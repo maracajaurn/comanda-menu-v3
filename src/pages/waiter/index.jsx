@@ -35,6 +35,7 @@ export const Waiter = () => {
         };
 
         setToggleView(false);
+        getOrdersByCheck();
         getCheckById();
     }, [totalPrice, id]);
 
@@ -169,27 +170,53 @@ export const Waiter = () => {
         return () => { socket.off("check_canceled") };
     }, []);
 
-    const getCheckById = useCallback(async () => {
-        await CheckService.getById(id)
+    const getCheckById = useCallback(() => {
+        CheckService.getById(id)
             .then((result) => {
+                if (result.length > 0) {
+                    setClient(result[0].name_client);
 
-                setClient(result.name_client);
+                    setTotalPrice(parseFloat(result[0].total_value || 0).toFixed(2).replace(".", ","));
 
-                setTotalPrice(parseFloat(result.total_value || 0).toFixed(2).replace(".", ","));
+                    // verificando status da comanda
+                    if (!result[0].status) {
+                        setCheckStatus(false);
+                    };
 
-                // verificando status da comanda
-                if (!result.status) {
-                    setCheckStatus(false);
+                    return;
                 };
-            });
 
-        await OrderService.get_orders_by_check(id)
-            .then((result) => {
-                setListProducts(result);
+                setLoading(false);
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message)
             });
-
-        setLoading(false);
     }, []);
+
+
+    // TODO: Aplicar essa lógica às outras listagens
+    const getOrdersByCheck = useCallback(() => {
+        OrderService.get_orders_by_check(id)
+            .then((result) => {
+                if (result.length > 0) {
+                    return setListProducts(result);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message)
+            });
+    }, []);
+
 
     // Editar quantidade do produto na lista
     const alterQnt = async (order_id, quantity, obs, category, product_name, action) => {
@@ -224,7 +251,7 @@ export const Waiter = () => {
                         socket.emit("quantity_change", data);
                         return getCheckById();
                     };
-                    
+
                     setLoading(false);
                     return toast.error(result.message);
                 })

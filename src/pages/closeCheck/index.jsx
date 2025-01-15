@@ -52,52 +52,78 @@ export const CloseCheck = () => {
         getOrders();
     }, []);
 
-    const getCheck = useCallback(async () => {
-        await CheckService.getById(id)
+    const getCheck = useCallback(() => {
+        CheckService.getById(id)
             .then((result) => {
                 if (result) {
                     setCheck((prev) => ({
                         ...prev,
-                        check_id: result.check_id,
-                        name_client: result.name_client,
-                        obs: result.obs,
-                        status: result.status,
-                        total_value: result.total_value || 0,
-                        pay_form: result.pay_form ? result.pay_form : "pix"
+                        check_id: result[0].check_id,
+                        name_client: result[0].name_client,
+                        obs: result[0].obs,
+                        status: result[0].status,
+                        total_value: result[0].total_value || 0,
+                        pay_form: result[0].pay_form ? result[0].pay_form : "pix"
                     }));
                     setDisabledButton(false);
-                } else {
-                    toast.error("Comanda não encontrada!");
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    toast.error(result.message);
                     return navigate(-1);
                 };
+
+                setLoading(false);
             }).catch((error) => {
                 toast.error(error.message);
                 return navigate(-1);
             });
     }, []);
 
-    const getOrders = useCallback(async () => {
-        try {
-            await OrderService.get_orders_by_check(id)
-                .then((result) => {
-                    setProducts(result);
-                    setLoading(false);
-                });
-        } catch (error) {
-            setLoading(false);
-            toast.error(error);
-            return navigate(-1);
-        };
-    }, []);
-
-    const getSetting = useCallback(async () => {
-        await SettingService.get()
+    const getOrders = useCallback(() => {
+        OrderService.get_orders_by_check(id)
             .then((result) => {
-                setSetting(result);
+                if (result.length > 0) {
+                    setProducts(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    toast.error(result.message);
+                    return navigate(-1);
+                };
+
+                setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                toast.error(error.message);
+                return navigate(-1);
             });
     }, []);
 
-    const closeCheck = useCallback(async () => {
+    const getSetting = useCallback(() => {
+        SettingService.get()
+            .then((result) => {
+                if (result.length > 0) {
+                    return setSetting(result[0]);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
+            })
+            .catch((error) => {
+                return toast.error(error.message);
+            });
+    }, []);
+
+    const closeCheck = useCallback(() => {
         setLoading(true);
         CheckService.closeCheck(check.pay_form, id)
             .then((result) => {
@@ -115,9 +141,9 @@ export const CloseCheck = () => {
             });
     }, [check]);
 
-    const cancelCheck = useCallback(async () => {
+    const cancelCheck = useCallback(() => {
         setLoading(true);
-        await CheckService.deleteById(id)
+        CheckService.deleteById(id)
             .then((result) => {
                 if (result.status) {
                     socket.emit("check_canceled", { client: check.name_client });

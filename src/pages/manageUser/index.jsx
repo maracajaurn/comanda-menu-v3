@@ -100,38 +100,49 @@ export const ManageUser = () => {
         });
     };
 
-    const getSetting = useCallback(async () => {
-        await SettingService.get()
+    const getSetting = useCallback(() => {
+        SettingService.get()
             .then((result) => {
-                const image = result.image_pix?.data;
+                if (result) {
+                    const image = result.image_pix?.data;
 
-                if (image) {
-                    const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
-                    blobToBase64(blob)
-                        .then((base64Image) => {
-                            setSetting((prev) => ({
-                                ...prev,
-                                setting_id: result.setting_id,
-                                estabishment_name: result.estabishment_name,
-                                serveice_change: result.serveice_change,
-                                service_change_percentage: result.service_change_percentage,
-                                color: result.color,
-                                image_pix: base64Image,
-                            }));
-                        })
-                        .catch((error) => {
-                            toast.error('Erro ao converter a imagem: ' + error.message);
-                        });
-                } else {
-                    setSetting(result);
-                }
+                    if (image) {
+                        const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
+                        blobToBase64(blob)
+                            .then((base64Image) => {
+                                setSetting((prev) => ({
+                                    ...prev,
+                                    setting_id: result.setting_id,
+                                    estabishment_name: result.estabishment_name,
+                                    serveice_change: result.serveice_change,
+                                    service_change_percentage: result.service_change_percentage,
+                                    color: result.color,
+                                    image_pix: base64Image,
+                                }));
+
+                                return;
+                            })
+                            .catch((error) => {
+                                return toast.error('Erro ao converter a imagem: ' + error.message);
+                            });
+                    } else {
+                        return setSetting(result);
+                    };
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
                 toast.error(error.message);
             });
     }, []);
 
-    const updateSetting = useCallback(async () => {
+    const updateSetting = useCallback(() => {
         const payload = {
             estabishment_name: setting.estabishment_name,
             serveice_change: setting.serveice_change,
@@ -146,12 +157,11 @@ export const ManageUser = () => {
 
         setLoading(true);
 
-        await SettingService.update(setting.setting_id, payload)
+        SettingService.update(setting.setting_id, payload)
             .then((result) => {
                 getSetting();
                 toast.success(result.message);
-                setLoading(false);
-                return
+                return setLoading(false);
             })
             .catch((error) => {
                 setLoading(false);
@@ -159,13 +169,25 @@ export const ManageUser = () => {
             });
     }, [setting]);
 
-    const getAllUsers = useCallback(async () => {
-        await UsuarioService.getAll()
+    const getAllUsers = useCallback(() => {
+        UsuarioService.getAll()
             .then((result) => {
-                setListUser(result);
-                setLoading(false);
+                if (result.length > 0) {
+                    setListUser(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
-            .catch((error) => { return toast.error(error.message || "Ocoreu um erro ao realizar a operação.") });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
     }, []);
 
     const deleteUser = async (setting_id) => {

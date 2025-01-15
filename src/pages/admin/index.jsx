@@ -45,7 +45,7 @@ export const Admin = () => {
         const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
         getAllCashier();
-        
+
     }, []);
 
     // check_finished
@@ -57,13 +57,23 @@ export const Admin = () => {
         return () => { socket.off("check_finished") };
     }, []);
 
-    const getAllCashier = useCallback(async () => {
-        await CashierService.getById(1)
+    const getAllCashier = useCallback(() => {
+        CashierService.getById(1)
             .then((result) => {
-                setCashier(result[0]);
-                setLoading(false);
+                if (result.length > 0) {
+                    setCashier(result[0]);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
+                setLoading(false);
                 return toast.error(error.message);
             });
     }, []);

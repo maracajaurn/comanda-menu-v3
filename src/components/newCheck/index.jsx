@@ -35,7 +35,7 @@ export const NewCheck = ({ is_client = false }) => {
             .then((result) => {
                 setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
             }).catch((error) => {
-                return toast.error(error.message || "Ocorreu um erro ao buscar o caixa.")
+                return toast.error(error.message || "Ocorreu um erro ao buscar o caixa.");
             });
     }, []);
 
@@ -73,7 +73,8 @@ export const NewCheck = ({ is_client = false }) => {
                         toast.success(result.message);
                         setValue(prev => ({ ...prev, name_client: "", obs: "" }));
                         setLoading(false);
-                    }
+                    };
+
                     setLoading(false);
                     return toast.error(result.message);
                 }).catch((error) => {

@@ -27,11 +27,20 @@ export const ClosedChecks = () => {
         getAllChecks();
     }, []);
 
-    const getAllChecks = useCallback(async () => {
-        await CheckService.getByStatus(0)
+    const getAllChecks = useCallback(() => {
+        CheckService.getByStatus(0)
             .then((result) => {
-                setLoading(false);
-                setRows(result);
+                if (result.length > 0) {
+                    setRows(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
                 setLoading(false);

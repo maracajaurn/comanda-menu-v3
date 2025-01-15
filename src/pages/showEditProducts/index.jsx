@@ -56,10 +56,22 @@ export const ShowEditProducts = () => {
     const getAllProducts = useCallback(() => {
         ProductService.getAll()
             .then((result) => {
-                setListProducts(result);
-                setLoading(false);
+                if (result.length > 0) {
+                    setListProducts(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
             })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado.") });
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message)
+            });
     }, []);
 
     const deleteById = (product_id) => {
@@ -69,15 +81,15 @@ export const ShowEditProducts = () => {
                 if (result.status) {
                     setLoading(false);
                     getAllProducts();
-                    return toast.success(result.message || "Produto deletado com sucesso.");
+                    return toast.success(result.message);
                 };
 
                 setLoading(false);
-                return toast.error(result.message || "Ocorreu um erro inesperado.");
+                return toast.error(result.message);
             })
             .catch((error) => {
                 setLoading(false);
-                return toast.error(error.message || "Ocorreu um erro inesperado.")
+                return toast.error(error.message)
             });
     };
 

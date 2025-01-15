@@ -55,23 +55,44 @@ export const ListingProducts = () => {
         getCheckById();
     }, []);
 
-    const getAllProducts = useCallback(async () => {
-        await ProductService.getAll()
+    const getAllProducts = useCallback(() => {
+        ProductService.getAll()
             .then((result) => {
-                setListProducts(result)
-            })
-            .catch((error) => { return toast.error(error.message || "Ocorreu um erro inesperado."); });
-    }, []);
+                if (result.length > 0) {
+                    return setListProducts(result);
+                };
 
-    const getCheckById = useCallback(async () => {
-        await CheckService.getById(id)
-            .then((result) => {
-                setClient(result[0].name_client);
-                setLoading(false);
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
                 setLoading(false);
-                return toast.error(error.message || "Ocorreu um erro inesperado.");
+                return toast.error(error.message);
+            });
+    }, []);
+
+    const getCheckById = useCallback(() => {
+        CheckService.getById(id)
+            .then((result) => {
+                if (result.length > 0) {
+                    setClient(result[0].name_client);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, [id]);
 

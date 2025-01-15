@@ -28,31 +28,44 @@ export const WaitForProducts = () => {
         getOrders();
     }, [id]);
 
-    const getOrders = useCallback(async () => {
-        try {
-            await OrderService.get_orders_by_check(id)
-                .then((result) => {
-                    console.log(result);
+    const getOrders = useCallback(() => {
+        OrderService.get_orders_by_check(id)
+            .then((result) => {
+                if (result.length > 0) {
                     setProducts(result);
-                    setLoading(false);
-                });
-        } catch (error) {
-            setLoading(false);
-            toast.error(error);
-            return navigate(-1);
-        };
-    }, []);
+                    return setLoading(false);
+                };
 
-    const getCheck = async () => {
-        CheckService.getById(id)
-            .then(result => {
-                setClient(result.name_client);
-                setTotalValue(result.total_value);
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
-            .catch(error => {
+            .catch((error) => {
+                setLoading(false);
                 return toast.error(error.message);
             });
-    };
+    }, []);
+
+    const getCheck = useCallback(() => {
+        CheckService.getById(id)
+            .then(result => {
+                if (result) {
+                    setClient(result.name_client);
+                    setTotalValue(result.total_value);
+                    return;
+                };
+
+                setLoading(false);
+                return toast.error(result.message);
+            })
+            .catch(error => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
+    }, []);
 
     return (
         <>

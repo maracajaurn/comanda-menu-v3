@@ -23,27 +23,42 @@ export const Cart = () => {
     const [client, setClient] = useState("");
     const [email, setEmail] = useState("");
 
-    const getProducts = useCallback(async () => {
+    const getProducts = useCallback(() => {
         ProductService.getAll()
             .then(result => {
-                setProducts(result);
-                setLoading(false);
+                if (result.length > 0) {
+                    setProducts(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch(error => {
-                toast.error(error.message);
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, []);
 
-    const getCheck = async () => {
+    const getCheck = useCallback(() => {
         CheckService.getById(id)
             .then(result => {
-                setClient(result.name_client);
-                localStorage.setItem("client", result.name_client);
+                if (result) {
+                    setClient(result.name_client);
+                    localStorage.setItem("client", result.name_client);
+                    return;
+                };
+
+                return toast.error(result.message);
             })
             .catch(error => {
                 return toast.error(error.message);
             });
-    };
+    }, []);
 
     useEffect(() => {
         setLoading(true);
@@ -132,16 +147,16 @@ export const Cart = () => {
         };
 
         PaymentService.createPayment(paymentData)
-            .then(response => {
-                if (response) {
+            .then((result) => {
+                if (result) {
                     setLoading(false);
-                    return window.location.href = response;
+                    return window.location.href = result;
                 };
 
                 setLoading(false);
-                return toast.error("Erro ao processar pagamento");
+                return toast.error(result.message);
             })
-            .catch(error => {
+            .catch((error) => {
                 setLoading(false);
                 return toast.error(error.message);
             });

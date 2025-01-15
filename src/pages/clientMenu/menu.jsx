@@ -53,14 +53,24 @@ export const Menu = () => {
         getAllProducts();
     }, []);
 
-    const getAllProducts = useCallback(async () => {
-        await ProductService.getAll()
+    const getAllProducts = useCallback(() => {
+        ProductService.getAll()
             .then((result) => {
-                mapProducts(result);
-                setLoading(false);
+                if (result.length > 0) {
+                    mapProducts(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
-                return toast.error(error.message || "Ocorreu um erro inesperado.");
+                setLoading(false);
+                return toast.error(error.message);
             });
     }, []);
 

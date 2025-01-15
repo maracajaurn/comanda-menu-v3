@@ -14,7 +14,7 @@ export const RegisterClient = () => {
 
     const navigate = useNavigate();
     const { loading, setLoading } = useLoader();
-    
+
     const [value, setValue] = useState({
         name_client: "",
         cashier_id: null,
@@ -22,6 +22,7 @@ export const RegisterClient = () => {
     });
 
     useEffect(() => {
+        setLoading(true);
         const check_id = localStorage.getItem("check_id");
         if (check_id) {
             navigate(`/${check_id}/products`);
@@ -35,8 +36,13 @@ export const RegisterClient = () => {
     useEffect(() => {
         CashierService.getByStatus(1)
             .then((result) => {
-                setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
+                if (result.length > 0) {
+                    setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
+                    setLoading(false);
+                };
+
                 setLoading(false);
+                return toast.error(result.message);
             }).catch((error) => {
                 setLoading(false);
                 return toast.error(error.message || "Ocorreu um erro ao buscar o caixa.");
@@ -66,7 +72,7 @@ export const RegisterClient = () => {
                         navigate(`/${result.check_id}/products`);
                         setValue(prev => ({ ...prev, name_client: "", obs: "" }));
                         setLoading(false);
-                        
+
                         return toast.success(result.message);
                     };
 

@@ -135,17 +135,25 @@ export const Bartender = () => {
     }, []);
 
     // buscar todos pedidos
-    const getOrders = useCallback(async () => {
-        try {
-            await OrderService.get_orders_from_barmen()
-                .then((result) => {
+    const getOrders = useCallback(() => {
+        OrderService.get_orders_from_barmen()
+            .then((result) => {
+                if (result.length > 0) {
                     setOrders(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
                     setLoading(false);
-                })
-                .catch((error) => { return toast.error(error) });
-        } catch (error) {
-            return toast.error(error);
-        };
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
     }, []);
 
     // sinalizar pedido pronto

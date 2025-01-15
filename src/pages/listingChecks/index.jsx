@@ -162,12 +162,20 @@ export const ListingChecks = () => {
         return () => { socket.off("check_canceled") };
     }, []);
 
-    // TODO: condicionar setar no state apenas se a requisição for bem sucedida | res.length > 0
-    const getCheckByStatus = useCallback(async () => {
+    const getCheckByStatus = useCallback(() => {
         CheckService.getByStatus(1)
             .then((result) => {
-                setLoading(false);
-                setRows(result);
+                if (result.length > 0) {
+                    setRows(result);
+                    return setLoading(false);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+                
+                return setLoading(false);
             })
             .catch((error) => {
                 setLoading(false);
