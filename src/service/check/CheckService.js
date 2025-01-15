@@ -16,7 +16,7 @@ const getById = async (id) => {
     try {
         const res = await API.get(`/api/check/${id}`);
 
-        if (res.data) return res.data[0];
+        if (res.data) return res.data;
 
         return new Error(res.message);
     } catch (error) {
