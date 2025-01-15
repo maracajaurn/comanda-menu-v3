@@ -162,18 +162,42 @@ export const CloseCheck = () => {
 
     return (
         <>
-            <Navbar title={`Finalizar: ${check.name_client}`} url />
+            <Navbar title={`Fechar`} url />
             <div className="w-[95%] min-h-[100vh] m-2 p-1 rounded-xl flex items-center justify-center flex-col gap-14">
                 <Toaster />
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
-                    <ul className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
-                        {products.map((e, index) => (
-                            <li key={index}
-                                className="w-[100%] flex justify-between gap-5 text-slate-700 font-semibold">
-                                <span><span className="text-[#EB8F00]">{e.quantity}x</span> - {e.product_name}</span><span className="font-bold text-slate-500">R$ {e.total_price.toFixed(2).replace(".", ",")}</span>
-                            </li>
+
+                    <h1 className="text-center text-slate-900 font-bold text-[32px]">{check.name_client}</h1>
+
+                    <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
+
+                        <thead>
+                            <tr className="flex justify-between items-center">
+                                <th>Und.</th>
+                                <th>Produto</th>
+                                <th>Preço</th>
+                            </tr>
+                        </thead>
+
+                        {products.map((product, index) => (
+                            <tbody key={index}>
+                                <tr className="flex justify-between gap-1 text-slate-700 font-semibold">
+                                    <td className="flex items-center justify-between gap-2">
+                                        <span className="text-[#EB8F00]">{product.quantity}x</span>
+                                    </td>
+                                    <td><span>{product.product_name}</span></td>
+                                    <td><span className="font-bold text-slate-500">R$ {product?.total_price.toFixed(2).replace(".", ",")}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {product.obs && (
+                                            <p className="text-[#EB8F00]">OBS: <span className="text-slate-500">{product.obs}</span></p>
+                                        )}
+                                    </td>
+                                </tr>
+                            </tbody>
                         ))}
-                    </ul>
+                    </table>
 
                     {setting.serveice_change ? (
                         <>
