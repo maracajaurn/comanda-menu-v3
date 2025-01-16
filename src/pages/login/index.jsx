@@ -50,7 +50,7 @@ export const Login = () => {
 
                     setLoading(false);
 
-                    sessionStorage.setItem("token", result.token);
+                    localStorage.setItem("token", result.token);
                     localStorage.setItem("func", result.func);
 
                     if (result.func === "barmen" || result.func === "cozinha") {

@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
 
-import { Navbar, Footer } from "../../components";
+import { Navbar } from "../../components";
 
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService"
+import { LoginService } from "../../service/login/LoginService";
 
 export const RegisterClient = () => {
 
@@ -22,25 +23,22 @@ export const RegisterClient = () => {
     });
 
     useEffect(() => {
-        setLoading(true);
+        setLoading(false);
         const check_id = localStorage.getItem("check_id");
         if (check_id) {
             navigate(`/${check_id}/products`);
         };
-
-        localStorage.setItem("client", ".");
     }, []);
 
     const handleInput = (field, event) => {
         setValue(prev => ({ ...prev, [field]: event.target.value }));
     };
 
-    useEffect(() => {
+    const getCashier = useCallback(() => {
         CashierService.getByStatus(1)
             .then((result) => {
                 if (result.length > 0) {
-                    setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
-                    return setLoading(false);
+                    return createCheck(result[0].cashier_id);
                 };
 
                 setLoading(false);
@@ -49,55 +47,65 @@ export const RegisterClient = () => {
                 setLoading(false);
                 return toast.error(error.message);
             });
-    }, []);
+    }, [value]);
 
-    const createCheck = () => {
+    const authenticateClient = useCallback(() => {
         if (value.name_client === "") {
-            setValue(prev => ({ ...prev, name_client: "Nova comanda" }));
+            return toast.error("O nome do cliente é obrigatório.");
         };
 
-        if (value.name_client !== "") {
-            setLoading(true);
+        localStorage.setItem("client", value.name_client);
 
-            const data = {
-                name_client: value.name_client,
-                cashier_id: value.cashier_id,
-                obs: value.obs,
-            };
+        LoginService.Create_token_for_client(value.name_client)
+            .then((result) => {
+                if (result.status) {
+                    localStorage.setItem("token", result.token);
+                    return getCashier();
+                };
 
-            setLoading(true);
+                setLoading(false);
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
+    }, [value]);
 
-            localStorage.setItem("client", value.name_client);
+    const createCheck = useCallback((cashier_id) => {
 
-            CheckService.createClosed(data)
-                .then((result) => {
-                    if (result.status) {
-                        localStorage.setItem("check_id", result.check_id);
-                        navigate(`/${result.check_id}/products`);
-                        setValue(prev => ({ ...prev, name_client: "", obs: "" }));
-                        setLoading(false);
-
-                        return toast.success(result.message);
-                    };
-
-                    setLoading(false);
-                    return toast.error(result.message);
-                }).catch((error) => {
-                    setLoading(false);
-                    return toast.error(error.message || "Ocorreu um erro ao criar a comanda.");
-                });
+        const data = {
+            name_client: value.name_client,
+            cashier_id,
+            obs: value.obs,
         };
-    };
+
+        CheckService.createClosed(data)
+            .then((result) => {
+                if (result.status) {
+                    localStorage.setItem("check_id", result.check_id);
+                    navigate(`/${result.check_id}/products`);
+                    setValue(prev => ({ ...prev, name_client: "", obs: "" }));
+                    setLoading(false);
+
+                    return toast.success(result.message);
+                };
+
+                setLoading(false);
+                return toast.error(result.message);
+            }).catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
+
+    }, [value]);
 
     return (
         <>
             <div className={`flex justify-center items-center`}>
                 <Navbar title="Bem-vindo" />
                 <Toaster />
-                <div className="h-[300px] w-[300px] rounded-md border shadow-md shadow-slate-500 bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
-                    <div className="p-5 bg-[#EB8F00] w-full">
-                        <h6 className="text-white text-center font-bold uppercase text-[18px]">Cliente</h6>
-                    </div>
+                <div className="w-[300px] rounded-md flex flex-col justify-between items-center gap-10">
                     <div className="flex flex-col items-center gap-3">
 
                         <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
@@ -127,13 +135,12 @@ export const RegisterClient = () => {
                         </label>
                     </div>
 
-                    <button onClick={() => createCheck()}
+                    <button onClick={() => authenticateClient()}
                         disabled={loading}
                         className="w-[270px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
                     >Cadastrar</button>
                 </div>
             </div>
-            <Footer is_client />
         </>
     );
 };
