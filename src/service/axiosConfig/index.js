@@ -28,6 +28,7 @@ API.interceptors.response.use(
             localStorage.removeItem("selected_product");
             localStorage.removeItem("client");
             localStorage.removeItem("client_id");
+            localStorage.removeItem("check_id");
             localStorage.removeItem("func");
         };
         return Promise.reject(error);
