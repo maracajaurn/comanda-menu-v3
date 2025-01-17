@@ -22,13 +22,19 @@ import {
     Proof,
     PaymentFailure,
     WaitForProducts,
+
+    NotAuthorized,
+    NotFound,
 } from "../pages";
 
 export const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="*" element={<Navigate to={"/login"} />} />
+
+            <Route path="*" element={<NotFound />} />
+            
+            <Route path="/401" element={<NotAuthorized />} />
 
             <Route path={`/admin`} element={
                 <Admin />
