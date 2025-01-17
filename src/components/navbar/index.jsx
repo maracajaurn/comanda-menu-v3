@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 
 import { useToggleView } from "../../contexts";
 import { LogoutService } from "../../service/logout/LogoutService";
@@ -33,7 +32,6 @@ export const Navbar = ({ title, url, isLogout }) => {
 
     return (
         <nav className={`fixed top-0 w-full h-16 px-5 flex ${url ? "justify-between" : logout ? "justify-between" : "justify-center"} items-center bg-[#EB8F00] text-slate-100`}>
-            <Toaster />
             <div>
                 {!isOnline ? (
                     <h2 className={`transition-all delay-200 uppercase bg-red-600 px-3 py-2 rounded-md font-bold text-white`}>Sem internet</h2>
