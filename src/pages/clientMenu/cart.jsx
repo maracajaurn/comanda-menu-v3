@@ -103,15 +103,14 @@ export const Cart = () => {
         };
     }, [products, productsSelected]);
 
-    // TODO: Atualizar a URL da notificação com ngrok
-    // Front e Mercado Pago
+    // TODO: Atualizar as back_urls do pagamento
     const payment = useCallback(() => {
         setLoading(true);
         const paymentData = {
             transaction_amount: total_value,
             description: `Pagamento da comanda ${client}`,
             payer: {
-                email: email || "no-email@teste.com"
+                email: email
             },
             back_urls: {
                 success: `http://localhost:3000/${id}/proof`,
@@ -142,7 +141,6 @@ export const Cart = () => {
                 installments: 1,
                 default_installments: 1,
             },
-            notification_url: "https://d9c5-170-82-72-249.ngrok-free.app/api/webhook/payment",
             auto_return: "all",
         };
 
