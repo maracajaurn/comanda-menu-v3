@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useToggleView, useLoader } from "../../contexts";
 
-import { Plus } from "../../libs/icons";
+import { Plus, Close } from "../../libs/icons";
 
 import { Navbar, NewCheck } from "../../components";
 
@@ -15,6 +15,7 @@ export const ListingChecks = () => {
 
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
+    const [filter, setFilter] = useState("");
 
     const { toggleView, setToggleView } = useToggleView();
     const { setLoading } = useLoader();
@@ -174,7 +175,7 @@ export const ListingChecks = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -183,13 +184,35 @@ export const ListingChecks = () => {
             });
     }, []);
 
+    const itensFiltrados = rows.filter(item =>
+        item.name_client.toLowerCase().includes(filter.toLowerCase())
+    );
+
     return (
         <>
             <Navbar title={`Todas as comandas`} isLogout />
             <div className="w-[95%] min-h-[90vh] py-3 px-5 rounded-xl flex items-center flex-col gap-5">
                 <NewCheck />
                 <Toaster />
-                {rows.length ? rows.map((e) => (
+
+                {rows.length > 10 && (
+                    <div className="border px-3 py-5 w-full rounded-xl shadow-md">
+                        <label className="flex gap-2 items-center">
+                            <input
+                                type="text"
+                                className="w-full border-2 rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Buscar comanda..."
+                                onChange={(e) => setFilter(e.target.value)}
+                                value={filter}
+                            />
+                            <button type="button" className="border-2 rounded-xl p-[10px] hover:text-red-600 hover:border-red-600 transition-all delay-75">
+                                <i onClick={() => setFilter("")}><Close /></i>
+                            </button>
+                        </label>
+                    </div>
+                )}
+
+                {itensFiltrados.length ? itensFiltrados.map((e) => (
                     <div className={` ${e.status ? "flex" : "hidden"} justify-between items-center my-3 px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
                         key={e.check_id}>
 
