@@ -13,9 +13,9 @@ export { ListingProducts } from "./listingProducts";
 export { Cousine } from "./preparation/cuisine";
 export { Bartender } from "./preparation/bartender";
 
-export { RegisterClient } from "./clientMenu/registerClient";
-export { Menu } from "./clientMenu/menu";
-export { Cart } from "./clientMenu/cart";
-export { Proof } from "./clientMenu/proof";
-export { PaymentFailure } from "./clientMenu/paymentFailure";
-export { WaitForProducts } from "./clientMenu/waitForProducts";
+export {
+    Cart, Menu, PaymentFailure,
+    Proof, RegisterClient, WaitForProducts
+} from "./clientMenu";
+
+export { NotAuthorized, NotFound } from "./error"
