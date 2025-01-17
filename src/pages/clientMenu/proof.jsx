@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar, Footer } from "../../components";
@@ -18,6 +18,8 @@ export const Proof = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
+    const [searchParams] = useSearchParams();
+
     const [products, setProducts] = useState(null);
 
     useEffect(() => {
@@ -27,7 +29,7 @@ export const Proof = () => {
     }, []);
 
     useEffect(() => {
-        if (products) {
+        if (products && searchParams.get("status") === "approved") {
             createOrder();
         };
         
@@ -85,7 +87,7 @@ export const Proof = () => {
                         <p className="text-center text-[1.3em]">
                             Logo logo seu pedido estará pronto! <span className="text-[1.5em]">😉</span>
                         </p>
-                        <p className="text-center">*Caso querira tirar alguma dúvida, comunique com nossos atendentes.</p>
+                        <p className="text-center">*Caso querira tirar alguma dúvida, comunique-se com nossos atendentes.</p>
                     </div>
                 </div>
 
