@@ -107,7 +107,7 @@ export const Login = () => {
                     </label>
                 </div>
 
-                <button className="w-[250px] font-semibold p-3 rounded-xl text-white bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] uppercase"
+                <button className="w-[250px] font-semibold flex justify-center p-3 text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75 uppercase"
                     onClick={() => login()}
                 >Login</button>
             </div>
