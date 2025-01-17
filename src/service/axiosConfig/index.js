@@ -21,7 +21,7 @@ API.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            window.location.href = "/login";
+            window.location.href = "/401";
             localStorage.removeItem("token");
             localStorage.removeItem("total_value");
             localStorage.removeItem("categories");
