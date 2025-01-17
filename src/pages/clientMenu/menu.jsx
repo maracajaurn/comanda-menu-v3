@@ -28,10 +28,6 @@ export const Menu = () => {
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
 
-    // Pagination states
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
     useEffect(() => {
         setLoading(true);
         const get_func = localStorage.getItem("func");
@@ -64,7 +60,7 @@ export const Menu = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -74,24 +70,26 @@ export const Menu = () => {
     }, []);
 
     const mapProducts = (list) => {
-        list.map((item) => {
+        const mappedProducts = list.map((item) => {
             const blob = new Blob([new Uint8Array(item.image?.data)], { type: 'image/jpeg' });
-            blobToBase64(blob)
-                .then((base64Image) => {
-                    setListProducts((prev) => ([...prev, {
-                        product_id: item.product_id,
-                        product_name: item.product_name,
-                        price: item.price,
-                        category: item.category,
-                        description: item.description,
-                        stock: item.stock,
-                        image: base64Image,
-                    }]));
-                })
-                .catch((error) => {
-                    toast.error('Erro ao converter a imagem: ' + error.message);
-                });
+            return blobToBase64(blob).then((base64Image) => ({
+                product_id: item.product_id,
+                product_name: item.product_name,
+                price: item.price,
+                category: item.category,
+                description: item.description,
+                stock: item.stock,
+                image: base64Image,
+            }));
         });
+
+        Promise.all(mappedProducts)
+            .then((products) => {
+                setListProducts(products);
+            })
+            .catch((error) => {
+                toast.error('Erro ao processar produtos: ' + error.message);
+            });
     };
 
     // converter imagem para base64
@@ -192,12 +190,6 @@ export const Menu = () => {
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
     );
 
-    // Pagination calculations
-    const totalItems = itensFiltrados.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = itensFiltrados.slice(startIndex, startIndex + itemsPerPage);
-
     return (
         <>
             <Navbar title="Menu" url />
@@ -219,7 +211,7 @@ export const Menu = () => {
                     </label>
                 </div>
 
-                {currentItems.map((item, index) => (
+                {itensFiltrados.map((item, index) => (
                     <div key={index} className={`flex flex-col justify-between items-center w-full rounded-xl bg-slate-100/50 shadow-md border`}>
                         {item.image && (
                             <div className="h-[300px] w-full rounded-md"
@@ -284,26 +276,6 @@ export const Menu = () => {
                         ><Cart /></button>
                     </div>
                 </div>
-
-                {totalPages > 1 && (
-                    <div className="w-full flex justify-between items-center gap-3 mt-5">
-                        <button
-                            className={`${currentPage === 1 && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
-                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                            disabled={currentPage === 1}
-                        >Anterior
-                        </button>
-
-                        <span>{currentPage} de {totalPages}</span>
-
-                        <button
-                            className={`${currentPage === totalPages && "opacity-50 cursor-not-allowed -z-10"} font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75`}
-                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                            disabled={currentPage === totalPages}
-                        >Próxima
-                        </button>
-                    </div>
-                )}
             </div>
         </>
     );
