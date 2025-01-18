@@ -217,23 +217,27 @@ export const Waiter = () => {
 
 
     // Editar quantidade do produto na lista
-    const alterQnt = async (order_id, quantity, obs, category, product_name, action) => {
-        setLoading(true);
+    const alterQnt = async (order_id, quantity, obs, category, product_name, stock, product_id, action) => {
+        //setLoading(true);
         if (quantity > 0) {
+
             const data = {
                 check_id: id,
                 status: 1,
                 quantity: quantity,
-                obs: obs
+                obs: obs,
             };
+
 
             if (action === "+") {
                 data.quantity = data.quantity + 1;
+                data.new_stock = [stock - 1, product_id];
             } else if (action === "-") {
                 data.quantity = data.quantity - 1;
+                data.new_stock = [stock + 1, product_id];
             };
 
-            await OrderService.update_order(order_id, data)
+            OrderService.update_order(order_id, data)
                 .then((result) => {
                     if (result.status) {
                         toast.success(result.message);
@@ -254,6 +258,7 @@ export const Waiter = () => {
                     return toast.error(result.message);
                 })
                 .catch((error) => {
+                    setLoading(false);
                     return toast.error(error.message);
                 });
         };
@@ -307,13 +312,13 @@ export const Waiter = () => {
                             {e.status ? (
                                 <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
                                     <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, "-")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "-")}
                                     ><Minus /></button>
 
                                     <p className="text-[#EB8F00] font-somibold">{e.quantity}</p>
 
                                     <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, "+")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "+")}
                                     ><Plus /></button>
                                 </div>
                             ) : (

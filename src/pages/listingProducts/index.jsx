@@ -66,7 +66,7 @@ export const ListingProducts = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -87,7 +87,7 @@ export const ListingProducts = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -152,7 +152,18 @@ export const ListingProducts = () => {
     // enviar novos produtos para a comanda
     const postProducts = useCallback(async () => {
         setLoading(true);
-        OrderService.create_order({ list_order: selectedProduct, check_id: id })
+
+        const qtn = []
+
+        listProducts.filter((item) => {
+            selectedProduct.filter((selected) => {
+                if (item.product_id === selected[1]) {
+                    qtn.push([(item.stock - selected[2]), item.product_id])
+                };
+            });
+        });
+
+        OrderService.create_order({ list_order: selectedProduct, check_id: id, new_stock: qtn })
             .then((result) => {
                 if (result.status) {
                     const objSocket = {
@@ -162,16 +173,17 @@ export const ListingProducts = () => {
 
                     socket.emit("new_order", objSocket);
                     setLoading(false);
+                    toast.success(result.message)
                     return navigate(-1);
                 };
 
-                return toast.error(result.message || "Ocorreu um erro inesperado.")
+                return toast.error(result.message)
             })
             .catch((error) => {
                 setLoading(false);
-                return toast.error(error.message || "Ocorreu um erro inesperado.");
+                return toast.error(error.message);
             });
-    }, [categories]);
+    }, [selectedProduct, categories]);
 
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
