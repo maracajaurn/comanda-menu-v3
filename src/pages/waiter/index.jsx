@@ -265,10 +265,16 @@ export const Waiter = () => {
     };
 
     // remover item da comanda pelo índice
-    const deleteItem = async (order_id, product_name, category) => {
+    const deleteItem = async (order_id, product_name, category, quantity, product_id, stock) => {
         setLoading(true);
 
-        await OrderService.delete_order(order_id, id)
+        const data = {
+            check_id: id,
+            new_stock: (stock + quantity),
+            product_id: product_id,
+        };
+
+        await OrderService.delete_order(order_id, data)
             .then((result) => {
                 if (result.status) {
                     setLoading(false);
@@ -335,7 +341,7 @@ export const Waiter = () => {
                             )}
 
                             <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                onClick={() => deleteItem(e.order_id, e.product_name, e.category)}
+                                onClick={() => deleteItem(e.order_id, e.product_name, e.category, e.quantity, e.product_id, e.stock)}
                             ><Delete /></button>
                         </div>
                     </div>

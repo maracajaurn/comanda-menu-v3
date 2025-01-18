@@ -77,9 +77,14 @@ const update_order = async (order_id, order) => {
     }
 };
 
-const delete_order = async (order_id, check_id) => {
+const delete_order = async (order_id, data) => {
     try {
-        const res = await API.delete(`/api/order/${order_id}?check_id=${check_id}`);
+
+        const check_id = data.check_id;
+        const product_id = data.product_id;
+        const new_stock = data.new_stock;
+
+        const res = await API.delete(`/api/order/${order_id}?check_id=${check_id}&product_id=${product_id}&new_stock=${new_stock}`);
         if (res.data) return res.data;
 
         return new Error(res.message);
