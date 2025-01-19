@@ -38,7 +38,7 @@ export const ListingChecks = () => {
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
                         <h6>Novo pedido na comanda</h6>
-                        <span className="font-semibold">{data}</span>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
                         onClick={() => {
