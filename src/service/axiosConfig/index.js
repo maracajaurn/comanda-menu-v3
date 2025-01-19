@@ -25,6 +25,7 @@ API.interceptors.response.use(
             localStorage.removeItem("token");
             localStorage.removeItem("total_value");
             localStorage.removeItem("categories");
+            localStorage.removeItem("list_stock");
             localStorage.removeItem("selected_product");
             localStorage.removeItem("client");
             localStorage.removeItem("client_id");

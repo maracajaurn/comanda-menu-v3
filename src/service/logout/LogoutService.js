@@ -1,5 +1,6 @@
 const logout = () => {
     localStorage.removeItem("selected_product");
+    localStorage.removeItem("list_stock");
     localStorage.removeItem("token");
     localStorage.removeItem("total_value");
     localStorage.removeItem("categories");
