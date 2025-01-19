@@ -32,7 +32,7 @@ export const Proof = () => {
         if (products && searchParams.get("status") === "approved") {
             createOrder();
         };
-        
+
         setLoading(false);
     }, [products]);
 
@@ -48,7 +48,13 @@ export const Proof = () => {
             return
         };
 
-        OrderService.create_order({ list_order: products, check_id: id })
+        const data = {
+            list_order: products,
+            check_id: id,
+            new_stock: JSON.parse(localStorage.getItem("new_stock")),
+        };
+
+        OrderService.create_order(data)
             .then((result) => {
 
                 if (result.status) {
