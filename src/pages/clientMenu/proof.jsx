@@ -51,14 +51,17 @@ export const Proof = () => {
         const data = {
             list_order: products,
             check_id: id,
-            new_stock: JSON.parse(localStorage.getItem("new_stock")),
+            new_stock: JSON.parse(localStorage.getItem("list_stock")),
         };
+
+        console.log(data);
 
         OrderService.create_order(data)
             .then((result) => {
 
                 if (result.status) {
                     localStorage.removeItem("selected_product");
+                    localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
                     setLoading(false);
                     return toast.success(result.message)
