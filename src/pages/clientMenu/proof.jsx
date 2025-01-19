@@ -8,6 +8,7 @@ import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 
+import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 import socket from "../../service/socket";
 
@@ -54,8 +55,6 @@ export const Proof = () => {
             new_stock: JSON.parse(localStorage.getItem("list_stock")),
         };
 
-        console.log(data);
-
         OrderService.create_order(data)
             .then((result) => {
 
@@ -63,6 +62,7 @@ export const Proof = () => {
                     localStorage.removeItem("selected_product");
                     localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
+                    setPaymentInCheck();
                     setLoading(false);
                     return toast.success(result.message)
                 };
@@ -74,7 +74,25 @@ export const Proof = () => {
                 setLoading(false);
                 return toast.error(error.message);
             });
-    }, [products]);
+    }, [products]);  
+
+    const setPaymentInCheck = useCallback(() => {
+        const pay_form = searchParams.get("payment_type") === "credit_card" ? "credit"
+            : searchParams.get("payment_type") === "debit_card" ? "debit"
+                : "pix";
+
+        CheckService.closeCheck(pay_form, id)
+            .then((result) => {
+                if (!result.status) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
+    }, []);
 
     return (
         <>

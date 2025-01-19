@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar, Footer } from "../../components";
@@ -14,6 +14,7 @@ export const WaitForProducts = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const [search_params] = useSearchParams();
 
     const { setLoading } = useLoader();
 
@@ -23,11 +24,11 @@ export const WaitForProducts = () => {
 
     useEffect(() => {
         setLoading(true);
-
+        
         getCheck();
         getOrders();
     }, [id]);
-
+        
     const getOrders = useCallback(() => {
         OrderService.get_orders_by_check(id)
             .then((result) => {
@@ -54,7 +55,7 @@ export const WaitForProducts = () => {
             .then(result => {
                 if (result.length > 0) {
                     setClient(result[0].name_client);
-                    setTotalValue(result[0].total_value);
+                    setTotalValue(result[0].total_value || 0);
                     return;
                 };
 
@@ -124,7 +125,7 @@ export const WaitForProducts = () => {
                     >Adicionar outros produtos</button>
                 </div>
             </div>
-            
+
             <Footer is_client />
         </>
     );
