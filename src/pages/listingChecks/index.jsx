@@ -72,7 +72,7 @@ export const ListingChecks = () => {
     useEffect(() => {
         socket.on("check_finished", (data) => {
             toast((t) => (
-                <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
+                <h6>Comanda <span className="font-semibold">{data.client}</span> finalizada</h6>
             ), { duration: 2000 });
             getCheckByStatus();
         });
@@ -109,7 +109,7 @@ export const ListingChecks = () => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
-                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product.nameProduct}</span> cancelado na comanda</h6>
+                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product_name}</span> cancelado na comanda</h6>
                         <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"

@@ -133,7 +133,7 @@ export const Cousine = () => {
     useEffect(() => {
         socket.on("check_finished", (data) => {
             toast((t) => (
-                <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
+                <h6>Comanda <span className="font-semibold">{data.client}</span> finalizada</h6>
             ), { duration: 2000 });
             getOrders();
         });

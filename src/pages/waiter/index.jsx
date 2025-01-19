@@ -42,11 +42,12 @@ export const Waiter = () => {
     // new_order
     useEffect(() => {
         socket.on("new_order", (data) => {
+            console.log(data);
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
                         <h6>Novo pedido na comanda</h6>
-                        <span className="font-semibold">{data}</span>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
                         onClick={() => toast.dismiss(t.id)}
@@ -76,7 +77,7 @@ export const Waiter = () => {
     useEffect(() => {
         socket.on("check_finished", (data) => {
             toast((t) => (
-                <h6>Comanda <span className="font-semibold">{data}</span> finalizada</h6>
+                <h6>Comanda <span className="font-semibold">{data.client}</span> finalizada</h6>
             ), { duration: 2000 });
         });
 
@@ -113,7 +114,7 @@ export const Waiter = () => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
-                        <h6>Pedido <span className="font-semibold">{data.product.nameProduct}</span> cancelado na comanda</h6>
+                        <h6>Pedido <span className="font-semibold">{data.product_name}</span> cancelado na comanda</h6>
                         <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
@@ -135,7 +136,7 @@ export const Waiter = () => {
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
-                        <h6><span className="font-semibold">{data.action} {data.product.nameProduct}</span> na comanda</h6>
+                        <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
                         <span className="font-semibold">{data.client}</span>
                     </div>
                     <button className="bg-[#EB8F00] text-white rounded-md p-2"
