@@ -168,7 +168,15 @@ export const CloseCheck = () => {
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
                     {/* // TODO: Função para alterar o nome do cliente */}
-                    <h1 className="text-center text-slate-900 font-bold text-[32px]">{check.name_client}</h1>
+                    <label>
+                        <input
+                            type="text"
+                            className="max-w-[300px] h-auto text-center text-slate-900 font-bold text-[32px] bg-transparent"
+                            placeholder="Nome do Cliente"
+                            onChange={(change) => {}}
+                            value={check.name_client}
+                        />
+                    </label>
 
                     <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
 
