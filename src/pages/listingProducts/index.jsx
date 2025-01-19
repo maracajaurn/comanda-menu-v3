@@ -136,16 +136,20 @@ export const ListingProducts = () => {
     };
 
     // Editando quantidade de cada item
-    const alterQnt = async (product_id, action) => {
+    const alterQnt = async (product_id, stock, action) => {
         const index = selectedProduct.findIndex((item) => item[1] === product_id);
         if (index !== -1) {
             const qnt = selectedProduct[index][2];
-            if (action === "+") {
-                selectedProduct[index][2] = qnt + 1;
-            } else if (action === "-" && qnt > 1) {
-                selectedProduct[index][2] = qnt - 1;
+            if (stock > qnt) {
+                if (action === "+") {
+                    selectedProduct[index][2] = qnt + 1;
+                } else if (action === "-" && qnt > 1) {
+                    selectedProduct[index][2] = qnt - 1;
+                };
+                setSelectedProduct([...selectedProduct]);
+            } else {
+                return toast.error("Estoque insuficiente!");
             };
-            setSelectedProduct([...selectedProduct]);
         };
     };
 
@@ -254,7 +258,7 @@ export const ListingProducts = () => {
                         <div className="h-full ml-5 flex items-center justify-center gap-3 border-l-2 pl-3">
                             <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
                                 <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, "-")}
+                                    onClick={() => alterQnt(item.product_id, item.stock, "-")}
                                 ><Minus /></button>
 
                                 <p className="text-[#EB8F00] font-somibold">
@@ -262,7 +266,7 @@ export const ListingProducts = () => {
                                 </p>
 
                                 <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, "+")}
+                                    onClick={() => alterQnt(item.product_id, item.stock, "+")}
                                 ><Plus /></button>
                             </div>
 

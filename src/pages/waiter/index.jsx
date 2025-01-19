@@ -229,13 +229,17 @@ export const Waiter = () => {
             };
 
 
-            if (action === "+") {
-                data.quantity = data.quantity + 1;
-                data.new_stock = [stock - 1, product_id];
-            } else if (action === "-") {
-                data.quantity = data.quantity - 1;
-                data.new_stock = [stock + 1, product_id];
-            };
+            if (stock > 0) {
+                if (action === "+") {
+                    data.quantity = data.quantity + 1;
+                    data.new_stock = [stock - 1, product_id];
+                } else if (action === "-") {
+                    data.quantity = data.quantity - 1;
+                    data.new_stock = [stock + 1, product_id];
+                };
+            } else {
+                return toast.error("Estoque insuficiente!");
+            }
 
             OrderService.update_order(order_id, data)
                 .then((result) => {
