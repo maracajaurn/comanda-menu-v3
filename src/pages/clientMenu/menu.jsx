@@ -130,9 +130,31 @@ export const Menu = () => {
 
 
     // Wrapper para setSelectedProduct
-    const updateSelectedProduct = (newSelectedProduct) => {
+    const updateSelectedProduct = (newSelectedProduct, new_stock = []) => {
         setSelectedProduct(newSelectedProduct);
         localStorage.setItem("selected_product", JSON.stringify(newSelectedProduct));
+
+        if (new_stock) {
+            const list_stock = JSON.parse(localStorage.getItem("list_stock")) || [];
+
+            const if_exists_stock = list_stock.find((item) => item[1] === new_stock[1]);
+            const if_exists_product = newSelectedProduct.find((item) => item[1] === new_stock[1]);
+
+            const index = list_stock.findIndex((item) => item[1] === new_stock[1]);
+
+            if (if_exists_stock) {
+                if (!if_exists_product) {
+                    list_stock.splice(index, 1);
+                } else {
+                    list_stock[index][0] = new_stock[0];
+                };
+            } else {
+                if (if_exists_product) {
+                    list_stock.push(new_stock);
+                };
+            };
+            localStorage.setItem("list_stock", JSON.stringify(list_stock));
+        };
     };
 
     // Adicionar obsevação a item
@@ -152,34 +174,54 @@ export const Menu = () => {
 
         if (index !== -1) {
             const qnt = selectedProduct[index][2];
+
             if (action === "+") {
+
                 if (qnt >= stock) {
                     return toast("Estoque insuficiente.", { icon: "😢" });
                 } else {
                     selectedProduct[index][2] = qnt + 1;
+                    const updatedStock = [stock - (qnt + 1), product_id];
+                    return updateSelectedProduct([...selectedProduct], updatedStock);
                 };
+
             } else if (action === "-" && qnt >= 1) {
+
                 if (qnt === 1) {
                     const remove_product = selectedProduct.filter((item) => item[1] !== product_id);
-                    return updateSelectedProduct(remove_product);
+                    return updateSelectedProduct(remove_product, [stock, product_id]);
                 } else {
                     selectedProduct[index][2] = qnt - 1;
+                    const updatedStock = [stock - (qnt - 1), product_id];
                     setSelectedProduct([...selectedProduct]);
+                    return updateSelectedProduct([...selectedProduct], updatedStock);
                 };
+
             };
+
         } else if (action === "+") {
             const product = listProducts.find((item) => item.product_id === product_id);
 
             if (product) {
-                const newProduct = [...selectedProduct, [id, product_id, 1, null]];
-                return updateSelectedProduct(newProduct);
+
+                if (stock > 0) {
+                    const newProduct = [...selectedProduct, [id, product_id, 1, null]];
+                    const updatedStock = [(stock - 1), product_id];
+                    return updateSelectedProduct(newProduct, updatedStock);
+                } else {
+                    return toast.error("Estoque insuficiente.");
+                };
+
             } else {
                 return toast.error("Produto não encontrado.");
             };
         };
 
-        return updateSelectedProduct([...selectedProduct]);
-    }, [listProducts, selectedProduct]);
+        return updateSelectedProduct([...selectedProduct], [stock, product_id]);
+    },
+        [listProducts, selectedProduct]
+    );
+
 
     const navigateToCart = () => {
         handleCategories();
