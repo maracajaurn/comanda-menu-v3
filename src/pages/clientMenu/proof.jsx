@@ -42,7 +42,7 @@ export const Proof = () => {
 
         const objSocket = {
             client: localStorage.getItem("client"),
-            categories: JSON.parse(localStorage.getItem("categories")),
+            categories: JSON.parse(localStorage.getItem("categories")) || [],
         };
 
         if (objSocket.categories.length === 0) {
