@@ -229,18 +229,21 @@ export const Waiter = () => {
                 obs: obs,
             };
 
-
-            if (stock > 0) {
-                if (action === "+") {
+            if (action === "+") {
+                if (stock > 0) {
                     data.quantity = data.quantity + 1;
                     data.new_stock = [stock - 1, product_id];
-                } else if (action === "-") {
+                } else {
+                    return toast.error("Estoque insuficiente!");
+                };
+            } else if (action === "-") {
+                if (quantity > 1) {
                     data.quantity = data.quantity - 1;
                     data.new_stock = [stock + 1, product_id];
+                } else {
+                    return;
                 };
-            } else {
-                return toast.error("Estoque insuficiente!");
-            }
+            };
 
             OrderService.update_order(order_id, data)
                 .then((result) => {
