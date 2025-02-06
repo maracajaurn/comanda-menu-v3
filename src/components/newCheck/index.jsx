@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -35,18 +35,16 @@ export const NewCheck = ({ is_client = false }) => {
             .then((result) => {
                 setValue(prev => ({ ...prev, cashier_id: result[0].cashier_id }));
             }).catch((error) => {
-                return toast.error(error.message || "Ocorreu um erro ao buscar o caixa.");
+                return toast.error(error.message);
             });
     }, []);
 
-    const createCheck = () => {
+    const createCheck = useCallback(() => {
         if (value.name_client === "") {
             setValue(prev => ({ ...prev, name_client: "Nova comanda" }));
         };
 
         if (value.name_client !== "") {
-            setLoading(true);
-
             const data = {
                 name_client: value.name_client,
                 cashier_id: value.cashier_id,
@@ -75,7 +73,7 @@ export const NewCheck = ({ is_client = false }) => {
                     return toast.error(error.message);
                 });
         };
-    };
+    }, [value]);
 
     return (
         <div className={`${toggleView ? "block" : "hidden"} fixed top-0 left-0 h-[100dvh] w-[100vw] bg-slate-950/50 py-3 px-1 flex flex-col justify-center items-center gap-5`}>
