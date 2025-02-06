@@ -101,7 +101,7 @@ const deleteById = async (id) => {
 
 const deleteAll = async () => {
     try {
-        const res = await API.delete(`/api/check`);
+        const res = await API.delete(`/api/check/delete/delete_all`);
 
         if (res.data) return res.data;
 

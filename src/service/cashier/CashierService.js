@@ -42,6 +42,20 @@ const getByStatus = async (status) => {
     };
 };
 
+const close = async (cashier_id) => {
+    try {
+        const res = await API.put(`/api/cashier/close/${cashier_id}`);
+
+        if (res.data) {
+            return res.data;
+        };
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
+};
+
 const update = async (id, data) => {
     try {
         const res = await API.put(`/api/cashier/${id}`, data);
@@ -76,6 +90,7 @@ export const CashierService = {
     get,
     getById,
     getByStatus,
+    close,
     update,
     deleteById,
 };

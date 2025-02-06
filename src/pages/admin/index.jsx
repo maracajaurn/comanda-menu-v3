@@ -44,21 +44,21 @@ export const Admin = () => {
 
         const today = new Date().toLocaleDateString("pt-BR");
         setData(today);
-        getAllCashier();
+        getCashierOpen();
 
     }, []);
 
     // check_finished
     useEffect(() => {
         socket.on("check_finished", () => {
-            getAllCashier();
+            getCashierOpen();
         });
 
         return () => { socket.off("check_finished") };
     }, []);
 
-    const getAllCashier = useCallback(() => {
-        CashierService.getById(1)
+    const getCashierOpen = useCallback(() => {
+        CashierService.getByStatus(1)
             .then((result) => {
                 if (result.length > 0) {
                     setCashier(result[0]);
@@ -69,7 +69,7 @@ export const Admin = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -78,19 +78,20 @@ export const Admin = () => {
             });
     }, []);
 
-    const closeCashier = () => {
+    const closeCashier = useCallback(async () => {
         setLoading(true);
         try {
-            CashierService.deleteById(cashier.cashier_id);
-            CheckService.deleteAll();
-            CashierService.get();
             screenshotCashier();
-            setLoading(false);
-            toast.success("Caixa fechado com sucesso!");
+            
+            await CashierService.close(cashier.cashier_id);
+            await CheckService.deleteAll();
+            
+            getCashierOpen();
+            return toast.success("Caixa fechado com sucesso!");
         } catch (error) {
-            return toast.error(error);
+            return toast.error(error.message);
         };
-    };
+    }, [cashier]);
 
     const screenshotCashier = () => {
         const node = document.getElementById('screenshotCashier');
@@ -108,7 +109,7 @@ export const Admin = () => {
             document.body.removeChild(link);
         });
 
-        getAllCashier();
+        getCashierOpen();
     };
 
     const printCashier = () => {
