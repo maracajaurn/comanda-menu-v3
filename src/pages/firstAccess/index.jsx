@@ -29,12 +29,12 @@ export const FirstAccess = () => {
         await LoginService.firt_access(value)
             .then((result) => {
                 toast.success(result.message);
+                setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
+                return setLoading(false);
             })
             .catch((error) => {
                 return toast.error(error.message);
             });
-        // setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
-        setLoading(false);
     };
 
     return (
