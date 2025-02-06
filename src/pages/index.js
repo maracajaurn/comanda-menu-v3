@@ -4,6 +4,7 @@ export { Admin } from "./admin";
 export { ManageUser } from "./manageUser";
 export { ClosedChecks } from "./closedChecks";
 export { ShowEditProducts } from "./showEditProducts";
+export { FirstAccess } from "./firstAccess";
 
 export { Waiter } from "./waiter";
 export { CloseCheck } from "./closeCheck";
