@@ -134,7 +134,7 @@ export const ManageUser = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -181,7 +181,7 @@ export const ManageUser = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -196,8 +196,8 @@ export const ManageUser = () => {
             .then((result) => {
                 if (result.status) {
                     setLoading(false);
-                    toast.success(`${result.message || "Configurações atualizadas"}`);
                     getAllUsers()
+                    return toast.success(`${result.message || "Usuário deletado"}`);
                 };
 
                 return toast.error(result.message || "Ocoreu um erro ao realizar a operação.")
