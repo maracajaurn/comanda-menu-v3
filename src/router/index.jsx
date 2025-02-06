@@ -7,6 +7,7 @@ import {
     ManageUser,
     ClosedChecks,
     ShowEditProducts,
+    FirstAccess,
 
     Waiter,
     CloseCheck,
@@ -47,6 +48,9 @@ export const AppRoutes = () => {
             } />
             <Route path={`/produtos`} element={
                 <ShowEditProducts />
+            } />
+            <Route path={`/first_access`} element={
+                <FirstAccess />
             } />
 
             <Route path={`/garcom/comanda/:id`} element={
