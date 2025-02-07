@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { useToggleView } from "../../contexts";
 import { LogoutService } from "../../service/logout/LogoutService";
-import { useConnectionMonitor } from "../../hooks/connectionMonitor";
+import { useConnectionMonitor } from "../../hooks/ConnectionMonitor";
 
 import { Back, ArrowRight } from "../../libs/icons";
 
