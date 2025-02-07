@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Navbar, Footer } from "../../components";
 
 import { useToggleView, useLoader } from "../../contexts";
+import { useDebounce } from "../../hooks/UseDebounce";
 
 import { Delete, Plus, Minus } from "../../libs/icons";
 
@@ -13,6 +14,8 @@ import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 
 export const Waiter = () => {
+
+    const { debounce } = useDebounce(600);
 
     const navigate = useNavigate();
 
@@ -25,6 +28,19 @@ export const Waiter = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [client, setClient] = useState("");
     const [checkStatus, setCheckStatus] = useState(true);
+
+    const [updateOrder, setUpdateOrder] = useState({
+        order_id: "",
+        data: {
+            check_id: 0,
+            status: 0,
+            quantity: 0,
+            obs: "",
+        },
+        category: "",
+        product_name: "",
+        action: "",
+    });
 
     useEffect(() => {
         setLoading(true);
@@ -171,6 +187,39 @@ export const Waiter = () => {
         return () => { socket.off("check_canceled") };
     }, []);
 
+    // Atualizar quantidade de produtos
+    useEffect(() => {
+        if (updateOrder.order_id) {
+            debounce(() => {
+                setLoading(true);
+                OrderService.update_order(updateOrder.order_id, updateOrder.data)
+                    .then((result) => {
+                        if (result.status) {
+                            toast.success(result.message);
+
+                            const data = {
+                                category: updateOrder.category,
+                                action: updateOrder.action,
+                                product_name: updateOrder.product_name,
+                                client
+                            };
+
+                            setLoading(false);
+                            socket.emit("quantity_change", data);
+                            return getCheckById();
+                        };
+
+                        setLoading(false);
+                        return toast.error(result.message);
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        return toast.error(error.message);
+                    });
+            });
+        };
+    }, [updateOrder]);
+
     const getCheckById = useCallback(() => {
         CheckService.getById(id)
             .then((result) => {
@@ -216,12 +265,9 @@ export const Waiter = () => {
             });
     }, []);
 
-
     // Editar quantidade do produto na lista
     const alterQnt = async (order_id, quantity, obs, category, product_name, stock, product_id, action) => {
-        //setLoading(true);
         if (quantity > 0) {
-
             const data = {
                 check_id: id,
                 status: 1,
@@ -231,44 +277,29 @@ export const Waiter = () => {
 
             if (action === "+") {
                 if (stock > 0) {
-                    data.quantity = data.quantity + 1;
-                    data.new_stock = [stock - 1, product_id];
+                    if (updateOrder.data.quantity) {
+                        data.quantity = updateOrder.data.quantity + 1;
+                        data.new_stock = [stock - 1, product_id];
+                    } else {
+                        data.quantity = data.quantity + 1;
+                        data.new_stock = [stock - 1, product_id];
+                    };
                 } else {
+                    setLoading(false);
                     return toast.error("Estoque insuficiente!");
                 };
             } else if (action === "-") {
                 if (quantity > 1) {
-                    data.quantity = data.quantity - 1;
-                    data.new_stock = [stock + 1, product_id];
+                    if (updateOrder.data.quantity) {
+                        data.quantity = updateOrder.data.quantity - 1;
+                        data.new_stock = [stock + 1, product_id];
+                    };
                 } else {
-                    return;
+                    return setLoading(false);
                 };
             };
 
-            OrderService.update_order(order_id, data)
-                .then((result) => {
-                    if (result.status) {
-                        toast.success(result.message);
-
-                        const data = {
-                            category: category,
-                            action: action,
-                            product_name: product_name,
-                            client
-                        };
-
-                        setLoading(false);
-                        socket.emit("quantity_change", data);
-                        return getCheckById();
-                    };
-
-                    setLoading(false);
-                    return toast.error(result.message);
-                })
-                .catch((error) => {
-                    setLoading(false);
-                    return toast.error(error.message);
-                });
+            setUpdateOrder({ order_id, data, action, category, product_name });
         };
     };
 
