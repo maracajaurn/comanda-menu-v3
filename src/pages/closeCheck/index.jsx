@@ -18,7 +18,7 @@ export const CloseCheck = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
-    const { debounce } = useDebounce(1000);
+    const { debounce } = useDebounce(1500);
 
     const [disabledButton, setDisabledButton] = useState(true);
 
@@ -29,6 +29,7 @@ export const CloseCheck = () => {
         total_value: 0,
         status: false,
         pay_form: "",
+        cashier_id: 0
     });
 
     const [products, setProducts] = useState([]);
@@ -60,7 +61,24 @@ export const CloseCheck = () => {
     useEffect(() => {
         if (newNameClient) {
             debounce(() => {
-                console.log("Novo nome do cliente: ", newNameClient)
+                const data = {
+                    name_client: newNameClient,
+                    obs: check.obs,
+                    total_value: check.total_value,
+                    status: check.status,
+                    pay_form: check.pay_form,
+                    cashier_id: check.cashier_id
+                };
+
+                CheckService.updateById(id, data)
+                    .then((result) => {
+                        if (result.status) {
+                            return toast.success(result.message);
+                        };
+                    })
+                    .catch((error) => {
+                        return toast.error(error.message);
+                    });
             });
         };
     }, [newNameClient]);
@@ -76,7 +94,8 @@ export const CloseCheck = () => {
                         obs: result[0].obs,
                         status: result[0].status,
                         total_value: result[0].total_value || 0,
-                        pay_form: result[0].pay_form ? result[0].pay_form : "pix"
+                        pay_form: result[0].pay_form ? result[0].pay_form : "pix",
+                        cashier_id: result[0].cashier_id,
                     }));
                     setDisabledButton(false);
                 };
@@ -180,7 +199,6 @@ export const CloseCheck = () => {
                 <Toaster />
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
-                    {/* TODO: Função para alterar o nome do cliente */}
                     <label>
                         <input
                             type="text"
