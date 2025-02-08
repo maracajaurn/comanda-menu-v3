@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Navbar, Calc } from "../../components";
 
 import { useLoader } from "../../contexts";
+import { useDebounce } from "../../hooks/UseDebounce";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -17,6 +18,7 @@ export const CloseCheck = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
+    const { debounce } = useDebounce(1000);
 
     const [disabledButton, setDisabledButton] = useState(true);
 
@@ -37,6 +39,8 @@ export const CloseCheck = () => {
         image_pix: "",
     });
 
+    const [newNameClient, setNewNameClient] = useState(null);
+
     const [visibilityCalc, setVisibilityCal] = useState(false);
 
     useEffect(() => {
@@ -51,6 +55,15 @@ export const CloseCheck = () => {
         getSetting();
         getOrders();
     }, []);
+
+    // Alterar o nome do cliente
+    useEffect(() => {
+        if (newNameClient) {
+            debounce(() => {
+                console.log("Novo nome do cliente: ", newNameClient)
+            });
+        };
+    }, [newNameClient]);
 
     const getCheck = useCallback(() => {
         CheckService.getById(id)
@@ -167,19 +180,18 @@ export const CloseCheck = () => {
                 <Toaster />
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
-                    {/* // TODO: Função para alterar o nome do cliente */}
+                    {/* TODO: Função para alterar o nome do cliente */}
                     <label>
                         <input
                             type="text"
                             className="max-w-[300px] h-auto text-center text-slate-900 font-bold text-[32px] bg-transparent"
                             placeholder="Nome do Cliente"
-                            onChange={(change) => {}}
-                            value={check.name_client}
+                            onChange={(change) => setNewNameClient(() => change.target.value)}
+                            value={newNameClient !== null ? newNameClient : check.name_client}
                         />
                     </label>
 
                     <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
-
                         <thead>
                             <tr className="flex justify-between items-center">
                                 <th>Und.</th>
