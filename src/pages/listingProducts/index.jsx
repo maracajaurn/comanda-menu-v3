@@ -140,15 +140,21 @@ export const ListingProducts = () => {
         const index = selectedProduct.findIndex((item) => item[1] === product_id);
         if (index !== -1) {
             const qnt = selectedProduct[index][2];
-            if (stock > qnt) {
-                if (action === "+") {
+
+            if (action === "+") {
+                
+                if (stock > qnt) {
                     selectedProduct[index][2] = qnt + 1;
-                } else if (action === "-" && qnt > 1) {
-                    selectedProduct[index][2] = qnt - 1;
+                    setSelectedProduct([...selectedProduct]);
+                } else {
+                    return toast.error("Estoque insuficiente!");
                 };
-                setSelectedProduct([...selectedProduct]);
-            } else {
-                return toast.error("Estoque insuficiente!");
+
+            } else if (action === "-") {
+                if (qnt > 1) {
+                    selectedProduct[index][2] = qnt - 1;
+                    setSelectedProduct([...selectedProduct]);
+                };
             };
         };
     };
