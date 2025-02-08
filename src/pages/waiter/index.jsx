@@ -192,7 +192,6 @@ export const Waiter = () => {
     useEffect(() => {
         if (updateOrder.order_id) {
             debounce(() => {
-                console.log(updateOrder);
                 setLoading(true);
                 OrderService.update_order(updateOrder.order_id, updateOrder.data)
                     .then((result) => {
