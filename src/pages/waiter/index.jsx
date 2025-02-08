@@ -36,6 +36,7 @@ export const Waiter = () => {
             status: 0,
             quantity: 0,
             obs: "",
+            new_stock: 0
         },
         category: "",
         product_name: "",
@@ -191,6 +192,7 @@ export const Waiter = () => {
     useEffect(() => {
         if (updateOrder.order_id) {
             debounce(() => {
+                console.log(updateOrder);
                 setLoading(true);
                 OrderService.update_order(updateOrder.order_id, updateOrder.data)
                     .then((result) => {
@@ -279,7 +281,7 @@ export const Waiter = () => {
                 if (stock > 0) {
                     if (updateOrder.data.quantity) {
                         data.quantity = updateOrder.data.quantity + 1;
-                        data.new_stock = [stock - 1, product_id];
+                        data.new_stock = [updateOrder.data.new_stock[0] - 1, product_id];
                     } else {
                         data.quantity = data.quantity + 1;
                         data.new_stock = [stock - 1, product_id];
@@ -292,6 +294,9 @@ export const Waiter = () => {
                 if (quantity > 1) {
                     if (updateOrder.data.quantity) {
                         data.quantity = updateOrder.data.quantity - 1;
+                        data.new_stock = [updateOrder.data.new_stock[0] + 1, product_id];
+                    } else {
+                        data.quantity = data.quantity - 1;
                         data.new_stock = [stock + 1, product_id];
                     };
                 } else {
@@ -339,7 +344,7 @@ export const Waiter = () => {
                 {listProducts.map((e, index) => (
                     <div key={index} className="flex justify-between items-center px-3 py-1 w-full bg-slate-100/50 rounded-xl shadow-md">
                         <div className="flex flex-col mr-1">
-                            <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x - </span> {e.product_name}</h3>
+                            <h3 className="text-slate-900 font-bold flex gap-1"><span>{updateOrder.data.quantity ? updateOrder.data.quantity : e.quantity}x - </span> {e.product_name}</h3>
 
                             <h4 className="text-slate-500 text-[15px] font-semibold">R$ {e.total_price.toFixed(2).replace(".", ",")}</h4>
 
@@ -360,7 +365,7 @@ export const Waiter = () => {
                                         onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "-")}
                                     ><Minus /></button>
 
-                                    <p className="text-[#EB8F00] font-somibold">{e.quantity}</p>
+                                    <p className="text-[#EB8F00] font-somibold">{updateOrder.data.quantity ? updateOrder.data.quantity : e.quantity}</p>
 
                                     <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
                                         onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "+")}
