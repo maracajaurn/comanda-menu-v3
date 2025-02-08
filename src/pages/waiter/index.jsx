@@ -329,9 +329,10 @@ export const Waiter = () => {
                     setLoading(false);
                     setListProducts((prev) => prev.filter((item) => item.order_id !== order_id));
                     socket.emit("product_removed", { product_name, client, category });
+                    getCheckById();
+                    return toast.success(result.message);
                 };
 
-                getCheckById();
                 return toast.error(result.message);
             })
             .catch((error) => {
