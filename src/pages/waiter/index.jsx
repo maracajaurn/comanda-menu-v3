@@ -267,7 +267,10 @@ export const Waiter = () => {
     }, []);
 
     // Editar quantidade do produto na lista
-    const alterQnt = async (order_id, quantity, obs, category, product_name, stock, product_id, action) => {
+    const alterQnt = (
+        order_id, quantity, obs, category,
+        product_name, stock, product_id, action
+    ) => {
         if (quantity > 0) {
             const data = {
                 check_id: id,
@@ -308,7 +311,10 @@ export const Waiter = () => {
     };
 
     // remover item da comanda pelo índice
-    const deleteItem = async (order_id, product_name, category, quantity, product_id, stock) => {
+    const deleteItem = (
+        order_id, product_name, category,
+        quantity, product_id, stock
+    ) => {
         setLoading(true);
 
         const data = {
@@ -317,15 +323,15 @@ export const Waiter = () => {
             product_id: product_id,
         };
 
-        await OrderService.delete_order(order_id, data)
+        OrderService.delete_order(order_id, data)
             .then((result) => {
                 if (result.status) {
                     setLoading(false);
-                    getCheckById();
+                    setListProducts((prev) => prev.filter((item) => item.order_id !== order_id));
                     socket.emit("product_removed", { product_name, client, category });
                 };
 
-                setLoading(false);
+                getCheckById();
                 return toast.error(result.message);
             })
             .catch((error) => {
