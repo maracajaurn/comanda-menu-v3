@@ -155,6 +155,10 @@ export const ListingProducts = () => {
 
     // enviar novos produtos para a comanda
     const postProducts = useCallback(async () => {
+        if (!selectedProduct.length) {
+            return toast.error("Adicione produtos!");
+        };
+
         setLoading(true);
 
         const qtn = []
