@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+ARG REACT_APP_BASE_URL_BACK
+ENV REACT_APP_BASE_URL_BACK=${REACT_APP_BASE_URL_BACK}
+
 RUN npm run build
 
 RUN npm install -g serve
