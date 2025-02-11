@@ -142,7 +142,7 @@ export const ListingProducts = () => {
             const qnt = selectedProduct[index][2];
 
             if (action === "+") {
-                
+
                 if (stock > qnt) {
                     selectedProduct[index][2] = qnt + 1;
                     setSelectedProduct([...selectedProduct]);
@@ -252,8 +252,9 @@ export const ListingProducts = () => {
                     <div key={index} className={`flex justify-between items-center px-3 py-1 w-full rounded-xl bg-slate-100/50 shadow-md`}>
 
                         <div className="w-2/3 flex flex-col items-start">
-                            <h3 className="text-slate-900 font-bold">{item.product_name}</h3>
+                            <h3 className="text-slate-900 font-bold">{item.stock} - {item.product_name}</h3>
                             <h3 className="text-slate-500 text-[15px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
+                            <h3 className="text-[#EB8F00] text-[15px] font-semibold">{item.category}</h3>
                             {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
                                 <label >
                                     <input
