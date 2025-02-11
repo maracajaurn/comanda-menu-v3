@@ -15,7 +15,7 @@ import { OrderService } from "../../service/order/OrderService";
 
 export const Waiter = () => {
 
-    const { debounce } = useDebounce(600);
+    const { debounce } = useDebounce(1000);
 
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export const Waiter = () => {
             status: 0,
             quantity: 0,
             obs: "",
-            new_stock: 0
+            new_stock: [0, 0]
         },
         category: "",
         product_name: "",
@@ -280,7 +280,7 @@ export const Waiter = () => {
             };
 
             if (action === "+") {
-                if (stock > 0) {
+                if (stock > 0 || (updateOrder.data.new_stock[0] > 0)) {
                     if (updateOrder.data.quantity) {
                         data.quantity = updateOrder.data.quantity + 1;
                         data.new_stock = [updateOrder.data.new_stock[0] - 1, product_id];
