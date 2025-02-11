@@ -155,7 +155,7 @@ export const Cousine = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -177,7 +177,7 @@ export const Cousine = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -188,13 +188,7 @@ export const Cousine = () => {
 
     // sinalizar pedido pronto
     const orderReady = (
-        order_id,
-        name_client,
-        name_product,
-
-        check_id,
-        quantity,
-        obs,
+        order_id, name_client, name_product, check_id, quantity, obs,
     ) => {
 
         const order = {
@@ -211,6 +205,7 @@ export const Cousine = () => {
                     setLoading(false);
                     socket.emit("order_ready", { client: name_client, product: name_product });
                     toast.success(result.message);
+                    setOrders({});
                     getOrders();
                     return
                 }
