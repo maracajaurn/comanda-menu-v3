@@ -15,7 +15,7 @@ import { OrderService } from "../../service/order/OrderService";
 
 export const Waiter = () => {
 
-    const { debounce } = useDebounce(1000);
+    const { debounce } = useDebounce(700);
 
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export const Waiter = () => {
             status: 0,
             quantity: 0,
             obs: "",
-            new_stock: [0, 0]
+            new_stock: [undefined, undefined]
         },
         category: "",
         product_name: "",
@@ -211,12 +211,27 @@ export const Waiter = () => {
                         };
 
                         setLoading(false);
+
                         return toast.error(result.message);
                     })
                     .catch((error) => {
                         setLoading(false);
                         return toast.error(error.message);
                     });
+
+                setUpdateOrder({
+                    order_id: "",
+                    data: {
+                        check_id: 0,
+                        status: 0,
+                        quantity: 0,
+                        obs: "",
+                        new_stock: [undefined, undefined]
+                    },
+                    category: "",
+                    product_name: "",
+                    action: "",
+                });
             });
         };
     }, [updateOrder]);
@@ -271,43 +286,46 @@ export const Waiter = () => {
         order_id, quantity, obs, category,
         product_name, stock, product_id, action
     ) => {
-        if (quantity > 0) {
-            const data = {
-                check_id: id,
-                status: 1,
-                quantity: quantity,
-                obs: obs,
-            };
-
-            if (action === "+") {
-                if (stock > 0 || (updateOrder.data.new_stock[0] > 0)) {
-                    if (updateOrder.data.quantity) {
-                        data.quantity = updateOrder.data.quantity + 1;
-                        data.new_stock = [updateOrder.data.new_stock[0] - 1, product_id];
-                    } else {
-                        data.quantity = data.quantity + 1;
-                        data.new_stock = [stock - 1, product_id];
-                    };
-                } else {
-                    setLoading(false);
-                    return toast.error("Estoque insuficiente!");
-                };
-            } else if (action === "-") {
-                if (quantity > 1) {
-                    if (updateOrder.data.quantity) {
-                        data.quantity = updateOrder.data.quantity - 1;
-                        data.new_stock = [updateOrder.data.new_stock[0] + 1, product_id];
-                    } else {
-                        data.quantity = data.quantity - 1;
-                        data.new_stock = [stock + 1, product_id];
-                    };
-                } else {
-                    return setLoading(false);
-                };
-            };
-
-            setUpdateOrder({ order_id, data, action, category, product_name });
+        const data = {
+            check_id: id,
+            status: 1,
+            quantity: quantity,
+            obs: obs,
         };
+
+        if (action === "+") {
+            const new_stock = updateOrder.data.new_stock[0] ?? stock;
+
+            if (new_stock > 0) {
+                if (updateOrder.data.quantity) {
+                    data.quantity = updateOrder.data.quantity + 1;
+                    data.new_stock = [updateOrder.data.new_stock[0] - 1, product_id];
+                } else {
+                    data.quantity = data.quantity + 1;
+                    data.new_stock = [stock - 1, product_id];
+                };
+            } else {
+                setLoading(false);
+                return toast.error("Estoque insuficiente!");
+            };
+        } else if (action === "-") {
+            const new_stock = updateOrder.data.new_stock[0] > 0 ? updateOrder.data.new_stock[0] : stock;
+            const new_quantity = updateOrder.data.quantity > 0 ? updateOrder.data.quantity : quantity;
+
+            if (new_stock >= 0 && new_quantity > 1) {
+                if (updateOrder.data.quantity) {
+                    data.quantity = updateOrder.data.quantity - 1;
+                    data.new_stock = [updateOrder.data.new_stock[0] + 1, product_id];
+                } else {
+                    data.quantity = data.quantity - 1;
+                    data.new_stock = [stock + 1, product_id];
+                };
+            } else {
+                return setLoading(false);
+            };
+        };
+
+        setUpdateOrder({ order_id, data, action, category, product_name });
     };
 
     // remover item da comanda pelo índice
@@ -350,7 +368,7 @@ export const Waiter = () => {
                 {listProducts.map((e, index) => (
                     <div key={index} className="flex justify-between items-center px-3 py-1 w-full bg-slate-100/50 rounded-xl shadow-md">
                         <div className="flex flex-col mr-1">
-                            <h3 className="text-slate-900 font-bold flex gap-1"><span>{updateOrder.data.quantity ? updateOrder.data.quantity : e.quantity}x - </span> {e.product_name}</h3>
+                            <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x - </span> {e.product_name}</h3>
 
                             <h4 className="text-slate-500 text-[15px] font-semibold">R$ {e.total_price.toFixed(2).replace(".", ",")}</h4>
 
@@ -371,7 +389,9 @@ export const Waiter = () => {
                                         onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "-")}
                                     ><Minus /></button>
 
-                                    <p className="text-[#EB8F00] font-somibold">{updateOrder.data.quantity ? updateOrder.data.quantity : e.quantity}</p>
+                                    <p className="text-[#EB8F00]">
+                                        {(updateOrder.order_id === e.order_id ? updateOrder.data.quantity ?? e.quantity : e.quantity)}
+                                    </p>
 
                                     <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
                                         onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "+")}
@@ -383,7 +403,7 @@ export const Waiter = () => {
                                     <button className="p-1 border-t-2 border-slate-500/30 text-slate-900/30"
                                     ><Minus /></button>
 
-                                    <p className="text-[#EB8F00] font-somibold">{e.quantity}</p>
+                                    <p className="text-[#EB8F00]">{e.quantity}</p>
 
                                     <button className="p-1 border-b-2 border-slate-500/30 text-slate-900/30"
                                     ><Plus /></button>
