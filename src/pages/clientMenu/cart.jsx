@@ -103,7 +103,6 @@ export const Cart = () => {
         };
     }, [products, productsSelected]);
 
-    // TODO: Atualizar as back_urls do pagamento
     const payment = useCallback(() => {
         setLoading(true);
         const paymentData = {
@@ -113,9 +112,9 @@ export const Cart = () => {
                 email: email
             },
             back_urls: {
-                success: `http://localhost:3000/${id}/proof`,
-                failure: `http://localhost:3000/${id}/payment_failure`,
-                pending: `http://localhost:3000/${id}/payment_failure`
+                success: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/proof`,
+                failure: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`,
+                pending: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`
             },
             items: productsInCart.map((product) => (
                 {
