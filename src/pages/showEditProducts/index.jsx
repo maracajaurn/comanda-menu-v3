@@ -37,6 +37,29 @@ export const ShowEditProducts = () => {
         getAllProducts();
     }, [toggleView]);
 
+    const mapProducts = (list) => {
+        const mappedProducts = list.map((item) => {
+            const blob = new Blob([new Uint8Array(item.image?.data)], { type: 'image/jpeg' });
+            return blobToBase64(blob).then((base64Image) => ({
+                product_id: item.product_id,
+                product_name: item.product_name,
+                price: item.price,
+                category: item.category,
+                description: item.description,
+                stock: item.stock,
+                image: item.image ? base64Image : "",
+            }));
+        });
+
+        Promise.all(mappedProducts)
+            .then((products) => {
+                setListProducts(products);
+            })
+            .catch((error) => {
+                toast.error('Erro ao processar produtos: ' + error.message);
+            });
+    };
+
     const blobToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -57,7 +80,7 @@ export const ShowEditProducts = () => {
         ProductService.getAll()
             .then((result) => {
                 if (result.length > 0) {
-                    setListProducts(result);
+                    mapProducts(result);
                     return setLoading(false);
                 };
 
@@ -65,6 +88,7 @@ export const ShowEditProducts = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
+
 
                 return setLoading(false);
             })
@@ -140,21 +164,27 @@ export const ShowEditProducts = () => {
                     <div className="font-semibold text-xl">Nenhum produto foi encontrado</div>
                 )}
 
-                {currentItems.map((e) => (
-                    <div key={e.product_id} className="flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 w-full rounded-xl shadow-md">
-                        <div className="w-2/3 flex flex-col items-start">
-                            <h3 className="text-slate-900 font-bold">{e.stock} - {e.product_name}</h3>
-                            <h3 className="text-slate-500 text-[15px] font-semibold">R$ {e.price.toFixed(2).replace(".", ",")}</h3>
-                            <h3 className="text-[#EB8F00] text-[15px]">{e.category}</h3>
+                {currentItems.map((product) => (
+                    <div key={product.product_id} className="flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 w-full rounded-xl shadow-md">
+                        <div className="w-2/3 flex gap-5 items-center">
+                            {product.image && (
+                                <img src={product.image}
+                                    className="w-[70px] h-[70px] object-cover rounded-xl" />
+                            )}
+                            <div className="flex flex-col gap-1">
+                                <h3 className="text-slate-900 font-bold">{product.stock} - {product.product_name}</h3>
+                                <h3 className="text-slate-500 text-[15px] font-semibold">R$ {product.price.toFixed(2).replace(".", ",")}</h3>
+                                <h3 className="text-[#EB8F00] text-[15px]">{product.category}</h3>
+                            </div>
                         </div>
 
                         <div className="flex gap-8 border-l-2 pl-3">
                             <button className=" text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => haldletoggleViewModal("edit", e.product_id)}
+                                onClick={() => haldletoggleViewModal("edit", product.product_id)}
                             ><Edit /></button>
 
                             <button className=" text-slate-900 hover:text-red-500 transition-all delay-75"
-                                onClick={() => deleteById(e.product_id)}
+                                onClick={() => deleteById(product.product_id)}
                             ><Delete /></button>
                         </div>
                     </div>
