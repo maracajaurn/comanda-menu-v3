@@ -175,6 +175,27 @@ export const CloseCheck = () => {
 
     const cancelCheck = useCallback(() => {
         setLoading(true);
+
+        products.map((product) => {
+            const data = {
+                check_id: id,
+                new_stock: (product.stock + product.quantity),
+                product_id: product.product_id,
+            };
+
+            OrderService.delete_order(product.order_id, data)
+                .then((result) => {
+                    if (!result.status) {
+                        setLoading(false);
+                        return toast.error(result.message);
+                    };
+                })
+                .catch((error) => {
+                    setLoading(false);
+                    return toast.error(error.message);
+                });
+        });
+
         CheckService.deleteById(id)
             .then((result) => {
                 if (result.status) {
