@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar, Footer } from "../../components";
+import { Navbar } from "../../components";
 import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
+import { useDebounce } from "../../hooks/UseDebounce";
 
+import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 
@@ -14,21 +16,80 @@ export const WaitForProducts = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const [search_params] = useSearchParams();
+    const { debounce } = useDebounce(1500);
 
     const { setLoading } = useLoader();
 
     const [products, setProducts] = useState([]);
+
+    const [check, setCheck] = useState({
+        check_id: 0,
+        name_client: "",
+        obs: "",
+        total_value: 0,
+        status: false,
+        pay_form: "",
+        cashier_id: 0
+    });
+
     const [total_value, setTotalValue] = useState(0);
-    const [client, setClient] = useState("");
+    const [newNameClient, setNewNameClient] = useState(null);
 
     useEffect(() => {
         setLoading(true);
-        
+
         getCheck();
         getOrders();
     }, [id]);
-        
+
+    // order_ready
+    useEffect(() => {
+        socket.on("order_ready", (data) => {
+            toast((t) => (
+                <div className="flex gap-3">
+                    <div className="flex flex-col justify-center items-center">
+                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product}</span> pronto na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
+                    </div>
+                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
+                        onClick={() => toast.dismiss(t.id)}
+                    >OK</button>
+                </div>
+            ), { duration: 1000000 });
+            getOrders();
+        });
+
+        toast.dismiss();
+
+        return () => { socket.off("order_ready") };
+    }, []);
+
+    // Alterar o nome do cliente
+    useEffect(() => {
+        if (newNameClient) {
+            debounce(() => {
+                const data = {
+                    name_client: newNameClient,
+                    obs: check.obs,
+                    total_value: check.total_value,
+                    status: check.status,
+                    pay_form: check.pay_form,
+                    cashier_id: check.cashier_id
+                };
+
+                CheckService.updateById(id, data)
+                    .then((result) => {
+                        if (result.status) {
+                            return toast.success(result.message);
+                        };
+                    })
+                    .catch((error) => {
+                        return toast.error(error.message);
+                    });
+            });
+        };
+    }, [newNameClient]);
+
     const getOrders = useCallback(() => {
         OrderService.get_orders_by_check(id)
             .then((result) => {
@@ -54,8 +115,16 @@ export const WaitForProducts = () => {
         CheckService.getById(id)
             .then(result => {
                 if (result.length > 0) {
-                    setClient(result[0].name_client);
-                    setTotalValue(result[0].total_value || 0);
+                    setCheck((prev) => ({
+                        ...prev,
+                        check_id: result[0].check_id,
+                        name_client: result[0].name_client,
+                        obs: result[0].obs,
+                        status: result[0].status,
+                        total_value: result[0].total_value || 0,
+                        pay_form: result[0].pay_form ? result[0].pay_form : "pix",
+                        cashier_id: result[0].cashier_id,
+                    }));
                     return;
                 };
 
@@ -75,7 +144,15 @@ export const WaitForProducts = () => {
                 <Toaster />
                 <div className=" flex flex-col justify-center items-center gap-5 px-10 py-14 shadow-xl bg-[#D39825]/10">
 
-                    <h1 className="text-center text-slate-900 font-bold text-[32px]">{client}</h1>
+                    <label>
+                        <input
+                            type="text"
+                            className="max-w-[300px] h-auto text-center text-slate-900 font-bold text-[32px] bg-transparent"
+                            placeholder="Nome do Cliente"
+                            onChange={(change) => setNewNameClient(() => change.target.value)}
+                            value={newNameClient !== null ? newNameClient : check.name_client}
+                        />
+                    </label>
 
                     <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
                         <thead>
@@ -102,12 +179,19 @@ export const WaitForProducts = () => {
                                         )}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        {product.status === 0 && (
+                                            <p className=" text-green-600  text-[15px]">Pedido pronto</p>
+                                        )}
+                                    </td>
+                                </tr>
                             </tbody>
                         ))}
                     </table>
 
                     <h2 className="mt-5 text-center text-slate-900 font-bold text-[28px]">
-                        Total: <span className="text-slate-500">R$ {parseFloat(total_value).toFixed(2).replace(".", ",")}</span>
+                        Total: <span className="text-slate-500">R$ {parseFloat(check.total_value).toFixed(2).replace(".", ",")}</span>
                     </h2>
 
                     <h5 className="flex gap-2">
@@ -125,8 +209,6 @@ export const WaitForProducts = () => {
                     >Adicionar outros produtos</button>
                 </div>
             </div>
-
-            <Footer is_client />
         </>
     );
 };
