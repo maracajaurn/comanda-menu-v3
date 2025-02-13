@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar, Footer } from "../../components";
+import { Navbar } from "../../components";
 
 import { CheckProduct } from "../../libs/icons";
 
@@ -126,7 +126,6 @@ export const Proof = () => {
                     >Aguardar preparo</button>
                 </div>
             </div>
-            <Footer is_client />
         </>
     );
 };

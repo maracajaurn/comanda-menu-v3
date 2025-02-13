@@ -1,6 +1,6 @@
 import { useLoader } from "../../contexts";
 
-import { Navbar, Footer } from "../../components";
+import { Navbar } from "../../components";
 
 import { XError } from "../../libs/icons";
 
@@ -34,8 +34,6 @@ export const NotAuthorized = () => {
                     </div>
                 </div>
             </div>
-
-            <Footer is_client />
         </>
     );
 };

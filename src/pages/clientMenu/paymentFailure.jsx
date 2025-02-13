@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useLoader } from "../../contexts";
 
-import { Navbar, Footer } from "../../components";
+import { Navbar } from "../../components";
 
 import { XError } from "../../libs/icons";
 
@@ -47,8 +47,6 @@ export const PaymentFailure = () => {
                     >Voltar para o carrinho</button>
                 </div>
             </div>
-
-            <Footer is_client />
         </>
     );
 };
