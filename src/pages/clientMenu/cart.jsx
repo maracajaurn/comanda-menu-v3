@@ -114,7 +114,7 @@ export const Cart = () => {
             back_urls: {
                 success: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/proof`,
                 failure: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`,
-                pending: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`
+                pending: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_pending`
             },
             items: productsInCart.map((product) => (
                 {
