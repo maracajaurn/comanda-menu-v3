@@ -49,7 +49,7 @@ export const Menu = () => {
     }, []);
 
     const getAllProducts = useCallback(() => {
-        ProductService.getAll()
+        ProductService.getByStock()
             .then((result) => {
                 if (result.length > 0) {
                     mapProducts(result);

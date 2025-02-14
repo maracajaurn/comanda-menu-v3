@@ -12,6 +12,18 @@ const getAll = async () => {
     };
 };
 
+const getByStock= async () => {
+    try {
+        const res = await API.get("/api/product/stock/1");
+
+        if (res.data) return res.data;
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
+};
+
 const getByPagenated = async (limit, page) => {
     try {
         const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
@@ -76,6 +88,7 @@ const deleteById = async (id) => {
 export const ProductService = {
     create,
     getAll,
+    getByStock,
     getByPagenated,
     getById,
     updateById,
