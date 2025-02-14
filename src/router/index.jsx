@@ -21,6 +21,7 @@ import {
     Menu,
     Cart,
     Proof,
+    PaymentInProcessing,
     PaymentFailure,
     WaitForProducts,
 
@@ -77,6 +78,7 @@ export const AppRoutes = () => {
             <Route path={`/:id/products`} element={<Menu />} />
             <Route path={`/:id/cart`} element={<Cart />} />
             <Route path={`/:id/proof`} element={<Proof />} />
+            <Route path={`/:id/payment_pending`} element={<PaymentInProcessing />} />
             <Route path={`/:id/payment_failure`} element={<PaymentFailure />} />
             <Route path={`/:id/wait_for_product`} element={<WaitForProducts />} />
         </Routes>
