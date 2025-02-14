@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
+import { Wait } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 
@@ -49,7 +50,7 @@ export const PaymentInProcessing = () => {
                 <div className="px-10 pt-5 pb-14 gap-5 flex flex-col justify-center shadow-xl shadow-slate-400 bg-[#D39825]/10">
                     <div>
                         <div className=" flex justify-center">
-                            <p className="h-[50px] w-[50px] rounded-full text-white bg-red-500">Icone</p>
+                            <p className="h-[50px] w-[50px] rounded-full text-white bg-blue-500"><Wait size={10} /></p>
                         </div>
                         <h1 className="text-center text-slate-900 font-bold text-[30px]">
                             Pagamento pendente ...
