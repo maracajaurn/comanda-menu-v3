@@ -15,8 +15,9 @@ export { Cousine } from "./preparation/cuisine";
 export { Bartender } from "./preparation/bartender";
 
 export {
-    Cart, Menu, PaymentFailure,
-    Proof, RegisterClient, WaitForProducts
+    Cart, Menu,
+    PaymentFailure, Proof, PaymentInProcessing,
+    RegisterClient, WaitForProducts
 } from "./clientMenu";
 
 export { NotAuthorized, NotFound } from "./error"
