@@ -8,9 +8,10 @@ import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 
+import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
-import socket from "../../service/socket";
+import { PaymentService } from "../../service/payment/PaymentService";
 
 export const Proof = () => {
 
@@ -22,6 +23,7 @@ export const Proof = () => {
     const [searchParams] = useSearchParams();
 
     const [products, setProducts] = useState(null);
+    const payment_id = searchParams.get("payment_id");
 
     useEffect(() => {
         localStorage.getItem("selected_product");
@@ -30,12 +32,29 @@ export const Proof = () => {
     }, []);
 
     useEffect(() => {
-        if (products && searchParams.get("status") === "approved") {
-            createOrder();
-        };
-
-        setLoading(false);
+        getStatusPayment();
     }, [products]);
+
+    const getStatusPayment = useCallback(() => {
+        PaymentService.getPaymentStatus(payment_id)
+            .then((result) => {
+                if (result.status === "approved") {
+                    if (products.length) {
+                        createOrder();
+                    };
+
+                    navigate(`/${id}/wait_for_product`);
+                    return;
+                } else if (result.status === "rejected" || result.status === "cancelled") {
+                    toast.error("O pagamento foi recusado ou cancelado.");
+                    navigate(`/${id}/payment_failure`);
+                    return;
+                };
+            })
+            .catch(() => {
+                return toast.error("Ocorreu um erro ao consultar o status do pagamento.");
+            });
+    }, [payment_id]);
 
     const createOrder = useCallback(() => {
         setLoading(true);
@@ -57,7 +76,6 @@ export const Proof = () => {
 
         OrderService.create_order(data)
             .then((result) => {
-
                 if (result.status) {
                     localStorage.removeItem("selected_product");
                     localStorage.removeItem("list_stock");
@@ -74,7 +92,7 @@ export const Proof = () => {
                 setLoading(false);
                 return toast.error(error.message);
             });
-    }, [products]);  
+    }, [products]);
 
     const setPaymentInCheck = useCallback(() => {
         const pay_form = searchParams.get("payment_type") === "credit_card" ? "credit"
