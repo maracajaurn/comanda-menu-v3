@@ -39,7 +39,7 @@ export const Proof = () => {
         PaymentService.getPaymentStatus(payment_id)
             .then((result) => {
                 if (result.status === "approved") {
-                    if (products.length) {
+                    if (products) {
                         createOrder();
                     };
 
@@ -51,7 +51,7 @@ export const Proof = () => {
                     return;
                 };
             })
-            .catch(() => {
+            .catch((error) => {
                 return toast.error("Ocorreu um erro ao consultar o status do pagamento.");
             });
     }, [payment_id]);
