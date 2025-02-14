@@ -4,3 +4,4 @@ export { PaymentFailure } from "./paymentFailure";
 export { Proof } from "./proof";
 export { RegisterClient } from "./registerClient";
 export { WaitForProducts } from "./waitForProducts";
+export { PaymentInProcessing } from "./paymentInProcessing.jsx";
