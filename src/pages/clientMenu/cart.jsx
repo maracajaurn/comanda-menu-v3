@@ -35,7 +35,7 @@ export const Cart = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch(error => {
@@ -127,11 +127,6 @@ export const Cart = () => {
             )),
             payment_methods: {
                 default_payment_method_id: 'pix',
-                excluded_payment_types: [
-                    {
-                        id: 'ticket',
-                    },
-                ],
                 installments: 1,
                 default_installments: 1,
             },
