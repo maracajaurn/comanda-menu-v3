@@ -43,7 +43,6 @@ export const Proof = () => {
                         createOrder();
                     };
 
-                    navigate(`/${id}/wait_for_product`);
                     return;
                 } else if (result.status === "rejected" || result.status === "cancelled") {
                     toast.error("O pagamento foi recusado ou cancelado.");
@@ -54,7 +53,7 @@ export const Proof = () => {
             .catch((error) => {
                 return toast.error("Ocorreu um erro ao consultar o status do pagamento.");
             });
-    }, [payment_id]);
+    }, [payment_id, products]);
 
     const createOrder = useCallback(() => {
         setLoading(true);
@@ -64,7 +63,7 @@ export const Proof = () => {
             categories: JSON.parse(localStorage.getItem("categories")) || [],
         };
 
-        if (objSocket.categories.length === 0) {
+        if (objSocket.categories.length === 0 || products.length === 0) {
             setLoading(false);
             return
         };
@@ -88,7 +87,7 @@ export const Proof = () => {
                 };
 
                 setLoading(false);
-                return toast.error(result.message);
+                return toast.error("Ocorreu um erro ao realizar o pedido.");
             })
             .catch((error) => {
                 setLoading(false);
@@ -97,11 +96,7 @@ export const Proof = () => {
     }, [products]);
 
     const setPaymentInCheck = useCallback(() => {
-        const pay_form = searchParams.get("payment_type") === "credit_card" ? "credit"
-            : searchParams.get("payment_type") === "debit_card" ? "debit"
-                : "pix";
-
-        CheckService.closeCheck(pay_form, id)
+        CheckService.closeCheck("pix", id)
             .then((result) => {
                 if (!result.status) {
                     setLoading(false);
@@ -112,7 +107,7 @@ export const Proof = () => {
                 setLoading(false);
                 return toast.error(error.message);
             });
-    }, []);
+    }, [id]);
 
     return (
         <>
