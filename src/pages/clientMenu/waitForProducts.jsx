@@ -32,7 +32,6 @@ export const WaitForProducts = () => {
         cashier_id: 0
     });
 
-    const [total_value, setTotalValue] = useState(0);
     const [newNameClient, setNewNameClient] = useState(null);
 
     useEffect(() => {
