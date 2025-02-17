@@ -59,7 +59,6 @@ export const Waiter = () => {
     // new_order
     useEffect(() => {
         socket.on("new_order", (data) => {
-            console.log(data);
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
