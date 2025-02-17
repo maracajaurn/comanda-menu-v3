@@ -122,19 +122,14 @@ export const Cart = () => {
                     description: product.obs,
                     quantity: product.quantity,
                     unit_price: product.price,
-                    currency: "BRL",
+                    currency_id: "BRL",
                 }
             )),
             payment_methods: {
-                default_payment_method_id: 'master',
+                default_payment_method_id: 'pix',
                 excluded_payment_types: [
                     {
                         id: 'ticket',
-                    },
-                ],
-                excluded_payment_methods: [
-                    {
-                        id: 'credit_card',
                     },
                 ],
                 installments: 1,
