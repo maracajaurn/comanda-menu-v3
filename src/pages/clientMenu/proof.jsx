@@ -22,7 +22,7 @@ export const Proof = () => {
 
     const [searchParams] = useSearchParams();
 
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState([]);
     const payment_id = searchParams.get("payment_id");
 
     useEffect(() => {
@@ -65,6 +65,7 @@ export const Proof = () => {
         };
 
         if (objSocket.categories.length === 0) {
+            setLoading(false);
             return
         };
 
@@ -78,6 +79,7 @@ export const Proof = () => {
             .then((result) => {
                 if (result.status) {
                     localStorage.removeItem("selected_product");
+                    localStorage.removeItem("categories");
                     localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
                     setPaymentInCheck();
