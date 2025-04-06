@@ -24,7 +24,7 @@ const getByStock= async () => {
     };
 };
 
-const getByPagenated = async (limit, page) => {
+const getByPagenated = async (limit = 10, page = 1) => {
     try {
         const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
 
