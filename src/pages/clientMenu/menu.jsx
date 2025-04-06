@@ -61,10 +61,10 @@ export const Menu = () => {
         isFetching.current = true;
         
         setLoadingHasMore(true);
-        ProductService.getByPagenated(10, page)
+        ProductService.getByPagenated(5, page)
             .then((result) => {
                 if (result.length > 0) {
-                    mapProducts([...listProducts, ...result]);
+                    mapProducts(result);
                     setPage(prev => prev + 1);
                     setLoadingHasMore(false);
                     return setLoading(false);
@@ -118,7 +118,8 @@ export const Menu = () => {
 
         Promise.all(mappedProducts)
             .then((products) => {
-                setListProducts(products);
+                console.log(products)
+                setListProducts([...listProducts, ...products]);
             })
             .catch((error) => {
                 toast.error('Erro ao processar produtos: ' + error.message);
