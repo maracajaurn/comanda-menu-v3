@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -9,11 +9,13 @@ import { Navbar } from "../../components";
 import { ProductService } from "../../service/product/ProductService";
 
 import { useToggleView, useLoader } from "../../contexts"
+import { useDebounce } from "../../hooks/UseDebounce";
 
 export const Menu = () => {
 
-    const { setToggleView } = useToggleView()
-    const { setLoading } = useLoader()
+    const { setToggleView } = useToggleView();
+    const { debounce } = useDebounce(500);
+    const { setLoading } = useLoader();
 
     const navigate = useNavigate();
 
@@ -27,6 +29,10 @@ export const Menu = () => {
 
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
+
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const isFetching = useRef(false);
 
     useEffect(() => {
         setLoading(true);
@@ -49,10 +55,15 @@ export const Menu = () => {
     }, []);
 
     const getAllProducts = useCallback(() => {
-        ProductService.getByStock()
+        if (isFetching.current) return;
+        isFetching.current = true;
+        setLoading(true);
+        console.log("Current page", page)
+        ProductService.getByPagenated(10, page)
             .then((result) => {
                 if (result.length > 0) {
-                    mapProducts(result);
+                    mapProducts([...listProducts, ...result]);
+                    setPage(prev => prev + 1);
                     return setLoading(false);
                 };
 
@@ -61,13 +72,30 @@ export const Menu = () => {
                     return toast.error(result.message);
                 };
 
+                setHasMore(false);
                 return setLoading(false);
             })
             .catch((error) => {
                 setLoading(false);
                 return toast.error(error.message);
+            })
+            .finally(() => {
+                setLoading(false);
+                isFetching.current = false;
             });
-    }, []);
+    }, [page, listProducts]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100) {
+                debounce(() => {
+                    if (hasMore) getAllProducts();
+                });
+            };
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [getAllProducts, hasMore]);
 
     const mapProducts = (list) => {
         const mappedProducts = list.map((item) => {
@@ -127,7 +155,6 @@ export const Menu = () => {
             localStorage.setItem("categories", JSON.stringify(updatedCategories));
         }
     }, [selectedProduct, listProducts]);
-
 
     // Wrapper para setSelectedProduct
     const updateSelectedProduct = (newSelectedProduct, new_stock = []) => {
@@ -221,7 +248,6 @@ export const Menu = () => {
     },
         [listProducts, selectedProduct]
     );
-
 
     const navigateToCart = () => {
         handleCategories();
