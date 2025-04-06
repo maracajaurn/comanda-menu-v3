@@ -288,7 +288,7 @@ export const Menu = () => {
                     <div key={index} className="card flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border">
                         <div className="w-full flex items-center justify-between gap-1">
                             {item.image && (
-                                <div className="h-[120px] w-[150px] rounded-md bg-slate-300"
+                                <div className="h-[120px] w-[180px] rounded-md bg-slate-300"
                                     style={{
                                         backgroundImage: `url(${item.image})`,
                                         backgroundSize: 'cover',
