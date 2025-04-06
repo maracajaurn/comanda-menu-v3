@@ -118,7 +118,6 @@ export const Menu = () => {
 
         Promise.all(mappedProducts)
             .then((products) => {
-                console.log(products)
                 setListProducts([...listProducts, ...products]);
             })
             .catch((error) => {
