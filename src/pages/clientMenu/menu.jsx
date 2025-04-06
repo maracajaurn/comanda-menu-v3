@@ -30,6 +30,8 @@ export const Menu = () => {
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
 
+    const [loadingHasMore, setLoadingHasMore] = useState(false);
+
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const isFetching = useRef(false);
@@ -57,21 +59,24 @@ export const Menu = () => {
     const getAllProducts = useCallback(() => {
         if (isFetching.current) return;
         isFetching.current = true;
-        setLoading(true);
-        console.log("Current page", page)
+        
+        setLoadingHasMore(true);
         ProductService.getByPagenated(10, page)
             .then((result) => {
                 if (result.length > 0) {
                     mapProducts([...listProducts, ...result]);
                     setPage(prev => prev + 1);
+                    setLoadingHasMore(false);
                     return setLoading(false);
                 };
 
                 if (result?.status === false) {
+                    setLoadingHasMore(false);
                     setLoading(false);
                     return toast.error(result.message);
                 };
 
+                setLoadingHasMore(false);
                 setHasMore(false);
                 return setLoading(false);
             })
@@ -333,6 +338,19 @@ export const Menu = () => {
                         </div>
                     </div>
                 ))}
+
+                {loadingHasMore && (
+                    <div className="flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border animate-pulse">
+                        <div className="w-full flex items-center justify-between gap-1">
+                            <div className="h-[120px] w-[150px] rounded-md bg-slate-300"></div>
+                            <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
+                                <h3 className="text-slate-900 text-[25px] font-bold">Carregando</h3>
+                                <p className="text-slate-500 text-[15px] font-semibold">Descrição</p>
+                                <h3 className="text-slate-500 text-[30px] font-semibold">R$ 0,00</h3>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="fixed bottom-0 right-0 p-5 flex justify-center items-center">
                     <div className="flex gap-3 z-50 relative">
