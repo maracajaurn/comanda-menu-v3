@@ -280,10 +280,10 @@ export const Menu = () => {
                 </div>
 
                 {itensFiltrados.map((item, index) => (
-                    <div key={index} className={`flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border`}>
-                        <div className="flex items-center justify-between gap-1">
+                    <div key={index} className="card flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border">
+                        <div className="w-full flex items-center justify-between gap-1">
                             {item.image && (
-                                <div className="h-[120px] w-[120px] rounded-md bg-slate-300"
+                                <div className="h-[120px] w-[150px] rounded-md bg-slate-300"
                                     style={{
                                         backgroundImage: `url(${item.image})`,
                                         backgroundSize: 'cover',
@@ -297,7 +297,7 @@ export const Menu = () => {
                                 </div>
                             )}
 
-                            <div className="flex flex-col items-center justify-between gap-2">
+                            <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
                                 <h3 className="text-slate-900 text-[25px] font-bold">{item.product_name}</h3>
                                 <p className="text-slate-500 text-[15px] font-semibold">{item.description}</p>
                                 <h3 className="text-slate-500 text-[30px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
