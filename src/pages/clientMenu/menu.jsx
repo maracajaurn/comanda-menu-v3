@@ -279,11 +279,11 @@ export const Menu = () => {
                         </div>
 
                         <div className="flex justify-between gap-2 mt-5">
-                            <label>
+                            <label className="w-full">
                                 {selectedProduct.find(product => product[1] === item.product_id)?.[2] && (
                                     <textarea
                                         placeholder="Observação"
-                                        className="w-[200px] mt-1 border border-slate-500 rounded-[5px] p-1"
+                                        className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
                                         onChange={(e) => obsProduct(item.product_id, e.target.value)}
                                         value={selectedProduct.find(product => product[1] === item.product_id)?.[3] || ""}
                                         disabled={selectedProduct.findIndex(product => product[1] === item.product_id) === -1}
