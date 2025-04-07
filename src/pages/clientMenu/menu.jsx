@@ -37,7 +37,7 @@ export const Menu = () => {
     const isFetching = useRef(false);
 
     useEffect(() => {
-        setLoading(true);
+        setLoading(false);
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
         const if_selected_product = localStorage.getItem("selected_product");
@@ -67,25 +67,25 @@ export const Menu = () => {
                     mapProducts(result);
                     setPage(prev => prev + 1);
                     setLoadingHasMore(false);
-                    return setLoading(false);
+                    return 
                 };
 
                 if (result?.status === false) {
                     setLoadingHasMore(false);
-                    setLoading(false);
+                    
                     return toast.error(result.message);
                 };
 
                 setLoadingHasMore(false);
                 setHasMore(false);
-                return setLoading(false);
+                return 
             })
             .catch((error) => {
-                setLoading(false);
+                
                 return toast.error(error.message);
             })
             .finally(() => {
-                setLoading(false);
+                
                 isFetching.current = false;
             });
     }, [page, listProducts]);
