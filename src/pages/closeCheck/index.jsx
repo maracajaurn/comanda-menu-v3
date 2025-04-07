@@ -139,8 +139,31 @@ export const CloseCheck = () => {
     const getSetting = useCallback(() => {
         SettingService.get()
             .then((result) => {
-                if (result.length > 0) {
-                    return setSetting(result[0]);
+                if (result[0]) {
+                    const image = result[0].image_pix?.data;
+
+                    if (image) {
+                        const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
+                        blobToBase64(blob)
+                            .then((base64Image) => {
+                                setSetting((prev) => ({
+                                    ...prev,
+                                    setting_id: result[0].setting_id,
+                                    estabishment_name: result[0].estabishment_name,
+                                    serveice_change: result[0].serveice_change,
+                                    service_change_percentage: result[0].service_change_percentage,
+                                    color: result[0].color,
+                                    image_pix: base64Image,
+                                }));
+
+                                return;
+                            })
+                            .catch((error) => {
+                                return toast.error('Erro ao converter a imagem: ' + error.message);
+                            });
+                    } else {
+                        return setSetting(result[0]);
+                    };
                 };
 
                 if (result?.status === false) {
@@ -154,6 +177,22 @@ export const CloseCheck = () => {
                 return toast.error(error.message);
             });
     }, []);
+
+    const blobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                resolve(reader.result);
+            };
+
+            reader.onerror = (error) => {
+                reject('Erro ao ler o Blob: ' + error);
+            };
+
+            reader.readAsDataURL(blob);
+        });
+    };
 
     const closeCheck = useCallback(() => {
         setLoading(true);
