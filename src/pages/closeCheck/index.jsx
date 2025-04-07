@@ -260,9 +260,9 @@ export const CloseCheck = () => {
                 <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
                     <label>
-                        <input
+                        <textarea
                             type="text"
-                            className="max-w-[300px] h-auto text-center text-slate-900 font-bold text-[32px] bg-transparent"
+                            className="max-w-[300px] text-center text-slate-900 font-bold text-[32px] bg-transparent"
                             placeholder="Nome do Cliente"
                             onChange={(change) => setNewNameClient(() => change.target.value)}
                             value={newNameClient !== null ? newNameClient : check.name_client}
