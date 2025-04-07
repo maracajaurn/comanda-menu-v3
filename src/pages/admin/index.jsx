@@ -82,10 +82,10 @@ export const Admin = () => {
         setLoading(true);
         try {
             screenshotCashier();
-            
+
             await CashierService.close(cashier.cashier_id);
             await CheckService.deleteAll();
-            
+
             getCashierOpen();
             return toast.success("Caixa fechado com sucesso!");
         } catch (error) {
@@ -114,19 +114,71 @@ export const Admin = () => {
 
     const printCashier = () => {
         const janelaDeImpressao = window.open('', '_blank');
-        janelaDeImpressao.document.write('<html><head><title>Imprimir</title></head><body>');
-        janelaDeImpressao.document.write(`<p>Receita Total Gerada: <b>R$ ${cashier.total_value}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Total de Comandas: <b>${cashier.lenght_cheks}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Total de Produtos Vendidos: <b>${cashier.lenght_products}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Vendas por categoria</p>`);
-        janelaDeImpressao.document.write(`<p>Pix: <b>R$ ${cashier.pix}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Dineiro: <b>R$ ${cashier.cash}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Cartão Crédito: <b>R$ ${cashier.credit}</b></p>`);
-        janelaDeImpressao.document.write(`<p>Cartão Débito: <b>R$ ${cashier.debit}</b></p>`);
-        janelaDeImpressao.document.write('</body></html>');
+        janelaDeImpressao.document.write(`
+            <html>
+                <head>
+                    <title>Imprimir</title>
+                    <style>
+                        body {
+                            font-family: monospace;
+                            font-size: 12px;
+                            padding: 0;
+                            margin: 0;
+                            width: 80mm;
+                        }
+                        .container {
+                            padding: 10px;
+                        }
+                        .center {
+                            text-align: center;
+                        }
+                        .bold {
+                            font-weight: bold;
+                        }
+                        .section {
+                            margin: 10px 0;
+                        }
+                        hr {
+                            border: none;
+                            border-top: 1px dashed #000;
+                            margin: 8px 0;
+                        }
+                        p {
+                            margin: 4px 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="center section">
+                            <p class="bold">FECHAMENTO DE CAIXA</p>
+                            <hr />
+                        </div>
+                        <div class="section">
+                            <p>Receita Total Gerada: <span class="bold">R$ ${Number(cashier.total_value).toFixed(2).replace(".", ",")}</span></p>
+                            <p>Total de Comandas: <span class="bold">${cashier.lenght_cheks}</span></p>
+                            <p>Total de Produtos Vendidos: <span class="bold">${cashier.lenght_products}</span></p>
+                        </div>
+                        <hr />
+                        <div class="section">
+                            <p class="bold">Vendas por Categoria</p>
+                            <p>Pix: <span class="bold">R$ ${Number(cashier.pix).toFixed(2).replace(".", ",") || "0,00"}</span></p>
+                            <p>Dinheiro: <span class="bold">R$ ${Number(cashier.cash).toFixed(2).replace(".", ",") || "0,00"}</span></p>
+                            <p>Cartão Crédito: <span class="bold">R$ ${Number(cashier.credit).toFixed(2).replace(".", ",") || "0,00"}</span></p>
+                            <p>Cartão Débito: <span class="bold">R$ ${Number(cashier.debit).toFixed(2).replace(".", ",") || "0,00"}</span></p>
+                        </div>
+                        <hr />
+                        <div class="center section">
+                            <p>Obrigado!</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `);
         janelaDeImpressao.document.close();
         janelaDeImpressao.print();
     };
+
 
     return (
         <>
@@ -244,16 +296,16 @@ export const Admin = () => {
                 <footer className="w-full flex flex-col gap-3 justify-between items-center py-3 bg-[#EB8F00] text-slate-100">
                     <h5 className="text-[28px] font-semibold">Finalizar o dia</h5>
 
-                    <div className="flex gap-5 w-2/3 justify-center items-center">
-                        <button className="flex gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
+                    <div className="flex gap-5 justify-center items-center">
+                        <button className="w-1/2 flex items-center gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
                             onClick={() => printCashier()}
                         ><Print /> Imprimir</button>
-                        <button className="flex gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
+                        <button className="w-1/2 flex items-center gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
                             onClick={() => screenshotCashier()}
                         ><Cam /> Print</button>
                     </div>
 
-                    <button className="w-2/3 py-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
+                    <button className="w-[260px] py-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
                         onClick={() => closeCashier()}
                     >Fechar caixa</button>
                 </footer>
