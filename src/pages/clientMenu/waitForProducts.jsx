@@ -46,7 +46,8 @@ export const WaitForProducts = () => {
     // order_ready
     useEffect(() => {
         socket.on("order_ready", (data) => {
-            notify(data.check_id);
+            if (data.check_id !== parseInt(id)) return;
+            notify(data.check_id, data.client);
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
