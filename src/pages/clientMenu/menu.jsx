@@ -344,9 +344,9 @@ export const Menu = () => {
                         <div className="w-full flex items-center justify-between gap-1">
                             <div className="h-[120px] w-[180px] rounded-md bg-slate-300"></div>
                             <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
-                                <h3 className="text-slate-900 text-[25px] font-bold">Buscando produtos...</h3>
-                                <p className="text-slate-500 text-[15px] font-semibold">Descrição</p>
-                                <h3 className="text-slate-500 text-[30px] font-semibold">R$ 0,00</h3>
+                                <h3 className="w-[200px] h-[25px] rounded bg-slate-400 text-[25px] font-bold"></h3>
+                                <p className="w-[200px] h-[25px] rounded bg-slate-200 text-[15px] font-semibold"></p>
+                                <h3 className="w-[200px] h-[25px] rounded bg-slate-300 text-[30px] font-semibold"></h3>
                             </div>
                         </div>
                     </div>
