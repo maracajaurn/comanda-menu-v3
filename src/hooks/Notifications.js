@@ -4,7 +4,7 @@ import { useCallback } from "react";
 export const useNotification = () => {
   const navigate = useNavigate();
 
-  const notify = useCallback(async (id) => {
+  const notify = useCallback(async (id, client) => {
     let granted = false;
 
     if (Notification.permission === "granted") {
@@ -17,8 +17,8 @@ export const useNotification = () => {
     if (!granted) return;
 
     const notification = new Notification("Comanda Menu", {
-      body: `Tem um pedido pronto aí, ehm...`,
-      icon: "/logo192.png", // não precisa de "../../public"
+      body: `${client}, tem um pedido pronto aí, ehm...`,
+      icon: "/logo192.png",
     });
 
     notification.addEventListener("click", () => {
