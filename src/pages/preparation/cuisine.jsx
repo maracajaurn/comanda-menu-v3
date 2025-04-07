@@ -203,7 +203,7 @@ export const Cousine = () => {
             .then((result) => {
                 if (result.status) {
                     setLoading(false);
-                    socket.emit("order_ready", { client: name_client, product: name_product });
+                    socket.emit("order_ready", { client: name_client, product: name_product, check_id: check_id });
                     toast.success(result.message);
                     setOrders({});
                     getOrders();

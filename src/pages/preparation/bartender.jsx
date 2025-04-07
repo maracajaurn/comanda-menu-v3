@@ -147,7 +147,7 @@ export const Bartender = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -181,7 +181,7 @@ export const Bartender = () => {
                 if (result.status) {
                     setLoading(false);
                     toast.success(result.message);
-                    socket.emit("order_ready", { client: name_client, product: name_product });
+                    socket.emit("order_ready", { client: name_client, product: name_product, check_id: check_id });
                     getOrders();
                     return
                 };
