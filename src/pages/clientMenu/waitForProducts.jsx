@@ -7,6 +7,7 @@ import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 import { useDebounce } from "../../hooks/UseDebounce";
+import { useNotification } from "../../hooks/Notifications";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -17,6 +18,7 @@ export const WaitForProducts = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { debounce } = useDebounce(1500);
+    const notify = useNotification();
 
     const { setLoading } = useLoader();
 
@@ -44,6 +46,7 @@ export const WaitForProducts = () => {
     // order_ready
     useEffect(() => {
         socket.on("order_ready", (data) => {
+            notify(data.check_id);
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
@@ -202,7 +205,7 @@ export const WaitForProducts = () => {
                 <div>
                     <button
                         className="
-                            bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] hover:border-[#1C1D26] text-white
+                            bg-[#1C1D26] hover:bg-[#EB8F00] text-white
                             p-2 text-[20px] font-bold rounded-xl border-2 border-transparent  transition-all delay-75"
                         onClick={() => navigate(`/${id}/products`)}
                     >Adicionar outros produtos</button>
