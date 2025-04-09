@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
+import { Delete } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 
@@ -59,6 +60,20 @@ export const Cart = () => {
                 return toast.error(error.message);
             });
     }, []);
+
+    const removeProduct = (product_id) => {
+        const newProductsSelected = productsSelected.filter((product) => product[1] !== product_id);
+        setProductsSelected(newProductsSelected);
+
+        const newProductsInCart = productsInCart.filter((product) => product.product_id !== product_id);
+        setProductsInCart(newProductsInCart);
+
+        const newTotalValue = total_value - (products.find((product) => product.product_id === product_id).price * productsSelected.find((selected) => selected[1] === product_id)[2]);
+        setTotalValue(newTotalValue);
+
+        localStorage.setItem("selected_product", JSON.stringify(newProductsSelected));
+        localStorage.setItem("total_value", newTotalValue.toFixed(2));
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -157,23 +172,26 @@ export const Cart = () => {
 
                     <h1 className="text-center text-slate-900 font-bold text-[32px]">{client}</h1>
 
-                    <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
+                    <table className="max-w-1/2 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
                         <thead>
-                            <tr className="flex justify-between items-center">
+                            <tr className="flex justify-between items-center gap-3">
                                 <th>Und.</th>
                                 <th>Produto</th>
                                 <th>Preço</th>
+                                <th></th>
                             </tr>
                         </thead>
 
                         {productsInCart.map((product, index) => (
                             <tbody key={index}>
-                                <tr className="flex justify-between gap-1 text-slate-700 font-semibold">
+                                <tr className="flex justify-between text-slate-700 font-semibold gap-3">
                                     <td className="flex items-center justify-between gap-2">
                                         <span className="text-[#EB8F00]">{product.quantity}x</span>
                                     </td>
                                     <td><span>{product.product_name}</span></td>
                                     <td><span className="font-bold text-slate-500">R$ {product.price.toFixed(2).replace(".", ",")}</span></td>
+                                    <td onClick={() => removeProduct(product.product_id)}
+                                    ><span className="text-red-500 cursor-pointer"><Delete /></span></td>
                                 </tr>
                                 <tr>
                                     <td>
