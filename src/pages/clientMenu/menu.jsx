@@ -59,7 +59,7 @@ export const Menu = () => {
     const getAllProducts = useCallback(() => {
         if (isFetching.current) return;
         isFetching.current = true;
-        
+
         setLoadingHasMore(true);
         ProductService.getByPagenated(5, page)
             .then((result) => {
@@ -67,25 +67,25 @@ export const Menu = () => {
                     mapProducts(result);
                     setPage(prev => prev + 1);
                     setLoadingHasMore(false);
-                    return 
+                    return
                 };
 
                 if (result?.status === false) {
                     setLoadingHasMore(false);
-                    
+
                     return toast.error(result.message);
                 };
 
                 setLoadingHasMore(false);
                 setHasMore(false);
-                return 
+                return
             })
             .catch((error) => {
-                
+
                 return toast.error(error.message);
             })
             .finally(() => {
-                
+
                 isFetching.current = false;
             });
     }, [page, listProducts]);
@@ -104,6 +104,8 @@ export const Menu = () => {
 
     const mapProducts = (list) => {
         const mappedProducts = list.map((item) => {
+            if (!item.image) return item;
+
             const blob = new Blob([new Uint8Array(item.image?.data)], { type: 'image/jpeg' });
             return blobToBase64(blob).then((base64Image) => ({
                 product_id: item.product_id,
@@ -287,16 +289,24 @@ export const Menu = () => {
                 {itensFiltrados.map((item, index) => (
                     <div key={index} className="card flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border">
                         <div className="w-full flex items-center justify-between gap-1">
-                            {item.image && (
+                            {item.image ? (
                                 <div className="h-[120px] w-[180px] rounded-md bg-slate-300"
                                     style={{
                                         backgroundImage: `url(${item.image})`,
                                         backgroundSize: 'cover',
-                                        backgroundPosition: 'center',
+                                        backgroundPosition: 'center'
                                     }}>
                                     <div className={`
+                                        ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
+                                        w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
+                                        <h6 className="text-white"><CheckProduct /></h6>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="h-[120px] w-[180px] rounded-md bg-slate-300 animate-pulse">
+                                    <div className={`
                                     ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
-                                    w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3 z-10`}>
+                                    w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
                                         <h6 className="text-white"><CheckProduct /></h6>
                                     </div>
                                 </div>
@@ -352,20 +362,20 @@ export const Menu = () => {
                     </div>
                 )}
 
-                <div className="fixed bottom-0 right-0 p-5 flex justify-center items-center">
+                <div className="cart fixed bottom-0 right-0 p-5 flex justify-center items-center animate-bounce">
                     <div className="flex gap-3 z-50 relative">
                         {selectedProduct.length > 0 && (
-                            <div className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full absolute -top-1 -left-1 z-10">
+                            <div className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full absolute border-2 shadow-2xl -top-1 -left-1 z-10">
                                 <h5 className="text-black">{selectedProduct.length}</h5>
                             </div>
                         )}
 
                         <button className={`
-                        ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
-                        bg-[#171821] hover:text-[#171821] border-2 border-transparent hover:border-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75`}
-                            onClick={() => { navigateToCart(); setToggleView(false) }}
-                            disabled={selectedProduct.length === 0}
-                        ><Cart /></button>
+                            ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
+                            bg-[#171821] hover:text-[#171821] hover:bg-[#EB8F00] transition-all delay-75`}
+                                onClick={() => { navigateToCart(); setToggleView(false) }}
+                                disabled={selectedProduct.length === 0}
+                            ><Cart /></button>
                     </div>
                 </div>
             </div>
