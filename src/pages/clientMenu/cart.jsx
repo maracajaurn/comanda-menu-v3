@@ -93,6 +93,7 @@ export const Cart = () => {
             );
 
             let total_value = 0;
+            let categories = [];
 
             const productsInCart = filteredProducts.map((product) => {
                 const selectedProduct = productsSelected.find((selected) => selected[1] === product.product_id);
@@ -100,6 +101,10 @@ export const Cart = () => {
                 const totalPrice = product.price * selectedProduct[2];
 
                 total_value += totalPrice;
+
+                if (!categories.includes(product.category)) {
+                    categories.push(product.category);
+                };
 
                 return {
                     product_id: product.product_id,
@@ -110,6 +115,7 @@ export const Cart = () => {
                 };
             });
 
+            localStorage.setItem("categories", JSON.stringify(categories));
             localStorage.setItem("total_value", total_value.toFixed(2));
 
             setTotalValue(total_value);
