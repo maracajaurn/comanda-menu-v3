@@ -144,25 +144,6 @@ export const Menu = () => {
         });
     };
 
-    const handleCategories = useCallback(() => {
-        const categories = JSON.parse(localStorage.getItem("categories") || "[]");
-
-        const selectedCategories = selectedProduct.map((product) => {
-            const productData = listProducts.find((item) => item.product_id === product[1]);
-            return productData.category;
-        });
-
-
-        const newCategories = selectedCategories.filter(
-            (category) => category && !categories.includes(category)
-        );
-
-        if (newCategories.length > 0) {
-            const updatedCategories = [...newCategories];
-            localStorage.setItem("categories", JSON.stringify(updatedCategories));
-        }
-    }, [selectedProduct, listProducts]);
-
     // Wrapper para setSelectedProduct
     const updateSelectedProduct = (newSelectedProduct, new_stock = []) => {
         setSelectedProduct(newSelectedProduct);
@@ -255,11 +236,6 @@ export const Menu = () => {
     },
         [listProducts, selectedProduct]
     );
-
-    const navigateToCart = () => {
-        handleCategories();
-        navigate(`/${id}/cart`);
-    };
 
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
@@ -373,7 +349,7 @@ export const Menu = () => {
                         <button className={`
                             ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
                             bg-[#171821] hover:text-[#171821] hover:bg-[#EB8F00] transition-all delay-75`}
-                                onClick={() => { navigateToCart(); setToggleView(false) }}
+                                onClick={() => { navigate(`/${id}/cart`); setToggleView(false) }}
                                 disabled={selectedProduct.length === 0}
                             ><Cart /></button>
                     </div>
