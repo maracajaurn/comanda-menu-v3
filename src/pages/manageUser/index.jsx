@@ -212,7 +212,7 @@ export const ManageUser = () => {
         <>
             <Navbar title={"Usuários"} url />
             <div className="flex flex-col gap-10 mb-10">
-                <div className="flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
+                <div className="max-w-[300px] flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
                     <ModalUser action={action} id={id} />
                     <Toaster />
 
