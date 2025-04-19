@@ -120,9 +120,23 @@ export const ModalProduct = ({ action, id }) => {
                 return toast.error("A imagem deve ser menor que 16 MB.");
             };
 
+            const img = new Image();
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setValue((prev) => ({ ...prev, image: reader.result }));
+            
+            reader.onload = (e) => {
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.heigth = img.heigth;
+
+                    const ctx = canva.getContext("2d");
+                    ctx.drawImage(img, 0, 0);
+
+                    const webpDataUrl = canvas.toDataUrl("image/webp", 0.8);
+
+                    setValue((prev) => ({ ...prev, image: webpDataUrl }));
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         };
@@ -151,7 +165,7 @@ export const ModalProduct = ({ action, id }) => {
                     const image = result[0].image?.data;
 
                     if (image) {
-                        const blob = new Blob([new Uint8Array(image)], { type: 'image/jpeg' });
+                        const blob = new Blob([new Uint8Array(image)], { type: 'image/webp' });
                         blobToBase64(blob)
                             .then((base64Image) => {
                                 setValue((prev) => ({
