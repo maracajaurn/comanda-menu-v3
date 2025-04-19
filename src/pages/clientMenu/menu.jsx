@@ -106,7 +106,7 @@ export const Menu = () => {
         const mappedProducts = list.map((item) => {
             if (!item.image) return item;
 
-            const blob = new Blob([new Uint8Array(item.image?.data)], { type: 'image/jpeg' });
+            const blob = new Blob([new Uint8Array(item.image?.data)], { type: 'image/webp' });
             return blobToBase64(blob).then((base64Image) => ({
                 product_id: item.product_id,
                 product_name: item.product_name,
