@@ -212,7 +212,7 @@ export const ManageUser = () => {
         <>
             <Navbar title={"Usuários"} url />
             <div className="flex flex-col gap-10 mb-10">
-                <div className="max-w-[300px] flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
+                <div className="max-w-[350px] flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
                     <ModalUser action={action} id={id} />
                     <Toaster />
 
@@ -221,7 +221,7 @@ export const ManageUser = () => {
                         >Usuários</h2>
 
                         <div className="mb-5 overflow-x-auto shadow-md sm:rounded-lg rounded-md">
-                            <table className="w-[300px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <table className="max-w-[350px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" className="px-2 py-2 text-center">
