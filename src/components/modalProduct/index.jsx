@@ -127,12 +127,12 @@ export const ModalProduct = ({ action, id }) => {
                 img.onload = () => {
                     const canvas = document.createElement("canvas");
                     canvas.width = img.width;
-                    canvas.heigth = img.heigth;
+                    canvas.heigth = img.height;
 
                     const ctx = canvas.getContext("2d");
                     ctx.drawImage(img, 0, 0);
 
-                    const webpDataUrl = canvas.toDataUrl("image/webp", 0.8);
+                    const webpDataUrl = canvas.toDataURL("image/webp", 0.8);
 
                     setValue((prev) => ({ ...prev, image: webpDataUrl }));
                 };
