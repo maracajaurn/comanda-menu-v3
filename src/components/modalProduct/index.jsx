@@ -129,7 +129,7 @@ export const ModalProduct = ({ action, id }) => {
                     canvas.width = img.width;
                     canvas.heigth = img.heigth;
 
-                    const ctx = canva.getContext("2d");
+                    const ctx = canvas.getContext("2d");
                     ctx.drawImage(img, 0, 0);
 
                     const webpDataUrl = canvas.toDataUrl("image/webp", 0.8);
