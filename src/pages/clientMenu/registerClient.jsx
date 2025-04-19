@@ -122,7 +122,7 @@ export const RegisterClient = () => {
                         </label>
 
                         <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
-                            <input
+                            <textarea
                                 className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
                                 type="text"
                                 id="indicacao"
