@@ -220,8 +220,8 @@ export const ManageUser = () => {
                         <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
                         >Usuários</h2>
 
-                        <div className="mb-5 shadow-md sm:rounded-lg rounded-md">
-                            <table className="max-w-[350px] overflow-x-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <div className="mb-5 shadow-md sm:rounded-lg rounded-md overflow-x-auto">
+                            <table className="max-w-[350px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th scope="col" className="px-2 py-2 text-center">
