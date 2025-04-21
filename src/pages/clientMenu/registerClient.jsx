@@ -108,7 +108,7 @@ export const RegisterClient = () => {
                 <div className="w-[300px] rounded-md flex flex-col justify-between items-center gap-10">
                     <div className="flex flex-col items-center gap-3">
 
-                        <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
+                        <label className="min-w-[350px] text-sm font-bold mb-2 text-[#1C1D26]">
                             <input
                                 className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
                                 type="text"
@@ -121,9 +121,9 @@ export const RegisterClient = () => {
                             />
                         </label>
 
-                        <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
+                        <label className="min-w-[350px] h-auto text-sm font-bold mb-2 text-[#1C1D26]">
                             <textarea
-                                className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
+                                className="h-[150px] focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
                                 type="text"
                                 id="indicacao"
                                 name="obs"
@@ -137,7 +137,7 @@ export const RegisterClient = () => {
 
                     <button onClick={() => authenticateClient()}
                         disabled={loading}
-                        className="w-[270px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
+                        className="min-w-[350px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
                     >Cadastrar</button>
                 </div>
             </div>
