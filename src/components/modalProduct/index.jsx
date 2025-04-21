@@ -110,14 +110,14 @@ export const ModalProduct = ({ action, id }) => {
 
         if (file) {
             // Verifica se o arquivo é uma imagem
-            const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+            const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
             if (!validTypes.includes(file.type)) {
-                return toast.error("Apenas arquivos de imagem (JPG, PNG) são permitidos.");
+                return toast.error("Apenas arquivos de imagem (JPG, PNG, WEBP) são permitidos.");
             };
 
             // Verifica se o tamanho do arquivo é maior que 5 mb
-            if (file.size > 16 * 1024 * 1024) {
-                return toast.error("A imagem deve ser menor que 16 MB.");
+            if (file.size > 5 * 1024 * 1024) {
+                return toast.error("A imagem deve ser menor que 5 MB.");
             };
 
             const img = new Image();
