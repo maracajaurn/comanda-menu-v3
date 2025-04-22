@@ -291,7 +291,7 @@ export const Menu = () => {
                             <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
                                 <h3 className="text-slate-900 text-[25px] font-bold">{item.product_name}</h3>
                                 <p className="text-slate-500 text-[15px] font-semibold">{item.description}</p>
-                                <h3 className="text-slate-500 text-[30px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
+                                <h3 className="text-slate-500 text-[30px] font-semibold"><span className="text-[#EB8F00]">R$</span> {item.price.toFixed(2).replace(".", ",")}</h3>
                             </div>
                         </div>
 
