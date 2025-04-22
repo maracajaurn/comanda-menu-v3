@@ -237,6 +237,7 @@ export const Menu = () => {
         [listProducts, selectedProduct]
     );
 
+    // Corrigir o filtro para buscar direto do DB
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
     );
