@@ -48,6 +48,10 @@ export const Proof = () => {
                     toast.error("O pagamento foi recusado ou cancelado.");
                     navigate(`/${id}/payment_failure`);
                     return;
+                } else if (result.status === "pending") {
+                    toast.error("O pagamento está pendente.");
+                    navigate(`/${id}/payment_pending`);
+                    return;
                 };
             })
             .catch((error) => {
