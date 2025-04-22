@@ -243,7 +243,7 @@ export const Menu = () => {
 
     return (
         <>
-            <Navbar title="Menu" url />
+            <Navbar title="Menu" />
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
                 <Toaster />
