@@ -108,6 +108,8 @@ export const ModalProduct = ({ action, id }) => {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
 
+        console.log(file);
+
         if (file) {
             // Verifica se o arquivo é uma imagem
             const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
