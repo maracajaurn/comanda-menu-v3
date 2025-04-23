@@ -180,32 +180,33 @@ export const Cart = () => {
 
                     <table className="max-w-1/2 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
                         <thead>
-                            <tr className="flex justify-between items-center gap-3">
+                            <tr className="flex justify-between items-center gap-2">
                                 <th>Und.</th>
                                 <th>Produto</th>
                                 <th>Preço</th>
-                                <th></th>
+                                <th><Delete /></th>
                             </tr>
                         </thead>
 
                         {productsInCart.map((product, index) => (
                             <tbody key={index}>
-                                <tr className="flex justify-between text-slate-700 font-semibold gap-3">
-                                    <td className="flex items-center justify-between gap-2">
+                                <tr className="flex justify-between text-slate-700 font-semibold gap-3 py-1">
+                                    <td className="flex items-center justify-between gap-2 w-[15px]">
                                         <span className="text-[#EB8F00]">{product.quantity}x</span>
                                     </td>
-                                    <td><span>{product.product_name}</span></td>
-                                    <td><span className="font-bold text-slate-500">R$ {product.price.toFixed(2).replace(".", ",")}</span></td>
-                                    <td onClick={() => removeProduct(product.product_id)}
-                                    ><span className="text-red-500 cursor-pointer"><Delete /></span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        {product.obs && (
-                                            <p className="text-[#EB8F00]">OBS: <span className="text-slate-500">{product.obs}</span></p>
-                                        )}
+                                    <td>{product.product_name}</td>
+                                    <td className="flex gap-5 font-bold text-slate-500">
+                                        R$ {product.price.toFixed(2).replace(".", ",")}
+                                        <span className="text-red-500 cursor-pointer p-1"
+                                            onClick={() => removeProduct(product.product_id)}><Delete />
+                                        </span>
                                     </td>
                                 </tr>
+                                {product.obs && (
+                                    <tr>
+                                        <td className="text-[#EB8F00]">OBS: <span className="text-slate-500">{product.obs}</span></td>
+                                    </tr>
+                                )}
                             </tbody>
                         ))}
                     </table>
