@@ -191,7 +191,7 @@ export const Cart = () => {
                         {productsInCart.map((product, index) => (
                             <tbody key={index}>
                                 <tr className="flex justify-between text-slate-700 font-semibold gap-3 py-1">
-                                    <td className="flex items-center justify-between gap-2 w-[15px]">
+                                    <td className="flex justify-between gap-2 w-[15px]">
                                         <span className="text-[#EB8F00]">{product.quantity}x</span>
                                     </td>
                                     <td>{product.product_name}</td>
