@@ -191,7 +191,7 @@ export const ListingChecks = () => {
     return (
         <>
             <Navbar title={`Todas as comandas`} isLogout />
-            <div className="w-[95%] min-h-[90vh] py-3 px-5 rounded-xl flex items-center flex-col gap-5">
+            <div className="w-[95%] min-h-[90vh] py-3 rounded-xl flex items-center flex-col gap-5">
                 <NewCheck />
                 <Toaster />
 
@@ -213,7 +213,7 @@ export const ListingChecks = () => {
                 )}
 
                 {itensFiltrados.length ? itensFiltrados.map((e) => (
-                    <div className={` ${e.status ? "flex" : "hidden"} justify-between items-center my-3 px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
+                    <div className={` ${e.status ? "flex" : "hidden"} justify-between items-center px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
                         key={e.check_id}>
 
                         <div className="flex flex-col">
