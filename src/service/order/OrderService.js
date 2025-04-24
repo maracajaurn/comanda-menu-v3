@@ -41,7 +41,19 @@ const get_order_by_id = async (order_id) => {
         return new Error(res.message);
     } catch (error) {
         return new Error(error.message);
-    }
+    };
+};
+
+const get_created_online = async () => {
+    try {
+        const res = await API.get("/api/order/list/check/created_online");
+
+        if (res.data) return res.data;
+
+        return new Error(res.message);
+    } catch (error) {
+        return new Error(error.message);
+    };
 };
 
 const get_orders_by_check = async (check_id) => {
@@ -99,6 +111,7 @@ export const OrderService = {
     get_orders_from_cozinha,
     get_orders_from_barmen,
     get_order_by_id,
+    get_created_online,
     create_order,
     update_order,
     delete_order,
