@@ -21,7 +21,7 @@ export const OnlineOrders = () => {
         setLoading(true);
         const get_func = localStorage.getItem("func");
 
-        if (get_func !== "admin" && get_func !== "barmen") {
+        if (get_func !== "admin" && get_func !== "online") {
             return navigate("/login");
         };
 
