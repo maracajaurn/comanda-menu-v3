@@ -10,6 +10,7 @@ export { Waiter } from "./waiter";
 export { CloseCheck } from "./closeCheck";
 export { ListingChecks } from "./listingChecks";
 export { ListingProducts } from "./listingProducts";
+export { OnlineOrders } from "./onlineOrders";
 
 export { Cousine } from "./preparation/cuisine";
 export { Bartender } from "./preparation/bartender";
