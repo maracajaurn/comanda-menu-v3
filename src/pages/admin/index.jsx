@@ -202,6 +202,10 @@ export const Admin = () => {
                         >Comandas</button>
 
                         <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => navigate("/created_online")}
+                        >Online</button>
+
+                        <button className="w-full font-semibold text-white py-2 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                             onClick={() => navigate("/cozinha/producao")}
                         >Cozinha</button>
 
