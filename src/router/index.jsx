@@ -24,6 +24,7 @@ import {
     PaymentInProcessing,
     PaymentFailure,
     WaitForProducts,
+    OnlineOrders,
 
     NotAuthorized,
     NotFound,
@@ -81,6 +82,8 @@ export const AppRoutes = () => {
             <Route path={`/:id/payment_pending`} element={<PaymentInProcessing />} />
             <Route path={`/:id/payment_failure`} element={<PaymentFailure />} />
             <Route path={`/:id/wait_for_product`} element={<WaitForProducts />} />
+
+            <Route path={`/created_online`} element={<OnlineOrders/>} />
         </Routes>
     );
 };
