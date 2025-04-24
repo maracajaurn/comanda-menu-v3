@@ -62,6 +62,9 @@ export const Login = () => {
                     } else if (result.func === "garcom") {
                         navigate(`/${result.func}/comandas`);
                         return;
+                    } else if (result.func === "online") {
+                        navigate("/created_online");
+                        return;
                     };
                 };
 
