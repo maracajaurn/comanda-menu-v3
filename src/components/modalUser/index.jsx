@@ -135,10 +135,11 @@ export const ModalUser = ({ action, id }) => {
                         name="func"
                         value={value.func}
                         onChange={(e) => handleInput("func", e)}>
+                        <option value={`admin`} >Administrador</option>
                         <option value={`garcom`} >Garçom</option>
                         <option value={`barmen`} >Barmen</option>
                         <option value={`cozinha`} >Cozinha</option>
-                        <option value={`admin`} >Administrador</option>
+                        <option value={`online`} >Online</option>
                     </select>
                 </label>
 
