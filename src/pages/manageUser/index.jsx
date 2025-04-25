@@ -251,7 +251,8 @@ export const ManageUser = () => {
                                                 {e.func === 'admin' ? 'ADM' :
                                                     e.func === 'garcom' ? 'Garçom' :
                                                         e.func === 'barmen' ? 'Barmen' :
-                                                            e.func === 'cozinha' ? 'Cozinha' : ''}
+                                                            e.func === 'cozinha' ? 'Cozinha' :
+                                                                'online'}
                                             </td>
                                             <td className="px-2 py-2 flex">
                                                 <button
