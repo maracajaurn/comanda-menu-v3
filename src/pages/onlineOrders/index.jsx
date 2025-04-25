@@ -232,7 +232,7 @@ export const OnlineOrders = () => {
 
                         <div className="flex flex-col">
                             <h3 className="text-slate-900 font-bold">Você não possui pedidos em aberto</h3>
-                            <h3 className="text-slate-400 font-semibold">Aguarde o garçom lançar algo ...</h3>
+                            <h3 className="text-slate-400 font-semibold">Aguarde algum cliente fazer o pedido</h3>
                             <h4 className="text-slate-500 text-[15px] font-semibold">
                                 <span className="font-bold text-[#EB8F00]">Porque eu estou!</span> 🙂</h4>
                         </div>
