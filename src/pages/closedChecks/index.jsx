@@ -8,6 +8,8 @@ import { Navbar } from "../../components";
 
 import { useLoader } from "../../contexts";
 
+import { Global, Users } from "../../libs/icons";
+
 import { CheckService } from "../../service/check/CheckService";
 
 export const ClosedChecks = () => {
@@ -39,7 +41,7 @@ export const ClosedChecks = () => {
                     setLoading(false);
                     return toast.error(result.message);
                 };
-                
+
                 return setLoading(false);
             })
             .catch((error) => {
@@ -60,17 +62,26 @@ export const ClosedChecks = () => {
                         key={e.check_id}>
 
                         <div className="flex flex-col">
-                            <h3 className="text-slate-900 font-bold">{e.name_client}</h3>
+                            <h3 className="text-slate-900 font-bold flex flex-col gap-3">
+                                {e.created_for === 1 ? (
+                                    <span className="text-green-500 flex gap-1"><Global /> Online</span>
+                                ) : (
+                                    <span className="text-blue-600 flex gap-1"><Users /> Garçom</span>
+                                )}
+                                <span>{e.name_client}</span>
+                            </h3>
                             <h3 className="text-slate-400 font-semibold">{e.obs}</h3>
                             <h4 className="text-slate-500 text-[15px] font-semibold">
                                 <span className="font-bold text-[#EB8F00]">Total:</span> R$ {parseFloat(e.total_value || 0).toFixed(2).replace(".", ",")}</h4>
-                            <p className="text-slate-500 text-[15px] font-semibold">Pagamento:
-                                <span className="font-bold text-[#EB8F00]"> {
-                                    e.pay_form === "credit" ? "Crédito" :
+                            <p className="text-slate-500 text-[15px] font-semibold flex gap-1">
+                                <span>Pagamento:</span>
+                                <span className="font-bold text-[#EB8F00]">
+                                    {e.pay_form === "credit" ? "Crédito" :
                                         e.pay_form === "debit" ? "Débito" :
                                             e.pay_form === "pix" ? "Pix" :
                                                 e.pay_form === "cash" ? "Dinheiro" :
-                                                    ""}</span>
+                                                    "Ainda não foi pago"}
+                                </span>
                             </p>
                         </div>
 
