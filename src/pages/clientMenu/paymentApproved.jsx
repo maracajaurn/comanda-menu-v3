@@ -13,7 +13,7 @@ import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 import { PaymentService } from "../../service/payment/PaymentService";
 
-export const Proof = () => {
+export const PaymentApproved = () => {
 
     const { setLoading } = useLoader();
 

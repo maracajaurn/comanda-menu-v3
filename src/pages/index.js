@@ -17,7 +17,7 @@ export { Bartender } from "./preparation/bartender";
 
 export {
     Cart, Menu,
-    PaymentFailure, Proof, PaymentInProcessing,
+    PaymentFailure, PaymentApproved, PaymentInProcessing,
     RegisterClient, WaitForProducts
 } from "./clientMenu";
 
