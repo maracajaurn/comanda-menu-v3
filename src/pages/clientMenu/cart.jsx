@@ -128,12 +128,12 @@ export const Cart = () => {
         setLoading(true);
         const paymentData = {
             transaction_amount: total_value,
-            description: `Pagamento da comanda ${client}`,
+            description: `Tô pagando minha comanda - ${client}`,
             payer: {
                 email: email
             },
             back_urls: {
-                success: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/proof`,
+                success: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_approved`,
                 failure: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`,
                 pending: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_pending`
             },
@@ -151,7 +151,7 @@ export const Cart = () => {
                 installments: 1,
                 default_installments: 1,
             },
-            auto_return: "all",
+            auto_return: ""
         };
 
         PaymentService.createPayment(paymentData)
