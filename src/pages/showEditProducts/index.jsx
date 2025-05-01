@@ -44,7 +44,7 @@ export const ShowEditProducts = () => {
                 product_id: item.product_id,
                 product_name: item.product_name,
                 price: item.price,
-                category: item.category,
+                name_category: item.name_category,
                 description: item.description,
                 stock: item.stock,
                 image: item.image ? base64Image : "",
@@ -174,7 +174,7 @@ export const ShowEditProducts = () => {
                             <div className="flex flex-col gap-1">
                                 <h3 className="text-slate-900 font-bold">{product.stock} - {product.product_name}</h3>
                                 <h3 className="text-slate-500 text-[15px] font-semibold">R$ {product.price.toFixed(2).replace(".", ",")}</h3>
-                                <h3 className="text-[#EB8F00] text-[15px]">{product.category}</h3>
+                                <h3 className="text-[#EB8F00] text-[15px]">{product.name_category}</h3>
                             </div>
                         </div>
 

@@ -1,20 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 import { useToggleView, useLoader } from "../../contexts";
 import { Plus, Close, Delete } from "../../libs/icons";
 import { ProductService } from "../../service/product/ProductService";
+import { CategoryService } from "../../service/category/CategoryService";
 
 export const ModalProduct = ({ action, id }) => {
 
     const [value, setValue] = useState({
         product_name: "",
         price: 0,
-        category: "Bebida",
-        description: "",
+        category_id: 0,
+        description: null,
         stock: 0,
-        image: "",
+        image: null,
     });
+
+    const [categories, setCategories] = useState([]);
 
     const { toggleView, setToggleView } = useToggleView();
 
@@ -27,14 +30,14 @@ export const ModalProduct = ({ action, id }) => {
     const createProduct = () => {
         setLoading(true);
 
-        if (value.product_name === "" || value.category === "" || value.price === 0) {
+        if (value.product_name === "" || value.category_id === "" || value.price === 0) {
             return toast.error("preencha todos os campos");
         };
 
         const data = {
             product_name: value.product_name,
             price: value.price,
-            category: value.category,
+            category_id: value.category_id,
             description: value.description,
             stock: value.stock,
             image: value.image,
@@ -51,7 +54,7 @@ export const ModalProduct = ({ action, id }) => {
                     ...prev,
                     "product_name": "",
                     "price": 0,
-                    "category": "Bebida",
+                    "category_id": "Bebida",
                 }));
 
                 setToggleView(false);
@@ -64,9 +67,29 @@ export const ModalProduct = ({ action, id }) => {
             });
     };
 
+    const getAllCategoies = useCallback(() => {
+        CategoryService.getAll()
+            .then((result) => {
+                if (result.length > 0) {
+                    setCategories(result);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                return toast.error(error.message);
+            });
+    }, []);
+
     const updateById = () => {
 
-        if (value.product_name === "" || value.category === "" || value.price === 0) {
+        if (value.product_name === "" || value.category_id === "" || value.price === 0) {
             return toast.error("preencha todos os campos");
         };
 
@@ -75,7 +98,7 @@ export const ModalProduct = ({ action, id }) => {
         const data = {
             product_name: value.product_name,
             price: value.price,
-            category: value.category,
+            category_id: value.category_id,
             description: value.description,
             stock: value.stock,
             image: value.image,
@@ -83,18 +106,18 @@ export const ModalProduct = ({ action, id }) => {
 
         ProductService.updateById(id, data)
             .then((result) => {
-                
+
                 if (!result.status) {
                     return toast.error(result.message);
                 };
-                
+
                 setValue(prev => ({
                     ...prev,
                     "product_name": "",
                     "price": 0,
-                    "category": "Bebida",
+                    "category_id": 0,
                 }));
-                
+
                 setToggleView(false);
                 setLoading(false);
                 return toast.success(result.message);
@@ -107,8 +130,6 @@ export const ModalProduct = ({ action, id }) => {
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
-
-        console.log(file);
 
         if (file) {
             // Verifica se o arquivo é uma imagem
@@ -124,7 +145,7 @@ export const ModalProduct = ({ action, id }) => {
 
             const img = new Image();
             const reader = new FileReader();
-            
+
             reader.onload = (e) => {
                 img.onload = () => {
                     const canvas = document.createElement("canvas");
@@ -174,7 +195,7 @@ export const ModalProduct = ({ action, id }) => {
                                     ...prev,
                                     product_name: result[0].product_name,
                                     price: result[0].price,
-                                    category: result[0].category,
+                                    category_id: result[0].category_id,
                                     description: result[0].description,
                                     stock: result[0].stock,
                                     image: base64Image,
@@ -193,12 +214,14 @@ export const ModalProduct = ({ action, id }) => {
                 ...prev,
                 product_name: "",
                 price: 0,
-                category: "Bebida",
-                description: "",
+                category_id: 0,
+                description: null,
                 stock: 0,
-                image: "",
+                image: null,
             }));
         }
+
+        getAllCategoies();
     }, [id]);
 
     return (
@@ -255,17 +278,13 @@ export const ModalProduct = ({ action, id }) => {
                 <label className="text-slate-700 text-sm font-bold mb-2">
                     <p>Categoria</p>
                     <select className="w-[250px] border p-3 rounded-xl"
-                        id={value.category}
+                        id={"category"}
                         name="category"
-                        value={value.category}
-                        onChange={(category) => handleInput("category", category)}>
-                        <option value={`Bebida`} >Bebida</option>
-                        <option value={`Drink`} >Sucos & Drinks</option>
-                        <option value={`Petisco`} >Petisco</option>
-                        <option value={`Porcao`} >Porção</option>
-                        <option value={`Refeicao`} >Refeição</option>
-                        <option value={`Salada`} >Salada</option>
-                        <option value={`Doce`} >Doce</option>
+                        value={value.category_id}
+                        onChange={(category) => handleInput("category_id", category)}>
+                        {categories.map((category) => (
+                            <option key={category.category_id} value={category.category_id} >{category.name_category}</option>
+                        ))}
                     </select>
                 </label>
 

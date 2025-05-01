@@ -13,6 +13,7 @@ import { useLoader } from "../../contexts";
 
 import { SettingService } from "../../service/setting/SettingService";
 import { UsuarioService } from "../../service/usuario/UsuarioService";
+import { CategoryService } from "../../service/category/CategoryService";
 
 export const ManageUser = () => {
     const { toggleView, setToggleView } = useToggleView();
@@ -33,8 +34,15 @@ export const ManageUser = () => {
         color: ""
     });
 
+    const [categories, setCategories] = useState([]);
+    const [newCategor, setNewCategory] = useState({
+        name_category: "",
+        screen: ""
+    });
+
     const navigate = useNavigate();
 
+    // TODO: Adicionar Promisse.all para carregar os dados em paralelo
     useEffect(() => {
         setLoading(true);
 
@@ -49,6 +57,7 @@ export const ManageUser = () => {
 
     useEffect(() => {
         getSetting();
+        getAllCategoies();
     }, []);
 
     const handleSetting = (field, event) => {
@@ -208,6 +217,69 @@ export const ManageUser = () => {
             });
     };
 
+    const getAllCategoies = useCallback(() => {
+        CategoryService.getAll()
+            .then((result) => {
+                if (result.length > 0) {
+                    setCategories(result);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
+            })
+            .catch((error) => {
+
+            });
+    }, []);
+
+    const createCategory = () => {
+        if (!newCategor.name_category || !newCategor.screen) {
+            return toast.error("Preencha todos os campos.");
+        };
+
+        const data = {
+            name_category: newCategor.name_category,
+            screen: newCategor.screen
+        };
+
+        CategoryService.create(data)
+            .then((result) => {
+                if (result.status) {
+                    setNewCategory({ name_category: "", screen: "" });
+                    getAllCategoies();
+                    return toast.success(result.message);
+                };
+
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                return toast.error(error.message);
+            });
+    };
+
+    const deleteCategory = (id) => {
+        CategoryService.deleteById(id)
+            .then((result) => {
+                if (result.status) {
+                    getAllCategoies();
+                    return toast.success(result.message);
+                };
+
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                return toast.error(error.message);
+            });
+    };
+
+    const handleNewCategory = (field, event) => {
+        setNewCategory(prev => ({ ...prev, [field]: event.target.value }));
+    };
+
     return (
         <>
             <Navbar title={"Usuários"} url />
@@ -241,9 +313,9 @@ export const ManageUser = () => {
                                 <tbody>
                                     {listUser.map((e) => (
                                         <tr key={e.user_id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                            <th scope="row" className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <td scope="row" className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {e.username}
-                                            </th>
+                                            </td>
                                             <td className="px-2 py-2">
                                                 {e.email}
                                             </td>
@@ -252,7 +324,7 @@ export const ManageUser = () => {
                                                     e.func === 'garcom' ? 'Garçom' :
                                                         e.func === 'barmen' ? 'Barmen' :
                                                             e.func === 'cozinha' ? 'Cozinha' :
-                                                                'online'}
+                                                                'Online'}
                                             </td>
                                             <td className="px-2 py-2 flex">
                                                 <button
@@ -319,6 +391,76 @@ export const ManageUser = () => {
                                 value={setting.service_change_percentage}
                             />
                         </label>
+
+                        <div className="mb-5 sm:rounded-lg rounded-md w-[350px] overflow-x-auto">
+                            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                            >Categorias
+                            </h2>
+
+                            <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" className="px-2 py-2 text-center">
+                                            Categoria
+                                        </th>
+                                        <th scope="col" className="px-2 py-2 text-center">
+                                            Tela
+                                        </th>
+                                        <th scope="col" className="px-2 py-2 text-center">
+                                            Excluir
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {categories.map((category) => (
+                                        <tr key={category.category_id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                            <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {category.name_category}
+                                            </td>
+                                            <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {category.screen}
+                                            </td>
+                                            <td className="px-2 py-2 flex justify-center">
+                                                <button
+                                                    className="p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                                    onClick={() => deleteCategory(category.category_id)}
+                                                ><Delete /></button>
+                                            </td>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            <div className="mt-5">
+                                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                                    Criar nova categoria
+                                    <input type="text"
+                                        placeholder="Nome da categoria"
+                                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={newCategor.name_category}
+                                        onChange={(e) => handleNewCategory("name_category", e)} />
+                                </label>
+
+                                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                                    <select name="screen_category"
+                                        id="screen_category"
+                                        value={newCategor.screen}
+                                        onChange={(e) => handleNewCategory("screen", e)}
+                                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <option value="">Selecione a tela</option>
+                                        <option value="churrasco">Churrasco</option>
+                                        <option value="bar">Bar</option>
+                                    </select>
+                                </label>
+                                <button
+                                    className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
+                                    rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                                    onClick={() => createCategory()}>
+                                    <Plus /> Cadastrar categoria
+                                </button>
+                            </div>
+                        </div>
 
                         <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col items-center gap-3`}>
                             <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
