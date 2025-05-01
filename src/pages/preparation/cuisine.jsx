@@ -34,14 +34,13 @@ export const Cousine = () => {
         getSetting();
     }, []);
 
-    // new_order - ok
+    // new_order
     useEffect(() => {
         socket.on("new_order", (data) => {
-            const verificationIfProductFromCategory =
-                (setting.estabishment_name !== "avanti" && data.categories.includes("Drink")) ||
-                data.categories.some((item) => ["Porcao", "Petisco", "Refeicao", "Salada"].includes(item));
+            const verificationIfProductFromScreen =
+                (data.screens.includes("churrasco"));
 
-            if (verificationIfProductFromCategory) {
+            if (verificationIfProductFromScreen) {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
@@ -62,11 +61,10 @@ export const Cousine = () => {
         return () => { socket.off("new_order") };
     }, []);
 
-    // product_removed - ok
+    // product_removed
     useEffect(() => {
         socket.on("product_removed", (data) => {
-            if ((setting.estabishment_name !== "avanti" && data.category === "Drink") ||
-                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category)) {
+            if (data.screens === "churrasco") {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
@@ -87,12 +85,10 @@ export const Cousine = () => {
         return () => { socket.off("product_removed") };
     }, []);
 
-    // quantity_change - ok
+    // quantity_change
     useEffect(() => {
         socket.on("quantity_change", (data) => {
-
-            if ((setting.estabishment_name !== "avanti" && data.category === "Drink") ||
-                ["Porcao", "Petisco", "Refeicao", "Salada"].includes(data.category)) {
+            if (data.screens === "churrasco") {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
@@ -221,7 +217,7 @@ export const Cousine = () => {
 
     return (
         <>
-            <Navbar title={`${setting.estabishment_name === "Avanti" ? "Churrasco" : "Cozinha"}`} isLogout />
+            <Navbar title={"Churrasco"} isLogout />
             <Toaster />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
                 {oreders.length ? oreders.map((e) => (

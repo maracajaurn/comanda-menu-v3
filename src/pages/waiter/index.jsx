@@ -38,7 +38,7 @@ export const Waiter = () => {
             obs: "",
             new_stock: [undefined, undefined]
         },
-        category: "",
+        screens: "",
         product_name: "",
         action: "",
     });
@@ -198,7 +198,7 @@ export const Waiter = () => {
                             toast.success(result.message);
 
                             const data = {
-                                category: updateOrder.category,
+                                screens: updateOrder.screens,
                                 action: updateOrder.action,
                                 product_name: updateOrder.product_name,
                                 client
@@ -282,7 +282,7 @@ export const Waiter = () => {
 
     // Editar quantidade do produto na lista
     const alterQnt = (
-        order_id, quantity, obs, category,
+        order_id, quantity, obs, screen,
         product_name, stock, product_id, action
     ) => {
         const data = {
@@ -324,12 +324,12 @@ export const Waiter = () => {
             };
         };
 
-        setUpdateOrder({ order_id, data, action, category, product_name });
+        setUpdateOrder({ order_id, data, action, screens: screen, product_name });
     };
 
     // remover item da comanda pelo índice
     const deleteItem = (
-        order_id, product_name, category,
+        order_id, product_name, screen,
         quantity, product_id, stock
     ) => {
         setLoading(true);
@@ -345,7 +345,7 @@ export const Waiter = () => {
                 if (result.status) {
                     setLoading(false);
                     setListProducts((prev) => prev.filter((item) => item.order_id !== order_id));
-                    socket.emit("product_removed", { product_name, client, category });
+                    socket.emit("product_removed", { product_name, client, screens: screen });
                     getCheckById();
                     return toast.success(result.message);
                 };
@@ -385,7 +385,7 @@ export const Waiter = () => {
                             {e.status ? (
                                 <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
                                     <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "-")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "-")}
                                     ><Minus /></button>
 
                                     <p className="text-[#EB8F00]">
@@ -393,7 +393,7 @@ export const Waiter = () => {
                                     </p>
 
                                     <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.category, e.product_name, e.stock, e.product_id, "+")}
+                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "+")}
                                     ><Plus /></button>
                                 </div>
                             ) : (
@@ -410,7 +410,7 @@ export const Waiter = () => {
                             )}
 
                             <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                onClick={() => deleteItem(e.order_id, e.product_name, e.category, e.quantity, e.product_id, e.stock)}
+                                onClick={() => deleteItem(e.order_id, e.product_name, e.screen, e.quantity, e.product_id, e.stock)}
                             ><Delete /></button>
                         </div>
                     </div>

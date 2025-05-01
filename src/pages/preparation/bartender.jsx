@@ -28,11 +28,11 @@ export const Bartender = () => {
         getOrders();
     }, []);
 
-    // new_order - ok
+    // new_order
     useEffect(() => {
         socket.on("new_order", (data) => {
-            const verificationIfProcuctFromCategory = data.categories.some((item) =>
-                item === "Drink"
+            const verificationIfProcuctFromCategory = data.screens.some((item) =>
+                item === "bar"
             );
             if (verificationIfProcuctFromCategory) {
                 toast((t) => (
@@ -55,11 +55,10 @@ export const Bartender = () => {
         return () => { socket.off("new_order") };
     }, []);
 
-    // product_removed - ok
+    // product_removed
     useEffect(() => {
         socket.on("product_removed", (data) => {
-            const verificationIfProcuctFromCategory = data.category === "Drink";
-            if (verificationIfProcuctFromCategory) {
+            if (data.screens === "bar") {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
@@ -80,10 +79,10 @@ export const Bartender = () => {
         return () => { socket.off("product_removed") };
     }, []);
 
-    // alterar_quantidade - ok
+    // quantity_change
     useEffect(() => {
         socket.on("quantity_change", (data) => {
-            if (data.category === "Drink") {
+            if (data.screens === "bar") {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center">
