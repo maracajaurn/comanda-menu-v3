@@ -49,13 +49,13 @@ export const PaymentApproved = () => {
                     navigate(`/${id}/payment_failure`);
                     return;
                 } else if (result.status === "pending") {
-                    toast.error("O pagamento está pendente.");
+                    toast.loading("Aguardando a confirmação do pagamento.");
                     navigate(`/${id}/payment_pending`);
                     return;
                 };
             })
             .catch((error) => {
-                return toast.error("Ocorreu um erro ao consultar o status do pagamento.");
+                return toast.error(error.message);
             });
     }, [payment_id, products]);
 
@@ -64,10 +64,10 @@ export const PaymentApproved = () => {
 
         const objSocket = {
             client: localStorage.getItem("client"),
-            categories: JSON.parse(localStorage.getItem("categories")) || [],
+            screens: JSON.parse(localStorage.getItem("screens")) || [],
         };
 
-        if (objSocket.categories.length === 0 || products.length === 0) {
+        if (objSocket.screens.length === 0 || products.length === 0) {
             setLoading(false);
             return
         };
@@ -82,7 +82,7 @@ export const PaymentApproved = () => {
             .then((result) => {
                 if (result.status) {
                     localStorage.removeItem("selected_product");
-                    localStorage.removeItem("categories");
+                    localStorage.removeItem("screens");
                     localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
                     setPaymentInCheck();
