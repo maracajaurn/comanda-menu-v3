@@ -31,23 +31,18 @@ export const OnlineOrders = () => {
     // new_order - ok
     useEffect(() => {
         socket.on("new_order", (data) => {
-            const verificationIfProcuctFromCategory = data.categories.some((item) =>
-                item === "Drink"
-            );
-            if (verificationIfProcuctFromCategory) {
-                toast((t) => (
-                    <div className="flex gap-3">
-                        <div className="flex flex-col items-center">
-                            <h6>Novo pedido na comanda</h6>
-                            <span className="font-semibold">{data.client}</span>
-                        </div>
-                        <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                            onClick={() => toast.dismiss(t.id)}
-                        >OK</button>
+            toast((t) => (
+                <div className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                        <h6>Novo pedido na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
-                ), { duration: 1000000 });
-                getOrders();
-            };
+                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
+                        onClick={() => toast.dismiss(t.id)}
+                    >OK</button>
+                </div>
+            ), { duration: 1000000 });
+            getOrders();
         });
 
         toast.dismiss();
@@ -58,21 +53,18 @@ export const OnlineOrders = () => {
     // product_removed - ok
     useEffect(() => {
         socket.on("product_removed", (data) => {
-            const verificationIfProcuctFromCategory = data.category === "Drink";
-            if (verificationIfProcuctFromCategory) {
-                toast((t) => (
-                    <div className="flex gap-3">
-                        <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold underline">{data.product_name}</span> cancelado na comanda</h6>
-                            <span className="font-semibold">{data.client}</span>
-                        </div>
-                        <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                            onClick={() => toast.dismiss(t.id)}
-                        >OK</button>
+            toast((t) => (
+                <div className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                        <h6><span className="font-semibold underline">{data.product_name}</span> cancelado na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
-                ), { duration: 1000000 });
-                getOrders();
-            };
+                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
+                        onClick={() => toast.dismiss(t.id)}
+                    >OK</button>
+                </div>
+            ), { duration: 1000000 });
+            getOrders();
         });
 
         toast.dismiss();
@@ -83,20 +75,18 @@ export const OnlineOrders = () => {
     // alterar_quantidade - ok
     useEffect(() => {
         socket.on("quantity_change", (data) => {
-            if (data.category === "Drink") {
-                toast((t) => (
-                    <div className="flex gap-3">
-                        <div className="flex flex-col items-center">
-                            <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
-                            <span className="font-semibold">{data.client}</span>
-                        </div>
-                        <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                            onClick={() => toast.dismiss(t.id)}
-                        >OK</button>
+            toast((t) => (
+                <div className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                        <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
+                        <span className="font-semibold">{data.client}</span>
                     </div>
-                ), { duration: 10000 });
-                getOrders();
-            };
+                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
+                        onClick={() => toast.dismiss(t.id)}
+                    >OK</button>
+                </div>
+            ), { duration: 10000 });
+            getOrders();
         });
 
         toast.dismiss();
