@@ -4,11 +4,15 @@ const getAll = async () => {
     try {
         const res = await API.get("/api/check");
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -16,11 +20,15 @@ const getById = async (id) => {
     try {
         const res = await API.get(`/api/check/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -28,11 +36,15 @@ const getByStatus = async (status) => {
     try {
         const res = await API.get(`/api/check/status/${status}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -40,11 +52,15 @@ const create = async (data) => {
     try {
         const res = await API.post("/api/check", data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -52,11 +68,15 @@ const createClosed = async (data) => {
     try {
         const res = await API.post("/api/check/closed", data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -65,11 +85,15 @@ const updateById = async (id, data) => {
 
         const res = await API.put(`/api/check/${id}`, data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -82,8 +106,14 @@ const closeCheck = async (pay_form, check_id) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -91,11 +121,15 @@ const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/check/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -103,11 +137,15 @@ const deleteAll = async () => {
     try {
         const res = await API.delete(`/api/check/delete/delete_all`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 

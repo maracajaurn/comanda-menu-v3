@@ -9,8 +9,14 @@ const get = async () => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -23,8 +29,14 @@ const getById = async (id) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -37,8 +49,14 @@ const getByStatus = async (status) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -51,8 +69,14 @@ const close = async (cashier_id) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -65,8 +89,14 @@ const update = async (id, data) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -81,8 +111,14 @@ const deleteById = async (id) => {
         };
 
         return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 

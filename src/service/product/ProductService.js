@@ -4,11 +4,15 @@ const getAll = async () => {
     try {
         const res = await API.get("/api/product");
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -16,11 +20,15 @@ const getByStock= async () => {
     try {
         const res = await API.get("/api/product/stock/1");
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -28,11 +36,15 @@ const getByPagenated = async (limit = 10, page = 1) => {
     try {
         const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -40,11 +52,15 @@ const getById = async (id) => {
     try {
         const res = await API.get(`/api/product/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -52,11 +68,15 @@ const create = async (data) => {
     try {
         const res = await API.post("/api/product", data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -68,8 +88,14 @@ const updateById = async (id, data) => {
         if (res.data) return res.data;
 
         return new Error("Erro ao atualizar a api/product!");
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -80,8 +106,14 @@ const deleteById = async (id) => {
         if (res.data) return res.data;
 
         return new Error("Erro ao deletar api/product!");
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 

@@ -3,23 +3,31 @@ import { API } from "../axiosConfig";
 const createPayment = async (paymentData) => {
     try {
         const res = await API.post("/api/payment/process_payment", paymentData);
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
 const getPaymentStatus = async (payment_id) => {
     try {
         const res = await API.post(`/api/payment/payment_status`, { payment_id });
-        if (res.data) return res.data;
+        return res.data;
 
-        return new Error(res.message);
-
-    } catch (error) {
-        return new Error(error.message);
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 

@@ -13,9 +13,7 @@ const getById = async (id) => {
     try {
         const res = await API.get(`/api/user/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         return new Error(error);
     };
@@ -25,11 +23,15 @@ const create = async (data) => {
     try {
         const res = await API.post("/api/user", data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
-    } catch (error) {
-        return new Error(error.message);
+        return res.data;
+    return res.data;} catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -38,9 +40,7 @@ const updateById = async (id, data) => {
 
         const res = await API.put(`/api/user/${id}`, data);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         return new Error(error);
     };
@@ -50,9 +50,7 @@ const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/user/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         return new Error(error);
     };
