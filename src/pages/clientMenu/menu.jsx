@@ -42,7 +42,7 @@ export const Menu = () => {
         const if_check_id = localStorage.getItem("check_id");
         const if_selected_product = localStorage.getItem("selected_product");
 
-        localStorage.removeItem("categories");
+        localStorage.removeItem("screens");
 
         if (if_selected_product) {
             setSelectedProduct(JSON.parse(if_selected_product));

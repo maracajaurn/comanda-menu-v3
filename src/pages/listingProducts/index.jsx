@@ -36,7 +36,7 @@ export const ListingProducts = () => {
 
     // armazena um array com todos as categorias de produtos 
     // que serão adicionados à comanda
-    const [categories, setCategories] = useState([]);
+    const [screens, setScreens] = useState([]);
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
@@ -97,14 +97,14 @@ export const ListingProducts = () => {
     }, [id]);
 
     // adicionar produtos
-    const addProduct = (product_id, category) => {
+    const addProduct = (product_id, screen) => {
         if (selectedProduct.some((item) => item[1] === product_id)) {
             return toast("Produto já adicionado", { icon: "😐", duration: 1200 });
         };
 
-        const if_exists = categories.some((item) => item === category);
+        const if_exists = screens.some((item) => item === screen);
         if (!if_exists) {
-            setCategories((prev) => [...prev, category]);
+            setScreens((prev) => [...prev, screen]);
         };
 
         setSelectedProduct((prev) => [...prev, [Number(id), product_id, 1, null]])
@@ -182,7 +182,7 @@ export const ListingProducts = () => {
                 if (result.status) {
                     const objSocket = {
                         client,
-                        categories
+                        screens: screens
                     };
 
                     socket.emit("new_order", objSocket);
@@ -197,7 +197,7 @@ export const ListingProducts = () => {
                 setLoading(false);
                 return toast.error(error.message);
             });
-    }, [selectedProduct, categories]);
+    }, [selectedProduct, screens]);
 
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
@@ -254,7 +254,7 @@ export const ListingProducts = () => {
                         <div className="w-2/3 flex flex-col items-start">
                             <h3 className="text-slate-900 font-bold">{item.stock} - {item.product_name}</h3>
                             <h3 className="text-slate-500 text-[15px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
-                            <h3 className="text-[#EB8F00] text-[15px] font-semibold">{item.category}</h3>
+                            <h3 className="text-[#EB8F00] text-[15px] font-semibold">{item.name_category}</h3>
                             {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
                                 <label >
                                     <input
@@ -283,11 +283,11 @@ export const ListingProducts = () => {
 
                             <div className="flex gap-4 flex-col">
                                 <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-blue-500 hover:border-blue-500 transition-all delay-75"
-                                    onClick={() => addProduct(item.product_id, item.category)}
+                                    onClick={() => addProduct(item.product_id, item.screen)}
                                 ><Plus /></button>
 
                                 <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                    onClick={() => removeProduct(item.product_id, item.category)}
+                                    onClick={() => removeProduct(item.product_id, item.screen)}
                                 ><Delete /></button>
                             </div>
                         </div>
