@@ -24,7 +24,7 @@ const create = async (data) => {
         const res = await API.post("/api/user", data);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {

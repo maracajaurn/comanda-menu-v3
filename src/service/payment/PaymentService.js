@@ -4,7 +4,7 @@ const createPayment = async (paymentData) => {
     try {
         const res = await API.post("/api/payment/process_payment", paymentData);
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -20,7 +20,7 @@ const getPaymentStatus = async (payment_id) => {
         const res = await API.post(`/api/payment/payment_status`, { payment_id });
         return res.data;
 
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {

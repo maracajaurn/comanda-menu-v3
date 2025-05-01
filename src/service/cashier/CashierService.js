@@ -9,7 +9,7 @@ const get = async () => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -29,7 +29,7 @@ const getById = async (id) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -49,7 +49,7 @@ const getByStatus = async (status) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -69,7 +69,7 @@ const close = async (cashier_id) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -89,7 +89,7 @@ const update = async (id, data) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -111,7 +111,7 @@ const deleteById = async (id) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {

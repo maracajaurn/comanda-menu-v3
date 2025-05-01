@@ -13,7 +13,7 @@ const get_orders_from_cozinha = async () => {
     try {
         const res = await API.get("/api/order/cuisine/1");
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -28,7 +28,7 @@ const get_orders_from_barmen = async () => {
     try {
         const res = await API.get("/api/order/barmen/1");
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -43,7 +43,7 @@ const get_order_by_id = async (order_id) => {
     try {
         const res = await API.get(`/api/order/${order_id}`);
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -59,7 +59,7 @@ const get_created_online = async () => {
         const res = await API.get("/api/order/list/check/created_online");
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {

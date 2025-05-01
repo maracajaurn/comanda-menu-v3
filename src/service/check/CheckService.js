@@ -5,7 +5,7 @@ const getAll = async () => {
         const res = await API.get("/api/check");
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -21,7 +21,7 @@ const getById = async (id) => {
         const res = await API.get(`/api/check/${id}`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -37,7 +37,7 @@ const getByStatus = async (status) => {
         const res = await API.get(`/api/check/status/${status}`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -53,7 +53,7 @@ const create = async (data) => {
         const res = await API.post("/api/check", data);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -69,7 +69,7 @@ const createClosed = async (data) => {
         const res = await API.post("/api/check/closed", data);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -86,7 +86,7 @@ const updateById = async (id, data) => {
         const res = await API.put(`/api/check/${id}`, data);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -106,7 +106,7 @@ const closeCheck = async (pay_form, check_id) => {
         };
 
         return new Error(res.message);
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -122,7 +122,7 @@ const deleteById = async (id) => {
         const res = await API.delete(`/api/check/${id}`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -138,7 +138,7 @@ const deleteAll = async () => {
         const res = await API.delete(`/api/check/delete/delete_all`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {

@@ -5,7 +5,7 @@ const getAll = async () => {
         const res = await API.get("/api/product");
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -21,7 +21,7 @@ const getByStock= async () => {
         const res = await API.get("/api/product/stock/1");
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -37,7 +37,7 @@ const getByPagenated = async (limit = 10, page = 1) => {
         const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -53,7 +53,7 @@ const getById = async (id) => {
         const res = await API.get(`/api/product/${id}`);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -69,7 +69,7 @@ const create = async (data) => {
         const res = await API.post("/api/product", data);
 
         return res.data;
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -88,7 +88,7 @@ const updateById = async (id, data) => {
         if (res.data) return res.data;
 
         return new Error("Erro ao atualizar a api/product!");
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
@@ -106,7 +106,7 @@ const deleteById = async (id) => {
         if (res.data) return res.data;
 
         return new Error("Erro ao deletar api/product!");
-    return res.data;} catch (error) {
+    } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
         } else if (error.request) {
