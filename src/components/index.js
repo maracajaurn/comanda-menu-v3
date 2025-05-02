@@ -4,3 +4,10 @@ export { Loader } from "./loader";
 export { Footer } from "./footer";
 export { NewCheck } from "./newCheck";
 export { ModalProduct } from "./modalProduct";
+
+export { LoadingItem } from "./loadingItem";
+export { CardProduct } from "./cardProduct";
+export { Filter } from "./filter";
+export { CardCheck } from "./cardCheck";
+export { CardProductPreparation } from "./cardProductPreparation";
+export { Check } from "./check";
