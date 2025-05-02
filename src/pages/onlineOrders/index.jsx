@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
 
-import { Navbar } from "../../components";
+import { Navbar, CardProductPreparation } from "../../components";
 
 import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
@@ -190,45 +190,7 @@ export const OnlineOrders = () => {
             <Navbar title="Pedidos Online" isLogout />
             <Toaster />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                {oreders.length ? oreders.map((e) => (
-                    <div key={e.order_id} className={`flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/50 rounded-xl shadow-md`}>
-
-                        <h3 className="font-bold">{e.name_client}</h3>
-
-                        <div className="flex justify-between items-center w-full">
-
-                            <div className="flex justify-between items-center w-full">
-                                <div className="flex flex-col mr-1">
-                                    <h3 className="text-slate-900 font-semibold flex gap-1">{e.quantity}x - {e.product_name}</h3>
-
-                                    {e.obs && (
-                                        <h3 className="text-slate-500 text-[15px] font-semibold">
-                                            <span className="font-bold text-[#EB8F00]">OBS: </span>{e.obs}
-                                        </h3>
-                                    )}
-                                </div>
-
-                                <div className=" flex gap-3 border-l-2 pl-3 text-white">
-                                    <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
-                                        disabled={!e.status}
-                                        onClick={() => orderReady(e.order_id, e.name_client, e.product_name, e.check_id, e.quantity, e.obs)}
-                                    >{e.status ? "Pronto" : "Finalizado"}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )) : (
-                    <div className="flex justify-between items-center my-3 px-5 py-3 w-full rounded-xl shadow-md">
-
-                        <div className="flex flex-col">
-                            <h3 className="text-slate-900 font-bold">Você não possui pedidos em aberto</h3>
-                            <h3 className="text-slate-400 font-semibold">Aguarde algum cliente fazer o pedido</h3>
-                            <h4 className="text-slate-500 text-[15px] font-semibold">
-                                <span className="font-bold text-[#EB8F00]">Porque eu estou!</span> 🙂</h4>
-                        </div>
-                    </div>
-
-                )}
+                <CardProductPreparation oreders={oreders} orderReady={orderReady}/>
             </div>
         </>
     );
