@@ -32,6 +32,21 @@ const getByStock= async () => {
     };
 };
 
+const getByName = async (name_product) => {
+    try {
+        const res = await API.get(`api/product/get_product/by_name?name_product=${name_product}`);
+        return res.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        };
+    };
+};
+
 const getByPagenated = async (limit = 10, page = 1) => {
     try {
         const res = await API.get(`/api/product/paginated?limit=${limit}&page=${page}`);
@@ -122,6 +137,7 @@ export const ProductService = {
     getAll,
     getByStock,
     getByPagenated,
+    getByName,
     getById,
     updateById,
     deleteById,
