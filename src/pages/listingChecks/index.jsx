@@ -4,9 +4,9 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useToggleView, useLoader } from "../../contexts";
 
-import { Plus, Close } from "../../libs/icons";
+import { Plus } from "../../libs/icons";
 
-import { Navbar, NewCheck } from "../../components";
+import { Navbar, NewCheck, Filter, CardCheck } from "../../components";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -196,38 +196,11 @@ export const ListingChecks = () => {
                 <Toaster />
 
                 {rows.length > 10 && (
-                    <div className="border px-3 py-5 w-full rounded-xl shadow-md">
-                        <label className="flex gap-2 items-center">
-                            <input
-                                type="text"
-                                className="w-full border-2 rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                placeholder="Buscar comanda..."
-                                onChange={(e) => setFilter(e.target.value)}
-                                value={filter}
-                            />
-                            <button type="button" className="border-2 rounded-xl p-[10px] hover:text-red-600 hover:border-red-600 transition-all delay-75">
-                                <i onClick={() => setFilter("")}><Close /></i>
-                            </button>
-                        </label>
-                    </div>
+                    <Filter filter={filter} setFilter={setFilter} placeholder="Buscar comanda..." />
                 )}
 
-                {itensFiltrados.length ? itensFiltrados.map((e) => (
-                    <div className={` ${e.status ? "flex" : "hidden"} justify-between items-center px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
-                        key={e.check_id}>
-
-                        <div className="flex flex-col">
-                            <h3 className="text-slate-900 font-bold">{e.name_client}</h3>
-                            <h3 className="text-slate-400 font-semibold">{e.obs}</h3>
-                            <h4 className="text-slate-500 text-[15px] font-semibold">
-                                <span className="font-bold text-[#EB8F00]">Total:</span> R$ {e.total_value ? e.total_value.toFixed(2).replace(".", ",") : "0,00"}</h4>
-                            <p>{e.status ? "" : "Encerrada"}</p>
-                        </div>
-
-                        <button className="p-2 rounded-md bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
-                            onClick={() => navigate(`/garcom/comanda/${e.check_id}`)}
-                        ><Plus /></button>
-                    </div>
+                {itensFiltrados.length ? itensFiltrados.map((item) => (
+                    <CardCheck item={item} navigate={navigate} />
                 )) : (
                     <div className="border flex justify-between items-center my-3 px-5 py-3 w-full rounded-xl shadow-md">
 

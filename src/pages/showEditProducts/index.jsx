@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 import { Navbar } from "../../components";
-import { ModalProduct } from "../../components";
+import { ModalProduct, Filter } from "../../components";
 
 import { useToggleView, useLoader } from "../../contexts";
 
-import { Delete, Edit, Close } from "../../libs/icons";
+import { Delete, Edit } from "../../libs/icons";
 import { ProductService } from "../../service/product/ProductService";
 
 export const ShowEditProducts = () => {
@@ -16,7 +16,7 @@ export const ShowEditProducts = () => {
     const { toggleView, setToggleView } = useToggleView();
     const { setLoading } = useLoader();
 
-    const [filtro, setFiltro] = useState("");
+    const [filter, setFilter] = useState("");
     const [idProduct, setIdProduct] = useState(null);
     const [action, setAction] = useState(null);
 
@@ -126,9 +126,9 @@ export const ShowEditProducts = () => {
 
     const itensFiltrados = useMemo(() => {
         return listProducts.filter(item =>
-            item.product_name.toLowerCase().includes(filtro.toLowerCase())
+            item.product_name.toLowerCase().includes(filter.toLowerCase())
         );
-    }, [listProducts, filtro]);
+    }, [listProducts, filter]);
 
     // Pagination calculations
     const totalItems = itensFiltrados.length;
@@ -140,21 +140,10 @@ export const ShowEditProducts = () => {
         <>
             <Navbar title={"Meus Produtos"} url />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-6">
+                <Toaster />
                 <ModalProduct action={action} id={idProduct} />
-                <div className="border flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl  shadow-md">
-                    <Toaster />
-                    <label className="flex gap-2 items-center">
-                        <input
-                            type="text"
-                            className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Buscar produto..."
-                            onChange={(e) => setFiltro(e.target.value)}
-                            value={filtro}
-                        />
-                        <button type="button" className="border-2 rounded-xl p-[10px] hover:text-red-600 hover:border-red-600 transition-all delay-75">
-                            <i onClick={() => setFiltro("")}><Close /></i>
-                        </button>
-                    </label>
+                <div className="flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl">
+                    <Filter filter={filter} setFilter={setFilter} />
                     <button className="font-semibold text-white py-2 px-5 rounded-md hover:bg-[#EB8F00] bg-[#1C1D26] transition-all delay-75"
                         onClick={() => haldletoggleViewModal("new")}
                     >Novo Produto</button>

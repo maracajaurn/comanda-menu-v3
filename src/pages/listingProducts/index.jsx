@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar } from "../../components/navbar";
+import { Navbar, Filter } from "../../components";
 import { ListinProductsForCheck } from "../../components/listinProductsForCheck";
 
 import { Plus, Delete, Minus, Close, ClipBoard } from "../../libs/icons";
@@ -233,20 +233,7 @@ export const ListingProducts = () => {
                     }
                 </div>
 
-                <div className="border px-3 py-5 w-full rounded-xl shadow-md">
-                    <label className="flex gap-2 items-center">
-                        <input
-                            type="text"
-                            className="w-full border-2 rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Buscar produto..."
-                            onChange={(e) => setFiltro(e.target.value)}
-                            value={filtro}
-                        />
-                        <button type="button" className="border-2 rounded-xl p-[10px] hover:text-red-600 hover:border-red-600 transition-all delay-75">
-                            <i onClick={() => setFiltro("")}><Close /></i>
-                        </button>
-                    </label>
-                </div>
+                <Filter filter={filtro} setFilter={setFiltro} />
 
                 {currentItems.map((item, index) => (
                     <div key={index} className={`flex justify-between items-center px-3 py-1 w-full rounded-xl bg-slate-100/50 shadow-md`}>
