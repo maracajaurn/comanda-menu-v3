@@ -449,8 +449,9 @@ export const ManageUser = () => {
                                         onChange={(e) => handleNewCategory("screen", e)}
                                         className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                         <option value="">Selecione a tela</option>
-                                        <option value="churrasco">Churrasco</option>
                                         <option value="bar">Bar</option>
+                                        <option value="churrasco">Churrasco</option>
+                                        <option value="sem tela">Sem tela</option>
                                     </select>
                                 </label>
                                 <button
