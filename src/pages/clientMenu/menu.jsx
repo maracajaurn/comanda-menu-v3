@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Plus, Minus, Close, Cart, CheckProduct } from "../../libs/icons";
+import { Cart } from "../../libs/icons";
 
-import { Navbar } from "../../components";
+import { Navbar, LoadingItem, CardProduct, Filter } from "../../components";
 
 import { ProductService } from "../../service/product/ProductService";
 
@@ -25,7 +25,7 @@ export const Menu = () => {
     const [listProducts, setListProducts] = useState([]);
 
     // Estado que armazena o termo de filtro digitado
-    const [filtro, setFiltro] = useState("");
+    const [filter, setFilter] = useState("");
 
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
@@ -56,6 +56,25 @@ export const Menu = () => {
         getAllProducts();
     }, []);
 
+    useEffect(() => {
+        if (filter.length > 0) {
+            debounce(() => {
+                ProductService.getByName(filter)
+                    .then((result) => {
+                        setListProducts(result);
+                        setHasMore(false);
+                    })
+                    .catch((error) => {
+                        return toast.error(error.message);
+                    });
+            });
+        } else {
+            setPage(1);
+            getAllProducts();
+            setHasMore(true);
+        };
+    }, [filter]);
+
     const getAllProducts = useCallback(() => {
         if (isFetching.current) return;
         isFetching.current = true;
@@ -72,7 +91,6 @@ export const Menu = () => {
 
                 if (result?.status === false) {
                     setLoadingHasMore(false);
-
                     return toast.error(result.message);
                 };
 
@@ -81,11 +99,9 @@ export const Menu = () => {
                 return
             })
             .catch((error) => {
-
                 return toast.error(error.message);
             })
             .finally(() => {
-
                 isFetching.current = false;
             });
     }, [page, listProducts]);
@@ -123,7 +139,7 @@ export const Menu = () => {
                 setListProducts([...listProducts, ...products]);
             })
             .catch((error) => {
-                toast.error('Erro ao processar produtos: ' + error.message);
+                toast.error(error.message);
             });
     };
 
@@ -237,107 +253,23 @@ export const Menu = () => {
         [listProducts, selectedProduct]
     );
 
-    // Corrigir o filtro para buscar direto do DB
-    const itensFiltrados = listProducts.filter(item =>
-        item.product_name.toLowerCase().includes(filtro.toLowerCase())
-    );
-
     return (
         <>
             <Navbar title="Bar Areia Vermelha" />
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
                 <Toaster />
-                <div className="border px-3 py-5 w-full rounded-xl shadow-md">
-                    <label className="flex gap-2 items-center">
-                        <input
-                            type="text"
-                            className="w-full border-2 rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Buscar produto..."
-                            onChange={(e) => setFiltro(e.target.value)}
-                            value={filtro}
-                        />
-                        <button type="button" className="border-2 rounded-xl p-[10px] hover:text-red-600 hover:border-red-600 transition-all delay-75">
-                            <i onClick={() => setFiltro("")}><Close /></i>
-                        </button>
-                    </label>
-                </div>
 
-                {itensFiltrados.map((item, index) => (
-                    <div key={index} className="card flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border">
-                        <div className="w-full flex items-center justify-between gap-1">
-                            {item.image ? (
-                                <div className="h-[120px] w-[180px] rounded-md bg-slate-300"
-                                    style={{
-                                        backgroundImage: `url(${item.image})`,
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}>
-                                    <div className={`
-                                        ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
-                                        w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
-                                        <h6 className="text-white"><CheckProduct /></h6>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="h-[120px] w-[180px] rounded-md bg-slate-300 animate-pulse">
-                                    <div className={`
-                                    ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
-                                    w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
-                                        <h6 className="text-white"><CheckProduct /></h6>
-                                    </div>
-                                </div>
-                            )}
+                <Filter filter={filter} setFilter={setFilter} />
 
-                            <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
-                                <h3 className="text-slate-900 text-[25px] font-bold">{item.product_name}</h3>
-                                <p className="text-slate-500 text-[15px] font-semibold">{item.description}</p>
-                                <h3 className="text-slate-500 text-[30px] font-semibold"><span className="text-[#EB8F00]">R$</span> {item.price.toFixed(2).replace(".", ",")}</h3>
-                            </div>
-                        </div>
+                <CardProduct
+                    listProducts={listProducts}
+                    selectedProduct={selectedProduct}
+                    obsProduct={obsProduct}
+                    alterQnt={alterQnt}
+                />
 
-                        <div className="flex justify-between gap-2 mt-5">
-                            <label className="w-full">
-                                {selectedProduct.find(product => product[1] === item.product_id)?.[2] && (
-                                    <textarea
-                                        placeholder="Observação"
-                                        className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
-                                        onChange={(e) => obsProduct(item.product_id, e.target.value)}
-                                        value={selectedProduct.find(product => product[1] === item.product_id)?.[3] || ""}
-                                        disabled={selectedProduct.findIndex(product => product[1] === item.product_id) === -1}
-                                    />
-                                )}
-                            </label>
-
-                            <div className="w-[150px] flex self-end justify-center items-center gap-3 border-2 border-slate-500 rounded-md my-5">
-                                <button className="py-1 px-5 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, item.stock, "+")}
-                                ><Plus /></button>
-
-                                <p className="text-[#EB8F00] font-somibold">
-                                    {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
-                                </p>
-
-                                <button className="py-1 px-5 border-l-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, item.stock, "-")}
-                                ><Minus /></button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-
-                {loadingHasMore && (
-                    <div className="flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border animate-pulse">
-                        <div className="w-full flex items-center justify-between gap-1">
-                            <div className="h-[120px] w-[180px] rounded-md bg-slate-300"></div>
-                            <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
-                                <h3 className="w-[200px] h-[25px] rounded bg-slate-400 text-[25px] font-bold"></h3>
-                                <p className="w-[200px] h-[25px] rounded bg-slate-200 text-[15px] font-semibold"></p>
-                                <h3 className="w-[200px] h-[25px] rounded bg-slate-300 text-[30px] font-semibold"></h3>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                {loadingHasMore && <LoadingItem />}
 
                 <div className="cart fixed bottom-0 right-0 p-5 flex justify-center items-center animate-bounce">
                     <div className="flex gap-3 z-50 relative">
@@ -350,9 +282,9 @@ export const Menu = () => {
                         <button className={`
                             ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
                             bg-[#171821] hover:text-[#171821] hover:bg-[#EB8F00] transition-all delay-75`}
-                                onClick={() => { navigate(`/${id}/cart`); setToggleView(false) }}
-                                disabled={selectedProduct.length === 0}
-                            ><Cart /></button>
+                            onClick={() => { navigate(`/${id}/cart`); setToggleView(false) }}
+                            disabled={selectedProduct.length === 0}
+                        ><Cart /></button>
                     </div>
                 </div>
             </div>
