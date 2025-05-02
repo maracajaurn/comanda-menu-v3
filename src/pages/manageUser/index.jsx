@@ -35,14 +35,15 @@ export const ManageUser = () => {
     });
 
     const [categories, setCategories] = useState([]);
-    const [newCategor, setNewCategory] = useState({
+    const [newCategory, setNewCategory] = useState({
         name_category: "",
-        screen: ""
+        screen: "",
+        action: "create" | "update",
+        category_id: 0
     });
 
     const navigate = useNavigate();
 
-    // TODO: Adicionar Promisse.all para carregar os dados em paralelo
     useEffect(() => {
         setLoading(true);
 
@@ -237,19 +238,44 @@ export const ManageUser = () => {
     }, []);
 
     const createCategory = () => {
-        if (!newCategor.name_category || !newCategor.screen) {
+        if (!newCategory.name_category || !newCategory.screen) {
             return toast.error("Preencha todos os campos.");
         };
 
         const data = {
-            name_category: newCategor.name_category,
-            screen: newCategor.screen
+            name_category: newCategory.name_category,
+            screen: newCategory.screen
         };
 
         CategoryService.create(data)
             .then((result) => {
                 if (result.status) {
                     setNewCategory({ name_category: "", screen: "" });
+                    getAllCategoies();
+                    return toast.success(result.message);
+                };
+
+                return toast.error(result.message);
+            })
+            .catch((error) => {
+                return toast.error(error.message);
+            });
+    };
+
+    const updateCategory = () => {
+        if (!newCategory.name_category || !newCategory.screen) {
+            return toast.error("Preencha todos os campos.");
+        };
+
+        const data = {
+            name_category: newCategory.name_category,
+            screen: newCategory.screen
+        };
+
+        CategoryService.updateById(newCategory.category_id, data)
+            .then((result) => {
+                if (result.status) {
+                    setNewCategory({ name_category: "", screen: "", action: "create", category_id: 0 });
                     getAllCategoies();
                     return toast.success(result.message);
                 };
@@ -284,9 +310,9 @@ export const ManageUser = () => {
         <>
             <Navbar title={"Usuários"} url />
             <div className="flex flex-col gap-10 mb-10">
+                <Toaster />
                 <div className="max-w-[350px] flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
                     <ModalUser action={action} id={id} />
-                    <Toaster />
 
                     <div className="w-full flex items-center flex-col gap-1 mt-10">
                         <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
@@ -348,163 +374,169 @@ export const ManageUser = () => {
                     ><Plus />Cadastrar usuário</button>
                 </div>
 
-                <div>
+                <div className="mt-5 flex flex-col gap-6">
                     <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
                     >Configurações</h2>
 
-                    <div className="mt-5 flex flex-col gap-6">
-                        <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                            Nome do Estabelecimento
-                            <input
-                                type="text"
-                                id="establishmentName"
-                                name="establishmentName"
-                                className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                onChange={(e) => handleSetting("estabishment_name", e)}
-                                value={setting.estabishment_name}
-                            />
-                        </label>
+                    <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                        Nome do Estabelecimento
+                        <input
+                            type="text"
+                            id="establishmentName"
+                            name="establishmentName"
+                            className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            onChange={(e) => handleSetting("estabishment_name", e)}
+                            value={setting.estabishment_name}
+                        />
+                    </label>
 
-                        <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                            Cobrar Taxa de Serviço?
-                            <select className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="serviceCharge"
-                                name="serviceCharge"
-                                value={setting.serveice_change}
-                                onChange={(e) => handleSetting("serveice_change", e)}>
-                                <option value="1" >Sim</option>
-                                <option value="0" >Não</option>
-                            </select>
-                        </label>
+                    <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                        Cobrar Taxa de Serviço?
+                        <select className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="serviceCharge"
+                            name="serviceCharge"
+                            value={setting.serveice_change}
+                            onChange={(e) => handleSetting("serveice_change", e)}>
+                            <option value="1" >Sim</option>
+                            <option value="0" >Não</option>
+                        </select>
+                    </label>
 
-                        <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                            Percentual de Taxa de Serviço (%)
-                            <input
-                                type="number"
-                                id="serviceChargePercentage"
-                                name="serviceChargePercentage"
-                                min="0"
-                                max="100"
-                                step="0.1"
-                                className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                onChange={(e) => handleSetting("service_change_percentage", e)}
-                                value={setting.service_change_percentage}
-                            />
-                        </label>
+                    <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                        Percentual de Taxa de Serviço (%)
+                        <input
+                            type="number"
+                            id="serviceChargePercentage"
+                            name="serviceChargePercentage"
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            onChange={(e) => handleSetting("service_change_percentage", e)}
+                            value={setting.service_change_percentage}
+                        />
+                    </label>
 
-                        <div className="mb-5 sm:rounded-lg rounded-md w-[350px] overflow-x-auto">
-                            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
-                            >Categorias
-                            </h2>
+                    <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col items-center gap-3`}>
+                        <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
+                            <button
+                                type="button"
+                                onClick={() => document.getElementById("qrcodepix").click()}
+                                className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all"
+                            >
+                                QR Code Pix
+                            </button>
 
-                            <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" className="px-2 py-2 text-center">
-                                            Categoria
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 text-center">
-                                            Tela
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 text-center">
-                                            Excluir
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {categories.map((category) => (
-                                        <tr key={category.category_id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                            <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {category.name_category}
-                                            </td>
-                                            <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {category.screen}
-                                            </td>
-                                            <td className="px-2 py-2 flex justify-center">
-                                                <button
-                                                    className="p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
-                                                    onClick={() => deleteCategory(category.category_id)}
-                                                ><Delete /></button>
-                                            </td>
-
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-
-                            <div className="mt-5">
-                                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                                    Criar nova categoria
-                                    <input type="text"
-                                        placeholder="Nome da categoria"
-                                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        value={newCategor.name_category}
-                                        onChange={(e) => handleNewCategory("name_category", e)} />
-                                </label>
-
-                                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                                    <select name="screen_category"
-                                        id="screen_category"
-                                        value={newCategor.screen}
-                                        onChange={(e) => handleNewCategory("screen", e)}
-                                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                        <option value="">Selecione a tela</option>
-                                        <option value="bar">Bar</option>
-                                        <option value="churrasco">Churrasco</option>
-                                        <option value="sem tela">Sem tela</option>
-                                    </select>
-                                </label>
-                                <button
-                                    className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                                    rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                                    onClick={() => createCategory()}>
-                                    <Plus /> Cadastrar categoria
-                                </button>
-                            </div>
+                            {setting.image_pix && (
+                                <div className="relative w-2/3">
+                                    <img
+                                        className="w-[250px] rounded-xl object-cover"
+                                        src={setting.image_pix}
+                                        alt="Imagem do QR Code Pix"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setSetting((prev) => ({ ...prev, image_pix: "" }))}
+                                        className="absolute bottom-2 right-2 p-2 bg-white text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all"
+                                    >
+                                        <Delete />
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
-                        <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col items-center gap-3`}>
-                            <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
-                                <button
-                                    type="button"
-                                    onClick={() => document.getElementById("qrcodepix").click()}
-                                    className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all"
-                                >
-                                    QR Code Pix
-                                </button>
+                        <input
+                            type="file"
+                            id="qrcodepix"
+                            name="qrcodepix"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                        />
+                    </label>
 
-                                {setting.image_pix && (
-                                    <div className="relative w-2/3">
-                                        <img
-                                            className="w-[250px] rounded-xl object-cover"
-                                            src={setting.image_pix}
-                                            alt="Imagem do QR Code Pix"
-                                        />
+                    <button
+                        className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
+                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                        onClick={() => updateSetting()}
+                    ><Reflesh />Atualizar Pix</button>
+                </div>
+
+                <div className="mb-5 sm:rounded-lg rounded-md w-[350px] overflow-x-auto">
+                    <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                    >Categorias</h2>
+
+                    <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="px-2 py-2 text-center">
+                                    Categoria
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center">
+                                    Tela
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center">
+                                    Ação
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {categories.map((category) => (
+                                <tr key={category.category_id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                    <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {category.name_category}
+                                    </td>
+                                    <td scope="row" className="text-center uppercase px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {category.screen}
+                                    </td>
+                                    <td className="px-2 py-2 flex justify-center">
                                         <button
-                                            type="button"
-                                            onClick={() => setSetting((prev) => ({ ...prev, image_pix: "" }))}
-                                            className="absolute bottom-2 right-2 p-2 bg-white text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all"
-                                        >
-                                            <Delete />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                                            className=" p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                            onClick={() => setNewCategory(() => ({
+                                                name_category: category.name_category,
+                                                screen: category.screen,
+                                                action: "update",
+                                                category_id: category.category_id
+                                            }))}
+                                        ><Edit /></button>
 
-                            <input
-                                type="file"
-                                id="qrcodepix"
-                                name="qrcodepix"
-                                className="hidden"
-                                onChange={handleImageUpload}
-                            />
+                                        <button
+                                            className="p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                            onClick={() => deleteCategory(category.category_id)}
+                                        ><Delete /></button>
+                                    </td>
+
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div className="mt-5">
+                        <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                            <input type="text"
+                                placeholder="Nome da categoria"
+                                className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                value={newCategory.name_category}
+                                onChange={(e) => handleNewCategory("name_category", e)} />
                         </label>
 
+                        <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                            <select name="screen_category"
+                                id="screen_category"
+                                value={newCategory.screen}
+                                onChange={(e) => handleNewCategory("screen", e)}
+                                className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                <option value="">Selecione a tela</option>
+                                <option value="bar">Bar</option>
+                                <option value="churrasco">Churrasco</option>
+                                <option value="sem tela">Sem tela</option>
+                            </select>
+                        </label>
                         <button
                             className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                            onClick={() => updateSetting()}
-                        ><Reflesh />Atualizar configurações</button>
+                                    rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                            onClick={() => { newCategory.action === "update" ? updateCategory() : createCategory() }}>
+                            <Plus /> Cadastrar categoria
+                        </button>
                     </div>
                 </div>
             </div>
