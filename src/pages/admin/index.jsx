@@ -6,10 +6,9 @@ import html2canvas from 'html2canvas';
 
 import { Navbar } from "../../components";
 import { useLoader } from "../../contexts";
-
+import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
 import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons";
 
-import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService";
 
@@ -48,15 +47,6 @@ export const Admin = () => {
 
     }, []);
 
-    // check_finished
-    useEffect(() => {
-        socket.on("check_finished", () => {
-            getCashierOpen();
-        });
-
-        return () => { socket.off("check_finished") };
-    }, []);
-
     const getCashierOpen = useCallback(() => {
         CashierService.getByStatus(1)
             .then((result) => {
@@ -77,6 +67,8 @@ export const Admin = () => {
                 return toast.error(error.message);
             });
     }, []);
+
+    useSocketOrderEvents(getCashierOpen);
 
     const closeCashier = useCallback(async () => {
         setLoading(true);
