@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-import { Navbar, Calc } from "../../components";
+import { Navbar, Calc, Check } from "../../components";
 
 import { useLoader } from "../../contexts";
 import { useDebounce } from "../../hooks/UseDebounce";
@@ -40,8 +40,6 @@ export const CloseCheck = () => {
         image_pix: "",
     });
 
-    const [newNameClient, setNewNameClient] = useState(null);
-
     const [visibilityCalc, setVisibilityCal] = useState(false);
 
     useEffect(() => {
@@ -59,29 +57,27 @@ export const CloseCheck = () => {
 
     // Alterar o nome do cliente
     useEffect(() => {
-        if (newNameClient) {
-            debounce(() => {
-                const data = {
-                    name_client: newNameClient,
-                    obs: check.obs,
-                    total_value: check.total_value,
-                    status: check.status,
-                    pay_form: check.pay_form,
-                    cashier_id: check.cashier_id
-                };
+        debounce(() => {
+            const data = {
+                name_client: check.name_client,
+                obs: check.obs,
+                total_value: check.total_value,
+                status: check.status,
+                pay_form: check.pay_form,
+                cashier_id: check.cashier_id
+            };
 
-                CheckService.updateById(id, data)
-                    .then((result) => {
-                        if (result.status) {
-                            return toast.success(result.message);
-                        };
-                    })
-                    .catch((error) => {
-                        return toast.error(error.message);
-                    });
-            });
-        };
-    }, [newNameClient]);
+            CheckService.updateById(id, data)
+                .then((result) => {
+                    if (result.status) {
+                        return toast.success(result.message);
+                    };
+                })
+                .catch((error) => {
+                    return toast.error(error.message);
+                });
+        });
+    }, [check]);
 
     const getCheck = useCallback(() => {
         CheckService.getById(id)
@@ -257,62 +253,15 @@ export const CloseCheck = () => {
             <Navbar title={`Fechar`} url />
             <div className="w-[95%] min-h-[100vh] m-2 p-1 rounded-xl flex items-center justify-center flex-col gap-14">
                 <Toaster />
-                <div className="px-10 py-14 rounded-md shadow-xl bg-[#D39825]/10">
 
-                    <label>
-                        <textarea
-                            type="text"
-                            className="max-w-[300px] text-center text-slate-900 font-bold text-[32px] bg-transparent"
-                            placeholder="Nome do Cliente"
-                            onChange={(change) => setNewNameClient(() => change.target.value)}
-                            value={newNameClient !== null ? newNameClient : check.name_client}
-                        />
-                    </label>
-
-                    <table className="max-w-2/3 flex gap-5 flex-col divide-y divide-dashed divide-slate-700">
-                        <thead>
-                            <tr className="flex justify-between items-center">
-                                <th>Und.</th>
-                                <th>Produto</th>
-                                <th>Preço</th>
-                            </tr>
-                        </thead>
-
-                        {products.map((product, index) => (
-                            <tbody key={index}>
-                                <tr className="flex justify-between gap-1 text-slate-700 font-semibold">
-                                    <td className="flex items-center justify-between gap-2">
-                                        <span className="text-[#EB8F00]">{product.quantity}x</span>
-                                    </td>
-                                    <td><span>{product.product_name}</span></td>
-                                    <td><span className="font-bold text-slate-500">R$ {product?.total_price.toFixed(2).replace(".", ",")}</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        {product.obs && (
-                                            <p className="text-[#EB8F00]">OBS: <span className="text-slate-500">{product.obs}</span></p>
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        ))}
-                    </table>
-
-                    {setting.serveice_change ? (
-                        <>
-                            <h2 className="mt-5 text-center text-slate-900 font-bold text-[22px]">
-                                Consumo: <span className="text-slate-500">R$ {parseFloat(check.total_value).toFixed(2).replace(".", ",")}</span>
-                            </h2>
-                            <h2 className="flex flex-col mt-5 text-center text-slate-900 font-bold text-[28px]">
-                                Total + {setting.service_change_percentage}% <span className="text-slate-500">R$ {parseFloat(check.total_value + (check.total_value * setting.service_change_percentage / 100)).toFixed(2).replace(".", ",")}</span>
-                            </h2>
-                        </>
-                    ) : (
-                        <h2 className="mt-5 text-center text-slate-900 font-bold text-[28px]">
-                            Total: <span className="text-slate-500">R$ {parseFloat(check.total_value).toFixed(2).replace(".", ",")}</span>
-                        </h2>
-                    )}
-                </div>
+                <Check
+                    check={check}
+                    setCheck={setCheck}
+                    products={products}
+                    checkProduct={false}
+                    status={false}
+                    serveice_change={setting.service_change_percentage}
+                />
 
                 <label className="flex flex-col text-slate-900 text-[20px] font-semibold">
                     Pagar com:
