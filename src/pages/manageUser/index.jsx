@@ -535,7 +535,7 @@ export const ManageUser = () => {
                             className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
                                     rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
                             onClick={() => { newCategory.action === "update" ? updateCategory() : createCategory() }}>
-                            <Plus /> Cadastrar categoria
+                            {newCategory.action === "update" ? (<><Reflesh /> Atualizar categoria</>) : (<><Plus /> Cadastrar categoria</>)}
                         </button>
                     </div>
                 </div>
