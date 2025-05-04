@@ -75,7 +75,7 @@ export const PaymentApproved = () => {
         const data = {
             list_order: products,
             check_id: id,
-            new_stock: JSON.parse(localStorage.getItem("list_stock")),
+            new_stock: /* JSON.parse(localStorage.getItem("list_stock")) */ "online", // enviando para o socker o tipo de tela
         };
 
         OrderService.create_order(data)

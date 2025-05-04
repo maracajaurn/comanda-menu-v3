@@ -151,7 +151,7 @@ export const Waiter = () => {
             });
     }, []);
 
-    useSocketOrderEvents(getCheckById);
+    useSocketOrderEvents(getCheckById, "waiter");
 
     // Editar quantidade do produto na lista
     const alterQnt = (

@@ -55,28 +55,30 @@ export const CloseCheck = () => {
         getOrders();
     }, []);
 
-    // Alterar o nome do cliente
+    // Atualizar nome ou obs da comanda
     useEffect(() => {
-        debounce(() => {
-            const data = {
-                name_client: check.name_client,
-                obs: check.obs,
-                total_value: check.total_value,
-                status: check.status,
-                pay_form: check.pay_form,
-                cashier_id: check.cashier_id
-            };
+        if (check.name_client !== "") {
+            debounce(() => {
+                const data = {
+                    name_client: check.name_client,
+                    obs: check.obs,
+                    total_value: check.total_value,
+                    status: check.status,
+                    pay_form: check.pay_form,
+                    cashier_id: check.cashier_id
+                };
 
-            CheckService.updateById(id, data)
-                .then((result) => {
-                    if (result.status) {
-                        return toast.success(result.message);
-                    };
-                })
-                .catch((error) => {
-                    return toast.error(error.message);
-                });
-        });
+                CheckService.updateById(id, data)
+                    .then((result) => {
+                        if (result.status) {
+                            return toast.success(result.message);
+                        };
+                    })
+                    .catch((error) => {
+                        return toast.error(error.message);
+                    });
+            });
+        };
     }, [check]);
 
     const getCheck = useCallback(() => {

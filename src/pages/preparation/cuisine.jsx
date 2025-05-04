@@ -52,7 +52,7 @@ export const Cousine = () => {
 
     }, []);
 
-    useSocketOrderEvents(getOrders);
+    useSocketOrderEvents(getOrders, "churrasco");
 
     // sinalizar pedido pronto
     const orderReady = (

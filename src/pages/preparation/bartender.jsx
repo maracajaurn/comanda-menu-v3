@@ -52,7 +52,7 @@ export const Bartender = () => {
             });
     }, []);
 
-    useSocketOrderEvents(getOrders);
+    useSocketOrderEvents(getOrders, "bar");
 
     // sinalizar pedido pronto
     const orderReady = (

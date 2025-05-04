@@ -27,6 +27,7 @@ export const ListingProducts = () => {
     const [listProducts, setListProducts] = useState([]);
 
     const [client, setClient] = useState("");
+    const [created_for, setCretedFor] = useState(0);
 
     // Estado que armazena o termo de filtro digitado
     const [filtro, setFiltro] = useState("");
@@ -80,6 +81,7 @@ export const ListingProducts = () => {
             .then((result) => {
                 if (result.length > 0) {
                     setClient(result[0].name_client);
+                    setCretedFor(result[0].created_for);
                     return setLoading(false);
                 };
 
@@ -182,7 +184,7 @@ export const ListingProducts = () => {
                 if (result.status) {
                     const objSocket = {
                         client,
-                        screens: screens
+                        screens: created_for === 0 ? screens : "online"
                     };
 
                     socket.emit("new_order", objSocket);

@@ -4,6 +4,9 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
 
+import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
+import { useAlarm } from "../../hooks/UseAlert";
+
 import { Navbar, CardProductPreparation } from "../../components";
 
 import socket from "../../service/socket";
@@ -16,6 +19,7 @@ export const OnlineOrders = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
+    const { playAlarm } = useAlarm();
 
     useEffect(() => {
         setLoading(true);
@@ -26,102 +30,6 @@ export const OnlineOrders = () => {
         };
 
         getOrders();
-    }, []);
-
-    // new_order - ok
-    useEffect(() => {
-        socket.on("new_order", (data) => {
-            toast((t) => (
-                <div className="flex gap-3">
-                    <div className="flex flex-col items-center">
-                        <h6>Novo pedido na comanda</h6>
-                        <span className="font-semibold">{data.client}</span>
-                    </div>
-                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                        onClick={() => toast.dismiss(t.id)}
-                    >OK</button>
-                </div>
-            ), { duration: 1000000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("new_order") };
-    }, []);
-
-    // product_removed - ok
-    useEffect(() => {
-        socket.on("product_removed", (data) => {
-            toast((t) => (
-                <div className="flex gap-3">
-                    <div className="flex flex-col items-center">
-                        <h6><span className="font-semibold underline">{data.product_name}</span> cancelado na comanda</h6>
-                        <span className="font-semibold">{data.client}</span>
-                    </div>
-                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                        onClick={() => toast.dismiss(t.id)}
-                    >OK</button>
-                </div>
-            ), { duration: 1000000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("product_removed") };
-    }, []);
-
-    // alterar_quantidade - ok
-    useEffect(() => {
-        socket.on("quantity_change", (data) => {
-            toast((t) => (
-                <div className="flex gap-3">
-                    <div className="flex flex-col items-center">
-                        <h6><span className="font-semibold">{data.action} {data.product_name}</span> na comanda</h6>
-                        <span className="font-semibold">{data.client}</span>
-                    </div>
-                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                        onClick={() => toast.dismiss(t.id)}
-                    >OK</button>
-                </div>
-            ), { duration: 10000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("quantity_change") };
-    }, []);
-
-    // check_canceled
-    useEffect(() => {
-        socket.on("check_canceled", (data) => {
-            toast((t) => (
-                <div>
-                    <h5>Comanda <span className="font-semibold">{data.client}</span> cancelada</h5>
-                </div>
-            ), { duration: 2000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("check_canceled") };
-    }, []);
-
-    // check_finished
-    useEffect(() => {
-        socket.on("check_finished", (data) => {
-            toast((t) => (
-                <h6>Comanda <span className="font-semibold">{data.client}</span> finalizada</h6>
-            ), { duration: 2000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("check_finished") };
     }, []);
 
     // buscar todos pedidos online
@@ -145,6 +53,11 @@ export const OnlineOrders = () => {
                 return toast.error(error.message);
             });
     }, []);
+
+    useSocketOrderEvents(() => {
+        playAlarm();
+        getOrders();
+    }, "online");
 
     // sinalizar pedido pronto
     const orderReady = (

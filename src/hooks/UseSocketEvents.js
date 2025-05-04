@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import socket from "../service/socket";
 
-export function useSocketOrderEvents(func) {
+export function useSocketOrderEvents(func, screens = "") {
     useEffect(() => {
         const handleNewOrder = (data) => {
+            if (data.screens !== screens) return;
+
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -20,6 +22,8 @@ export function useSocketOrderEvents(func) {
         };
 
         const handleProductRemoved = (data) => {
+            if (data.screens !== screens) return;
+
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -35,6 +39,8 @@ export function useSocketOrderEvents(func) {
         };
 
         const handleQuantityChange = (data) => {
+            if (data.screens !== screens) return;
+
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col items-center">
@@ -70,6 +76,8 @@ export function useSocketOrderEvents(func) {
         };
 
         const handleOrderReady = (data) => {
+            if (screens !== "waiter") return;
+
             toast((t) => (
                 <div className="flex gap-3">
                     <div className="flex flex-col justify-center items-center">
