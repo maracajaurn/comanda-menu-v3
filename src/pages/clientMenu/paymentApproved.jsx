@@ -64,18 +64,18 @@ export const PaymentApproved = () => {
 
         const objSocket = {
             client: localStorage.getItem("client"),
-            screens: JSON.parse(localStorage.getItem("screens")) || [],
+            screens: ["online"],
         };
 
-        if (objSocket.screens.length === 0 || products.length === 0) {
+        /* if (objSocket.screens.length === 0 || products.length === 0) {
             setLoading(false);
             return
-        };
+        }; */
 
         const data = {
             list_order: products,
             check_id: id,
-            new_stock: /* JSON.parse(localStorage.getItem("list_stock")) */ "online", // enviando para o socker o tipo de tela
+            new_stock: JSON.parse(localStorage.getItem("list_stock"))
         };
 
         OrderService.create_order(data)

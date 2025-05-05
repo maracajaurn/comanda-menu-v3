@@ -184,7 +184,7 @@ export const ListingProducts = () => {
                 if (result.status) {
                     const objSocket = {
                         client,
-                        screens: created_for === 0 ? screens : "online"
+                        screens: created_for === 0 ? screens : ["online"]
                     };
 
                     socket.emit("new_order", objSocket);
