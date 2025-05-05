@@ -93,7 +93,7 @@ export const Cart = () => {
             );
 
             let total_value = 0;
-            let screens = [];
+            //let screens = [];
 
             const productsInCart = filteredProducts.map((product) => {
                 const selectedProduct = productsSelected.find((selected) => selected[1] === product.product_id);
@@ -102,9 +102,9 @@ export const Cart = () => {
 
                 total_value += totalPrice;
 
-                if (!screens.includes(product.screen)) {
+                /* if (!screens.includes(product.screen)) {
                     screens.push(product.screen);
-                };
+                }; */
 
                 return {
                     product_id: product.product_id,
@@ -115,7 +115,7 @@ export const Cart = () => {
                 };
             });
 
-            localStorage.setItem("screens", JSON.stringify(screens));
+            //localStorage.setItem("screens", JSON.stringify(screens));
             localStorage.setItem("total_value", total_value.toFixed(2));
 
             setTotalValue(total_value);
