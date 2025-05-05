@@ -5,7 +5,7 @@ import socket from "../service/socket";
 export function useSocketOrderEvents(func, screens = "") {
     useEffect(() => {
         const handleNewOrder = (data) => {
-            if (data.screens !== screens) return;
+            if (!data.screens.includes(screens)) return;
 
             toast((t) => (
                 <div className="flex gap-3">
@@ -22,7 +22,7 @@ export function useSocketOrderEvents(func, screens = "") {
         };
 
         const handleProductRemoved = (data) => {
-            if (data.screens !== screens) return;
+            if (!data.screens.includes(screens)) return;
 
             toast((t) => (
                 <div className="flex gap-3">
@@ -39,7 +39,7 @@ export function useSocketOrderEvents(func, screens = "") {
         };
 
         const handleQuantityChange = (data) => {
-            if (data.screens !== screens) return;
+            if (!data.screens.includes(screens)) return;
 
             toast((t) => (
                 <div className="flex gap-3">
