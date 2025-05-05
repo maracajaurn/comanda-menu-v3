@@ -70,23 +70,7 @@ export const ListingChecks = () => {
                     <Filter filter={filter} setFilter={setFilter} placeholder="Buscar comanda..." />
                 )}
 
-                {itensFiltrados.length ? itensFiltrados.map((item) => (
-                    <CardCheck item={item} navigate={navigate} />
-                )) : (
-                    <div className="border flex justify-between items-center my-3 px-5 py-3 w-full rounded-xl shadow-md">
-
-                        <div className="flex flex-col">
-                            <h3 className="text-slate-900 font-bold">Você não possui comandas em aberto</h3>
-                            <h3 className="text-slate-400 font-semibold">Clique em + Nova comanda</h3>
-                            <h4 className="text-slate-500 text-[15px] font-semibold">
-                                <span className="font-bold text-[#EB8F00]">Total:</span> R$ 0,00</h4>
-                        </div>
-
-                        <button className="p-2 rounded-md bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
-                            onClick={() => setToggleView(true)}
-                        ><Plus /></button>
-                    </div>
-                )}
+                <CardCheck listCheck={itensFiltrados} navigate={navigate} />
 
                 <button className="mt-[100px] flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
                     onClick={() => setToggleView(true)}
