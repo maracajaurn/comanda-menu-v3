@@ -12,7 +12,7 @@ export const ModalProduct = ({ action, id }) => {
         product_name: "",
         price: 0,
         category_id: 0,
-        description: null,
+        description: undefined,
         stock: 0,
         image: null,
     });
@@ -260,7 +260,7 @@ export const ModalProduct = ({ action, id }) => {
                         className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Descrição"
                         onChange={(change) => handleInput("description", change)}
-                        value={value.description}
+                        value={value.description || undefined}
                     />
                 </label>
 
