@@ -41,10 +41,7 @@ export const Admin = () => {
             return navigate("/login");
         };
 
-        const today = new Date().toLocaleDateString("pt-BR");
-        setData(today);
         getCashierOpen();
-
     }, []);
 
     const getCashierOpen = useCallback(() => {
@@ -52,6 +49,18 @@ export const Admin = () => {
             .then((result) => {
                 if (result.length > 0) {
                     setCashier(result[0]);
+
+                    const data = new Date(result[0].created_at);
+
+                    const formatado = data.toLocaleString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        timeZone: "America/Sao_Paulo",
+                    });
+
+                    setData(formatado);
+
                     return setLoading(false);
                 };
 
@@ -171,7 +180,6 @@ export const Admin = () => {
         janelaDeImpressao.print();
     };
 
-
     return (
         <>
             <Navbar title={"Resumo do dia"} isLogout />
@@ -210,7 +218,7 @@ export const Admin = () => {
                 <main className="w-full my-10 pb-10 flex flex-col items-center gap-14" id="screenshotCashier">
                     <div className="flex gap-10 flex-col">
 
-                        <p><span className="font-semibold text-[#1C1d26]">Data:</span> {date}</p>
+                        <p><span className="font-semibold text-[#1C1d26]">Caixa aberto em</span> {date}</p>
 
                         <p className="text-2xl text-green-600">Receita</p>
 
