@@ -30,7 +30,7 @@ export const Calc = ({ visibilityCalc }) => {
 
     return (
         <div className={`border ${visibilityCalc ? '' : 'hidden'} border-[#EBAE4D] rounded-md bg-[#EBAE4D]/25 shadow-2xl w-[300px] h-auto pt-2 flex flex-col justify-center items-center gap-4`}>
-            <Toaster />
+            
             <textarea className="px-1 w-[95%] h-auto bg-[#EBAD00] rounded-md flex items-center justify-end text-6xl text-right flex-wrap"
                 value={calculo}
                 disabled

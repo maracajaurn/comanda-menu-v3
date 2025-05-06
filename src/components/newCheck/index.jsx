@@ -77,7 +77,7 @@ export const NewCheck = ({ is_client = false }) => {
 
     return (
         <div className={`${toggleView ? "block" : "hidden"} fixed top-0 left-0 h-[100dvh] w-[100vw] bg-slate-950/50 py-3 px-1 flex flex-col justify-center items-center gap-5`}>
-            <Toaster />
+            
             <div className="h-[300px] w-[300px] rounded-md border-hidden bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
                 <div className="p-5 bg-[#EB8F00] w-full">
                     <h6 className="text-white text-center font-bold uppercase text-[18px]">Nova comanda</h6>

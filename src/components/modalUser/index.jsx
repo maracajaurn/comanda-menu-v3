@@ -94,7 +94,7 @@ export const ModalUser = ({ action, id }) => {
 
     return (
         <div className={`${toggleView ? "flex" : "hidden"} fixed top-0 left-0 w-full h-[100dvh] flex flex-col gap-10 justify-center items-center bg-slate-950/50`}>
-            <Toaster />
+            
             <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-5 overflow-hidden">
                 <div className="p-5 bg-[#EB8F00] w-full">
                     <h6 className="text-white text-center font-bold uppercase text-[18px]">{action === "new" ? "Cadastrar Usuário" : "Atualizar Usuário"}</h6>
