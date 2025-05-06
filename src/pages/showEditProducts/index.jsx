@@ -140,7 +140,7 @@ export const ShowEditProducts = () => {
         <>
             <Navbar title={"Meus Produtos"} url />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-6">
-                <Toaster />
+                
                 <ModalProduct action={action} id={idProduct} />
                 <div className="flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl">
                     <Filter filter={filter} setFilter={setFilter} />

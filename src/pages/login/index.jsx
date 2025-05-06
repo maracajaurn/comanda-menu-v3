@@ -81,7 +81,7 @@ export const Login = () => {
         <div className="h-full w-full">
             <Navbar title="Bem-vindo" />
             <div className="h-full flex justify-center items-center flex-col">
-                <Toaster />
+                
                 <div className="mb-4">
                     <label className="text-slate-700 text-sm font-bold mb-2">
                         <input

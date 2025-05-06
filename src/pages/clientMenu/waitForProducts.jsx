@@ -139,7 +139,7 @@ export const WaitForProducts = () => {
         <>
             <Navbar title="Em preparação" url />
             <div className="flex flex-col items-center gap-10 pb-[200px]">
-                <Toaster />
+                
 
                 <Check
                     check={check}

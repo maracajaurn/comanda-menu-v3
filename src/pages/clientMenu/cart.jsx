@@ -173,7 +173,7 @@ export const Cart = () => {
         <>
             <Navbar title="Meu carrinho" url />
             <div className="flex flex-col items-center gap-10 pb-[100px]">
-                <Toaster />
+                
                 <div className="px-10 py-14 shadow-xl bg-[#D39825]/10">
 
                     <h1 className="text-center text-slate-900 font-bold text-[32px]">{client}</h1>

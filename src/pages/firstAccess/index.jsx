@@ -40,7 +40,7 @@ export const FirstAccess = () => {
     return (
         <>
             <Navbar />
-            <Toaster />
+            
             <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-5 overflow-hidden">
                 <div className="p-5 bg-[#EB8F00] w-full">
                     <h6 className="text-white text-center font-bold uppercase text-[18px]">Primeiro acesso</h6>

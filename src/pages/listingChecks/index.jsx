@@ -64,7 +64,7 @@ export const ListingChecks = () => {
             <Navbar title={`Todas as comandas`} isLogout />
             <div className="w-[95%] min-h-[90vh] py-3 rounded-xl flex items-center flex-col gap-5">
                 <NewCheck />
-                <Toaster />
+                
 
                 {rows.length > 10 && (
                     <Filter filter={filter} setFilter={setFilter} placeholder="Buscar comanda..." />

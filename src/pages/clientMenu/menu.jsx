@@ -258,7 +258,7 @@ export const Menu = () => {
             <Navbar title="Bar Areia Vermelha" />
 
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
-                <Toaster />
+                
 
                 <Filter filter={filter} setFilter={setFilter} />
 

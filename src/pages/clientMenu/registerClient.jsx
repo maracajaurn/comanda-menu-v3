@@ -104,7 +104,7 @@ export const RegisterClient = () => {
         <>
             <div className={`flex justify-center items-center`}>
                 <Navbar title="Bem-vindo" />
-                <Toaster />
+                
                 <div className="w-[300px] rounded-md flex flex-col justify-between items-center gap-10">
                     <div className="flex flex-col items-center gap-3">
 

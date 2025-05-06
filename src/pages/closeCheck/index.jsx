@@ -254,7 +254,7 @@ export const CloseCheck = () => {
         <>
             <Navbar title={`Fechar`} url />
             <div className="w-[95%] min-h-[100vh] m-2 p-1 rounded-xl flex items-center justify-center flex-col gap-14">
-                <Toaster />
+                
 
                 <Check
                     check={check}

@@ -56,7 +56,7 @@ export const ClosedChecks = () => {
             <Navbar title={`Comandas Fechadas`} url />
 
             <div className="w-[95%] min-h-[90vh] py-3 px-5 rounded-xl flex items-center flex-col gap-5">
-                <Toaster />
+                
                 {rows.length > 0 ? rows.map((e) => (
                     <div className={` ${e.status ? "hidden" : "flex"}  justify-between items-center my-3 px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md`}
                         key={e.check_id}>
