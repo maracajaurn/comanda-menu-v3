@@ -9,7 +9,7 @@ export const App = () => {
     <LoaderContextProvider>
       <BrowserRouter>
         <ToggleViewProvider>
-          <LayoutBase title="comandas" url="comandas">
+          <LayoutBase>
             <AppRoutes />
           </LayoutBase>
         </ToggleViewProvider>
