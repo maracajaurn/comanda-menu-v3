@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import socket from "../service/socket";
 
-export function useSocketOrderEvents(func, screens = "") {
+export function useSocketOrderEvents(func, screens = []) {
     useEffect(() => {
         const handleNewOrder = (data) => {
             if (!data.screens.includes(screens)) return;
