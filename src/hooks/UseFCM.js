@@ -17,10 +17,13 @@ export const useFCM = () => {
                 toast((t) => (
                     <div className="flex gap-3">
                         <div className="flex flex-col items-center text-center">
-                            <h6>Aceite as notificações para continuar</h6>
+                            <h6>Aceite as notificações para ser atualizado sobre seus pedidos</h6>
                         </div>
                         <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                            onClick={() => toast.dismiss(t.id)}
+                            onClick={() => {
+                                toast.dismiss(t.id);
+                                Notification.requestPermission();
+                            }}
                         >OK</button>
                     </div>
                 ), { duration: 1000000 });
