@@ -45,7 +45,7 @@ export const useFCM = () => {
 
         const unsubscribe = onMessage(messaging, (payload) => {
             console.log('Mensagem recebida:', payload);
-            alert(`${payload.notification?.title}\n${payload.notification?.body}`);
+            toast(`${payload.notification?.title}\n${payload.notification?.body}`);
         });
 
         return () => unsubscribe();
