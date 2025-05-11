@@ -33,8 +33,8 @@ export const CloseCheck = () => {
     });
 
     const [updateCheck, setUpdateCheck] = useState({
-        name_client: "",
-        obs: ""
+        name_client: null,
+        obs: null
     });
 
     const [products, setProducts] = useState([]);
@@ -62,7 +62,7 @@ export const CloseCheck = () => {
 
     // Atualizar nome ou obs da comanda
     useEffect(() => {
-        if (!updateCheck.name_client && !updateCheck.obs) return;
+        if (updateCheck.name_client === null && updateCheck.obs === null) return;
 
         debounce(() => {
             const data = {
