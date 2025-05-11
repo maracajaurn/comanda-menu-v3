@@ -1,5 +1,5 @@
 import { useState } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export const Calc = ({ visibilityCalc }) => {
 

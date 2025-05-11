@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { Navbar, Filter } from "../../components";
 import { ListinProductsForCheck } from "../../components/listinProductsForCheck";

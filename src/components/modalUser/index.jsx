@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { Plus, Close } from "../../libs/icons";
 import { useToggleView } from "../../contexts";

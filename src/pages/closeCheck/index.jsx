@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import { Navbar, Calc, Check } from "../../components";
 
@@ -32,6 +32,11 @@ export const CloseCheck = () => {
         cashier_id: 0
     });
 
+    const [updateCheck, setUpdateCheck] = useState({
+        name_client: "",
+        obs: ""
+    });
+
     const [products, setProducts] = useState([]);
 
     const [setting, setSetting] = useState({
@@ -57,29 +62,29 @@ export const CloseCheck = () => {
 
     // Atualizar nome ou obs da comanda
     useEffect(() => {
-        if (check.name_client !== "") {
-            debounce(() => {
-                const data = {
-                    name_client: check.name_client,
-                    obs: check.obs,
-                    total_value: check.total_value,
-                    status: check.status,
-                    pay_form: check.pay_form,
-                    cashier_id: check.cashier_id
-                };
+        if (!updateCheck.name_client && !updateCheck.obs) return;
 
-                CheckService.updateById(id, data)
-                    .then((result) => {
-                        if (result.status) {
-                            return toast.success(result.message);
-                        };
-                    })
-                    .catch((error) => {
-                        return toast.error(error.message);
-                    });
-            });
-        };
-    }, [check]);
+        debounce(() => {
+            const data = {
+                name_client: updateCheck.name_client || check.name_client,
+                obs: updateCheck.obs || check.obs,
+                total_value: check.total_value,
+                status: check.status,
+                pay_form: check.pay_form,
+                cashier_id: check.cashier_id
+            };
+
+            CheckService.updateById(id, data)
+                .then((result) => {
+                    if (result.status) {
+                        return toast.success(result.message);
+                    };
+                })
+                .catch((error) => {
+                    return toast.error(error.message);
+                });
+        });
+    }, [updateCheck, check]);
 
     const getCheck = useCallback(() => {
         CheckService.getById(id)
@@ -254,15 +259,15 @@ export const CloseCheck = () => {
         <>
             <Navbar title={`Fechar`} url />
             <div className="w-[95%] min-h-[100vh] m-2 p-1 rounded-xl flex items-center justify-center flex-col gap-14">
-                
-
                 <Check
                     check={check}
                     setCheck={setCheck}
+                    updateCheck={updateCheck}
+                    setUpdateCheck={setUpdateCheck}
                     products={products}
                     checkProduct={false}
                     status={false}
-                    serveice_change={setting.service_change_percentage}
+                    serveice_change={setting.serveice_change ? setting.service_change_percentage : false}
                 />
 
                 <label className="flex flex-col text-slate-900 text-[20px] font-semibold">

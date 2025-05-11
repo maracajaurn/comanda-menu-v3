@@ -1,6 +1,6 @@
 import { CheckProduct } from "../../libs/icons";
 
-export const Check = ({ check, setCheck, products = [], checkProduct = false, status = false, serveice_change = false }) => {
+export const Check = ({ check, setCheck, updateCheck, setUpdateCheck, products = [], checkProduct = false, status = false, serveice_change = false }) => {
     return (
         <div className="flex flex-col justify-center items-center gap-1 px-10 py-14 shadow-xl bg-[#D39825]/10">
             <label>
@@ -8,8 +8,11 @@ export const Check = ({ check, setCheck, products = [], checkProduct = false, st
                     type="text"
                     className="max-w-[300px] text-center text-slate-900 font-bold text-[32px] bg-transparent"
                     placeholder="Nome do Cliente"
-                    onChange={(change) => setCheck((prev) => ({ ...prev, name_client: change.target.value }))}
-                    value={check.name_client}
+                    onChange={(change) => {
+                        setUpdateCheck((prev) => ({ ...prev, name_client: change.target.value }));
+                        setCheck((prev) => ({ ...prev, name_client: change.target.value }));
+                    }}
+                    value={updateCheck.name_client || check.name_client}
                 />
             </label>
 
@@ -58,8 +61,11 @@ export const Check = ({ check, setCheck, products = [], checkProduct = false, st
                     type="text"
                     className="mt-5 w-full text-center text-slate-600 font-semibold text-[18px] bg-transparent"
                     placeholder="OBS"
-                    onChange={(change) => setCheck((prev) => ({ ...prev, obs: change.target.value }))}
-                    value={check.obs}
+                    onChange={(change) => {
+                        setUpdateCheck((prev) => ({ ...prev, obs: change.target.value }));
+                        setCheck((prev) => ({ ...prev, obs: change.target.value }));
+                    }}
+                    value={updateCheck.obs || check.obs}
                 />
             </label>
 

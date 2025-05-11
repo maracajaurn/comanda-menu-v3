@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import html2canvas from 'html2canvas';
 
