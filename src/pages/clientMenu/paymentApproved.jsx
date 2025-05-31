@@ -30,9 +30,6 @@ export const PaymentApproved = () => {
 
     useEffect(() => {
         verifyIfClientId();
-
-        localStorage.getItem("selected_product");
-
         setProducts(JSON.parse(localStorage.getItem("selected_product")) || []);
     }, []);
 
@@ -42,7 +39,7 @@ export const PaymentApproved = () => {
         }, 5000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [products]);
 
     const getStatusPayment = useCallback(() => {
         PaymentService.getPaymentStatus(payment_id)
