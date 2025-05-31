@@ -33,7 +33,7 @@ export const useFCM = () => {
             try {
                 const token = await getToken(messaging, { vapidKey });
                 if (token) {
-                    console.log('FCM Token:', token);
+                    //console.log('FCM Token:', token);
                     // Salvar o token no backend aqui
                 };
             } catch (err) {
