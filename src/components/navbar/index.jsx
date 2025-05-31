@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useToggleView } from "../../contexts";
@@ -7,6 +8,12 @@ import { useConnectionMonitor } from "../../hooks/ConnectionMonitor";
 import { Back, ArrowRight } from "../../libs/icons";
 
 export const Navbar = ({ title, url, isLogout }) => {
+
+    useEffect(() => {
+        if (title) {
+            document.title = title;
+        }
+    }, [title]);
 
     const isOnline = useConnectionMonitor();
 
