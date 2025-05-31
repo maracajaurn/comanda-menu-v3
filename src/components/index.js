@@ -11,3 +11,7 @@ export { Filter } from "./filter";
 export { CardCheck } from "./cardCheck";
 export { CardProductPreparation } from "./cardProductPreparation";
 export { Check } from "./check";
+
+export { ManagerUser } from "./managerUser";
+export { Categories } from "./categories";
+export { Settings } from "./settings";
