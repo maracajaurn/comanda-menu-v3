@@ -1,5 +1,4 @@
-import { Navbar } from "../../components";
-import { ManagerUser, Settings, Categories } from "../../components"
+import { ManagerUser, Settings, Categories, Navbar } from "../../components"
 
 export const ManageUser = () => {
     return (
