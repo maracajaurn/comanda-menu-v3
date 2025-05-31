@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { Navbar } from "../../components";
@@ -16,6 +16,7 @@ export const Cart = () => {
     const { setLoading } = useLoader();
 
     const { id } = useParams();
+    const navidate = useNavigate();
 
     const [products, setProducts] = useState([]);
     const [productsSelected, setProductsSelected] = useState([]);
@@ -129,35 +130,17 @@ export const Cart = () => {
         const paymentData = {
             transaction_amount: total_value,
             description: `Tô pagando minha comanda - ${client}`,
+            payment_method_id: 'pix',
             payer: {
                 email: email
             },
-            back_urls: {
-                success: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_approved`,
-                failure: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_failure`,
-                pending: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/payment_pending`
-            },
-            items: productsInCart.map((product) => (
-                {
-                    title: product.product_name,
-                    description: product.obs,
-                    quantity: product.quantity,
-                    unit_price: product.price,
-                    currency_id: "BRL",
-                }
-            )),
-            payment_methods: {
-                default_payment_method_id: 'pix',
-                installments: 1,
-                default_installments: 1,
-            },
-            auto_return: ""
         };
 
         PaymentService.createPayment(paymentData)
             .then((result) => {
                 if (result) {
-                    return window.location.href = result;
+                    navidate(`/${id}/to-pay?payment_id=${result.id}`)
+                    return
                 };
 
                 setLoading(false);
