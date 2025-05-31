@@ -1,19 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { useToggleView } from "../../contexts";
+import { useToggleView, useToggleViewSidebar } from "../../contexts";
 import { LogoutService } from "../../service/logout/LogoutService";
 import { useConnectionMonitor } from "../../hooks/ConnectionMonitor";
 
-import { Back, ArrowRight } from "../../libs/icons";
+import { Back, ArrowRight, BarsOpen } from "../../libs/icons";
 
-export const Navbar = ({ title, url, isLogout }) => {
+export const Navbar = ({ title, url, isLogout, sidebar = false }) => {
 
-    useEffect(() => {
-        if (title) {
-            document.title = title;
-        }
-    }, [title]);
+    const { toggleViewSidebar, setToggleViewSidebar } = useToggleViewSidebar();
 
     const isOnline = useConnectionMonitor();
 
@@ -23,6 +19,12 @@ export const Navbar = ({ title, url, isLogout }) => {
 
     const navigate = useNavigate();
     const location = useLocation();
+
+    useEffect(() => {
+        if (title) {
+            document.title = title;
+        }
+    }, [title]);
 
     const backOldPage = () => {
         setToggleView(false);
@@ -39,6 +41,13 @@ export const Navbar = ({ title, url, isLogout }) => {
 
     return (
         <nav className={`fixed top-0 z-10 w-full h-16 px-5 flex ${url ? "justify-between" : isLogout ? "justify-between" : "justify-center"} items-center bg-[#EB8F00] text-slate-100`}>
+            {sidebar && (
+                <button className={`${toggleViewSidebar ? "w-0" : ""} h-[50px] w-[50px] flex justify-center items-center text-[#1C1D26] hover:border-gray-800 transition-all delay-500 ease-in-out`}
+                    onClick={() => setToggleViewSidebar(true)} >
+                    <BarsOpen size={7} />
+                </button>
+            )}
+
             <div>
                 {!isOnline ? (
                     <h2 className={`transition-all delay-200 uppercase bg-red-600 px-3 py-2 rounded-md font-bold text-white`}>Sem internet</h2>
