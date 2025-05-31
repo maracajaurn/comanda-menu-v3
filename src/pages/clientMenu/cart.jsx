@@ -137,7 +137,8 @@ export const Cart = () => {
             description: `Tô pagando minha comanda - ${client}`,
             payment_method_id: 'pix',
             payer: {
-                email: email
+                email: email,
+                first_name: client
             },
         };
 
