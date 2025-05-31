@@ -24,6 +24,10 @@ export const RegisterClient = () => {
 
     useEffect(() => {
         setLoading(false);
+
+        localStorage.removeItem("func");
+        localStorage.removeItem("token");
+
         const check_id = localStorage.getItem("check_id");
         if (check_id) {
             navigate(`/${check_id}/products`);
