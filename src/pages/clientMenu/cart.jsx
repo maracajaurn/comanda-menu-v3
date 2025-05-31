@@ -6,6 +6,7 @@ import { Navbar } from "../../components";
 import { Delete } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 import { CheckService } from "../../service/check/CheckService";
 import { ProductService } from "../../service/product/ProductService";
@@ -17,6 +18,8 @@ export const Cart = () => {
 
     const { id } = useParams();
     const navidate = useNavigate();
+
+    const { verifyIfClientId } = useVerifyIfClientId(id);
 
     const [products, setProducts] = useState([]);
     const [productsSelected, setProductsSelected] = useState([]);
@@ -77,6 +80,8 @@ export const Cart = () => {
     };
 
     useEffect(() => {
+        verifyIfClientId();
+
         setLoading(true);
         const selectedProducts = localStorage.getItem("selected_product");
         if (selectedProducts) {
@@ -156,7 +161,7 @@ export const Cart = () => {
         <>
             <Navbar title="Meu carrinho" url />
             <div className="flex flex-col items-center gap-10 pb-[100px]">
-                
+
                 <div className="px-10 py-14 shadow-xl bg-[#D39825]/10">
 
                     <h1 className="text-center text-slate-900 font-bold text-[32px]">{client}</h1>

@@ -6,6 +6,8 @@ import { Navbar } from "../../components";
 import { QRCode } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+
 import { PaymentService } from "../../service/payment/PaymentService";
 
 export const ToPay = () => {
@@ -20,6 +22,8 @@ export const ToPay = () => {
     const [searchParams] = useSearchParams();
     const payment_id = searchParams.get("payment_id");
 
+    const { verifyIfClientId } = useVerifyIfClientId(id);
+
     const [pix, setPix] = useState({
         qr_code: "",
         qr_code_base64: "",
@@ -32,6 +36,8 @@ export const ToPay = () => {
     };
 
     useEffect(() => {
+        verifyIfClientId();
+        
         const interval = setInterval(() => {
             getStatusPayment();
         }, 5000);

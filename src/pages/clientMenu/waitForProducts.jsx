@@ -6,6 +6,7 @@ import { Navbar, Check } from "../../components";
 
 import { useLoader } from "../../contexts";
 import { useNotification } from "../../hooks/Notifications";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -16,6 +17,8 @@ export const WaitForProducts = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const notify = useNotification();
+
+    const { verifyIfClientId } = useVerifyIfClientId(id);
 
     const { setLoading } = useLoader();
 
@@ -32,6 +35,7 @@ export const WaitForProducts = () => {
     });
 
     useEffect(() => {
+        verifyIfClientId();
         setLoading(true);
 
         getCheck();

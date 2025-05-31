@@ -1,20 +1,28 @@
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useLoader } from "../../contexts";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 import { Navbar } from "../../components";
 
 import { XError } from "../../libs/icons";
 
 export const PaymentFailure = () => {
-    
+
     const navigate = useNavigate();
     const { id } = useParams();
+
+    const { verifyIfClientId } = useVerifyIfClientId(id);
 
     const { setLoading } = useLoader();
 
     setLoading(false);
-    
+
+    useEffect(() => {
+        verifyIfClientId();
+    }, []);
+
     return (
         <>
             <Navbar title="Falha com pagamento" />

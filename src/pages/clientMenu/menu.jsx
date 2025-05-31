@@ -10,16 +10,17 @@ import { ProductService } from "../../service/product/ProductService";
 
 import { useToggleView, useLoader } from "../../contexts"
 import { useDebounce } from "../../hooks/UseDebounce";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 export const Menu = () => {
 
+    const { id } = useParams();
     const { setToggleView } = useToggleView();
     const { debounce } = useDebounce(500);
     const { setLoading } = useLoader();
+    const { verifyIfClientId } = useVerifyIfClientId(id);
 
     const navigate = useNavigate();
-
-    const { id } = useParams();
 
     // listagem de produtos do db
     const [listProducts, setListProducts] = useState([]);
@@ -37,6 +38,8 @@ export const Menu = () => {
     const isFetching = useRef(false);
 
     useEffect(() => {
+        verifyIfClientId();
+
         setLoading(false);
         const get_func = localStorage.getItem("func");
         const if_check_id = localStorage.getItem("check_id");
@@ -256,9 +259,7 @@ export const Menu = () => {
     return (
         <>
             <Navbar title="Bar Areia Vermelha" />
-
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
-                
 
                 <Filter filter={filter} setFilter={setFilter} />
 

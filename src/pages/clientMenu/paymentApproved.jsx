@@ -7,6 +7,7 @@ import { Navbar } from "../../components";
 import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
+import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -20,12 +21,16 @@ export const PaymentApproved = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
+    const { verifyIfClientId } = useVerifyIfClientId(id);
+
     const [searchParams] = useSearchParams();
 
     const [products, setProducts] = useState([]);
     const payment_id = searchParams.get("payment_id");
 
     useEffect(() => {
+        verifyIfClientId();
+
         localStorage.getItem("selected_product");
 
         setProducts(JSON.parse(localStorage.getItem("selected_product")) || []);
