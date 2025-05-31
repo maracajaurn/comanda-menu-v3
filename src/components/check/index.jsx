@@ -1,6 +1,45 @@
-import { CheckProduct } from "../../libs/icons";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-export const Check = ({ check, setCheck, updateCheck, setUpdateCheck, products = [], checkProduct = false, status = false, serveice_change = false }) => {
+import { CheckService } from "../../service/check/CheckService";
+import { CheckProduct } from "../../libs/icons";
+import { useDebounce } from "../../hooks/UseDebounce";
+
+export const Check = ({ id, check, setCheck, products = [], checkProduct = false, status = false, serveice_change = false }) => {
+
+    const { debounce } = useDebounce(1500);
+
+    const [updateCheck, setUpdateCheck] = useState({
+        name_client: null,
+        obs: null
+    });
+
+    // Atualizar nome ou obs da comanda
+    useEffect(() => {
+        if (updateCheck.name_client === null && updateCheck.obs === null) return;
+
+        debounce(() => {
+            const data = {
+                name_client: updateCheck.name_client || check.name_client,
+                obs: updateCheck.obs || check.obs,
+                total_value: check.total_value,
+                status: check.status,
+                pay_form: check.pay_form,
+                cashier_id: check.cashier_id
+            };
+
+            CheckService.updateById(id, data)
+                .then((result) => {
+                    if (result.status) {
+                        return toast.success(result.message);
+                    };
+                })
+                .catch((error) => {
+                    return toast.error(error.message);
+                });
+        });
+    }, [updateCheck, check]);
+
     return (
         <div className="flex flex-col justify-center items-center gap-1 px-10 py-14 shadow-xl bg-[#D39825]/10">
             <label>
@@ -32,7 +71,11 @@ export const Check = ({ check, setCheck, updateCheck, setUpdateCheck, products =
                                 <span className="text-[#EB8F00]">{product.quantity}x</span>
                             </td>
                             <td><span>{product.product_name}</span></td>
-                            <td><span className="font-bold text-slate-500">R$ {product?.total_price.toFixed(2).replace(".", ",")}</span></td>
+                            <td>
+                                <span className="font-bold text-slate-500">
+                                    R$ {product?.total_price.toFixed(2).replace(".", ",")}
+                                </span>
+                            </td>
                         </tr>
 
                         {product.obs && (

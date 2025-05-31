@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { Navbar, Check } from "../../components";
 
 import { useLoader } from "../../contexts";
-import { useDebounce } from "../../hooks/UseDebounce";
 import { useNotification } from "../../hooks/Notifications";
 
 import socket from "../../service/socket";
@@ -16,7 +15,6 @@ export const WaitForProducts = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const { debounce } = useDebounce(1500);
     const notify = useNotification();
 
     const { setLoading } = useLoader();
@@ -63,30 +61,6 @@ export const WaitForProducts = () => {
 
         return () => { socket.off("order_ready") };
     }, []);
-
-    // Alterar o nome do cliente
-    useEffect(() => {
-        debounce(() => {
-            const data = {
-                name_client: check.name_client,
-                obs: check.obs,
-                total_value: check.total_value,
-                status: check.status,
-                pay_form: check.pay_form,
-                cashier_id: check.cashier_id
-            };
-
-            CheckService.updateById(id, data)
-                .then((result) => {
-                    if (result.status) {
-                        return toast.success(result.message);
-                    };
-                })
-                .catch((error) => {
-                    return toast.error(error.message);
-                });
-        });
-    }, [check]);
 
     const getOrders = useCallback(() => {
         OrderService.get_orders_by_check(id)
@@ -139,14 +113,13 @@ export const WaitForProducts = () => {
         <>
             <Navbar title="Em preparação" url />
             <div className="flex flex-col items-center gap-10 pb-[200px]">
-                
-
                 <Check
+                    id={id}
                     check={check}
                     setCheck={setCheck}
                     products={products}
                     checkProduct
-                    status={check.status}
+                    status={true}
                     serveice_change={false}
                 />
 

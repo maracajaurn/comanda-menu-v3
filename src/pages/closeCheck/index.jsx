@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import { Navbar, Calc, Check } from "../../components";
 
 import { useLoader } from "../../contexts";
-import { useDebounce } from "../../hooks/UseDebounce";
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -18,7 +17,6 @@ export const CloseCheck = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
-    const { debounce } = useDebounce(1500);
 
     const [disabledButton, setDisabledButton] = useState(true);
 
@@ -30,11 +28,6 @@ export const CloseCheck = () => {
         status: false,
         pay_form: "",
         cashier_id: 0
-    });
-
-    const [updateCheck, setUpdateCheck] = useState({
-        name_client: null,
-        obs: null
     });
 
     const [products, setProducts] = useState([]);
@@ -59,32 +52,6 @@ export const CloseCheck = () => {
         getSetting();
         getOrders();
     }, []);
-
-    // Atualizar nome ou obs da comanda
-    useEffect(() => {
-        if (updateCheck.name_client === null && updateCheck.obs === null) return;
-
-        debounce(() => {
-            const data = {
-                name_client: updateCheck.name_client || check.name_client,
-                obs: updateCheck.obs || check.obs,
-                total_value: check.total_value,
-                status: check.status,
-                pay_form: check.pay_form,
-                cashier_id: check.cashier_id
-            };
-
-            CheckService.updateById(id, data)
-                .then((result) => {
-                    if (result.status) {
-                        return toast.success(result.message);
-                    };
-                })
-                .catch((error) => {
-                    return toast.error(error.message);
-                });
-        });
-    }, [updateCheck, check]);
 
     const getCheck = useCallback(() => {
         CheckService.getById(id)
@@ -260,10 +227,9 @@ export const CloseCheck = () => {
             <Navbar title={`Fechar`} url />
             <div className="w-[95%] min-h-[100vh] m-2 p-1 rounded-xl flex items-center justify-center flex-col gap-14">
                 <Check
+                    id={id}
                     check={check}
                     setCheck={setCheck}
-                    updateCheck={updateCheck}
-                    setUpdateCheck={setUpdateCheck}
                     products={products}
                     checkProduct={false}
                     status={false}
