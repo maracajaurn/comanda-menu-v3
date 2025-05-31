@@ -17,7 +17,7 @@ const createPayment = async (paymentData) => {
 
 const getPaymentStatus = async (payment_id) => {
     try {
-        const res = await API.post(`/api/payment/payment_status`, { payment_id });
+        const res = await API.post(`/api/payment/payment_status`, { id: payment_id });
         return res.data;
 
     } catch (error) {
