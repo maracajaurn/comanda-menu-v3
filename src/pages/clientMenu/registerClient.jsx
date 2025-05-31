@@ -25,8 +25,11 @@ export const RegisterClient = () => {
     useEffect(() => {
         setLoading(false);
 
-        localStorage.removeItem("func");
-        localStorage.removeItem("token");
+        const func = localStorage.getItem("func");
+        if (func === "admin") {
+            localStorage.removeItem("func");
+            localStorage.removeItem("token");
+        };
 
         const check_id = localStorage.getItem("check_id");
         if (check_id) {
