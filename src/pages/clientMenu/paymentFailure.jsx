@@ -34,7 +34,7 @@ export const PaymentFailure = () => {
                         <p className="text-center text-[1.3em]">
                             Aconteceu um problema com o seu pagamento. <span className="text-[1.5em]">😣</span>
                         </p>
-                        <p className="text-center">*Caso querira tirar alguma dúvida, comunique com nossos atendentes.</p>
+                        <p className="text-center">*Caso querira tirar alguma dúvida, fale com nossos atendentes.</p>
                     </div>
                 </div>
 
@@ -43,8 +43,8 @@ export const PaymentFailure = () => {
                         className="
                         bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] hover:border-[#1C1D26] text-white
                         p-2 text-[20px] font-bold rounded-xl border-2 border-transparent  transition-all delay-75"
-                        onClick={() => navigate(`/${id}/cart`)}
-                    >Voltar para o carrinho</button>
+                        onClick={() => navigate(`/${id}/products`)}
+                    >Voltar para o menu</button>
                 </div>
             </div>
         </>
