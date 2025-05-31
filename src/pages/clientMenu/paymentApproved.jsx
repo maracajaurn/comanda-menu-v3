@@ -131,7 +131,7 @@ export const PaymentApproved = () => {
                         <p className="text-center text-[1.3em]">
                             Logo logo seu pedido estará pronto! <span className="text-[1.5em]">😉</span>
                         </p>
-                        <p className="text-center">*Caso querira tirar alguma dúvida, comunique-se com nossos atendentes.</p>
+                        <p className="text-center">Caso querira tirar alguma dúvida, comunique-se com nossos atendentes.</p>
                     </div>
                 </div>
 

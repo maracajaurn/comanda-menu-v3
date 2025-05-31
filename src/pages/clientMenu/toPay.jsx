@@ -108,7 +108,7 @@ export const ToPay = () => {
                 </div>
 
                 <div className="text-center">
-                    <p>Aponte seu celular ou copie a chave PIX a cime para realizar o pagamento.</p>
+                    <p>Aponte seu celular ou copie a chave PIX acima para realizar o pagamento.</p>
                 </div>
             </div>
         </>

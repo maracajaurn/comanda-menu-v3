@@ -30,7 +30,7 @@ export const NotFound = () => {
                             Vai pra onde? Essa página nem existe.
                         </p>
                         <span className="text-[3em]">🤨</span>
-                        <p className="text-center">*Caso querira tirar alguma dúvida, comunique com nossos atendentes.</p>
+                        <p className="text-center">Caso queira tirar alguma dúvida, fale com nossos atendentes.</p>
                     </div>
                 </div>
             </div>

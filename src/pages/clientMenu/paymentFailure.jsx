@@ -42,7 +42,7 @@ export const PaymentFailure = () => {
                         <p className="text-center text-[1.3em]">
                             Aconteceu um problema com o seu pagamento. <span className="text-[1.5em]">😣</span>
                         </p>
-                        <p className="text-center">*Caso querira tirar alguma dúvida, fale com nossos atendentes.</p>
+                        <p className="text-center">Caso queira tirar alguma dúvida, fale com nossos atendentes.</p>
                     </div>
                 </div>
 
