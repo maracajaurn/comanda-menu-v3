@@ -308,7 +308,7 @@ export const ManageUser = () => {
 
     return (
         <>
-            <Navbar title={"Usuários"} url />
+            <Navbar title="Configurações" url />
             <div className="flex flex-col gap-10 mb-10">
                 
                 <div className="max-w-[350px] flex justify-center items-center flex-col gap-5 border-b-2 pb-5">
