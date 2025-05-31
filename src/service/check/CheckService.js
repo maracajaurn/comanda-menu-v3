@@ -82,7 +82,6 @@ const createClosed = async (data) => {
 
 const updateById = async (id, data) => {
     try {
-
         const res = await API.put(`/api/check/${id}`, data);
 
         return res.data;
@@ -101,11 +100,7 @@ const closeCheck = async (pay_form, check_id) => {
     try {
         const res = await API.put(`/api/check/close/${check_id}`, { pay_form });
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");

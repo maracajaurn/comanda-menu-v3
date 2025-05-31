@@ -100,8 +100,6 @@ const update = async (id, data) => {
     };
 };
 
-
-
 const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/cashier/${id}`);

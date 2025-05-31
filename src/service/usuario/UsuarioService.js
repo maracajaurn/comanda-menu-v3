@@ -3,9 +3,16 @@ import { API } from "../axiosConfig";
 const getAll = async () => {
     try {
         const res = await API.get("/api/user");
+        
         return res.data;
     } catch (error) {
-        return new Error(error);
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -15,7 +22,13 @@ const getById = async (id) => {
 
         return res.data;
     } catch (error) {
-        return new Error(error);
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -37,12 +50,17 @@ const create = async (data) => {
 
 const updateById = async (id, data) => {
     try {
-
         const res = await API.put(`/api/user/${id}`, data);
 
         return res.data;
     } catch (error) {
-        return new Error(error);
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 
@@ -52,7 +70,13 @@ const deleteById = async (id) => {
 
         return res.data;
     } catch (error) {
-        return new Error(error);
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
     };
 };
 

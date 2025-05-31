@@ -3,7 +3,6 @@ const logout = () => {
     localStorage.removeItem("list_stock");
     localStorage.removeItem("token");
     localStorage.removeItem("total_value");
-    localStorage.removeItem("categories");
     localStorage.removeItem("client");
     localStorage.removeItem("client_id");
     localStorage.removeItem("check_id");

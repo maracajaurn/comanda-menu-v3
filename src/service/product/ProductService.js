@@ -35,6 +35,7 @@ const getByStock= async () => {
 const getByName = async (name_product) => {
     try {
         const res = await API.get(`api/product/get_product/by_name?name_product=${name_product}`);
+        
         return res.data;
     } catch (error) {
         if (error.response) {
@@ -118,9 +119,7 @@ const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/product/${id}`);
 
-        if (res.data) return res.data;
-
-        return new Error("Erro ao deletar api/product!");
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
