@@ -28,29 +28,33 @@ export const PaymentApproved = () => {
     useEffect(() => {
         localStorage.getItem("selected_product");
 
-        setProducts(JSON.parse(localStorage.getItem("selected_product")));
+        setProducts(JSON.parse(localStorage.getItem("selected_product")) || []);
     }, []);
 
     useEffect(() => {
-        getStatusPayment();
-    }, [products]);
+        const interval = setInterval(() => {
+            getStatusPayment();
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const getStatusPayment = useCallback(() => {
         PaymentService.getPaymentStatus(payment_id)
             .then((result) => {
                 if (result.status === "approved") {
-                    if (products) {
+                    if (products.length) {
                         createOrder();
                     };
-
+                    setLoading(false);
                     return;
-                } else if (result.status === "rejected" || result.status === "cancelled") {
+                } else if (result.status === "refunded" || result.status === "cancelled") {
                     toast.error("O pagamento foi recusado ou cancelado.");
                     navigate(`/${id}/payment_failure`);
                     return;
                 } else if (result.status === "pending") {
                     toast.loading("Aguardando a confirmação do pagamento.");
-                    navigate(`/${id}/payment_pending`);
+                    navigate(`/${id}/to-pay?payment_id=${payment_id}`);
                     return;
                 };
             })
@@ -67,11 +71,6 @@ export const PaymentApproved = () => {
             screens: ["online"],
         };
 
-        /* if (objSocket.screens.length === 0 || products.length === 0) {
-            setLoading(false);
-            return
-        }; */
-
         const data = {
             list_order: products,
             check_id: id,
@@ -86,12 +85,10 @@ export const PaymentApproved = () => {
                     localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
                     setPaymentInCheck();
-                    setLoading(false);
                     return toast.success(result.message)
+                } else {
+                    return toast.error(result.message);
                 };
-
-                setLoading(false);
-                return toast.error("Ocorreu um erro ao realizar o pedido.");
             })
             .catch((error) => {
                 setLoading(false);
@@ -117,7 +114,7 @@ export const PaymentApproved = () => {
         <>
             <Navbar title="Comprovante" />
             <div className="w-full flex flex-col px-5 items-center gap-14">
-                
+
                 <div className="px-10 pt-5 pb-14 gap-5 flex flex-col justify-center shadow-xl shadow-slate-400 bg-[#D39825]/10">
                     <div>
                         <div className=" flex justify-center">
