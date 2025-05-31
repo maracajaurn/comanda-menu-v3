@@ -15,3 +15,5 @@ export { Check } from "./check";
 export { ManagerUser } from "./managerUser";
 export { Categories } from "./categories";
 export { Settings } from "./settings";
+
+export { Sidebar } from "./sidebar";
