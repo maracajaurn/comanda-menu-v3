@@ -21,7 +21,7 @@ export const Sidebar = ({ items = [{ label: "Home", link: "/" }] }) => {
                 {items.map((item, index) => (
                     <li key={index}
                         className="w-full p-3 rounded-xl text-center border-[1px] text-gray-500 hover:text-gray-800 cursor-pointer"
-                        onClick={() => navigate(item.link)}
+                        onClick={() => {navigate(item.link); setToggleViewSidebar(false)}}
                     >
                         {item.label}
                     </li>
