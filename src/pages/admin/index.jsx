@@ -12,15 +12,6 @@ import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService";
 
-const listItems = [
-    { label: "Produtos", link: "/produtos" },
-    { label: "Configurações", link: "/usuarios" },
-    { label: "Comandas", link: "/garcom/comandas" },
-    { label: "Online", link: "/created_online" },
-    { label: "Cozinha", link: "/cozinha/producao" },
-    { label: "Bar", link: "/barmen/producao" },
-]
-
 export const Admin = () => {
 
     const { setLoading } = useLoader();
@@ -193,8 +184,6 @@ export const Admin = () => {
         <>
             <Navbar title={"Resumo do dia"} isLogout sidebar />
             <div className="w-full pt-5 flex flex-col items-center">
-                <Sidebar items={listItems} />
-
                 <main className="w-full my-10 pb-10 flex flex-col items-center gap-14" id="screenshotCashier">
                     <div className="flex gap-10 flex-col">
 
