@@ -42,7 +42,7 @@ export const Navbar = ({ title, url, isLogout }) => {
     return (
         <nav className={`fixed top-0 z-10 w-full h-16 px-5 flex ${url ? "justify-between" : isLogout ? "justify-between" : "justify-center"} items-center bg-[#EB8F00] text-slate-100`}>
             {(get_func === "admin") && (
-                <button className={`${toggleViewSidebar ? "w-0" : ""} h-[50px] w-[50px] flex justify-center items-center text-[#1C1D26] hover:border-gray-800 transition-all delay-500 ease-in-out`}
+                <button className={`${toggleViewSidebar ? "w-0" : "w-[50px]"} h-[50px] flex justify-center items-center text-[#1C1D26] hover:border-gray-800 transition-all delay-500 ease-in-out`}
                     onClick={() => setToggleViewSidebar(true)} >
                     <BarsOpen size={7} />
                 </button>
