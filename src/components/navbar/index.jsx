@@ -33,6 +33,7 @@ export const Navbar = ({ title, url, isLogout }) => {
 
     const logout = () => {
         LogoutService.logout();
+        setToggleViewSidebar(false);
         navigate("/login");
     };
 
