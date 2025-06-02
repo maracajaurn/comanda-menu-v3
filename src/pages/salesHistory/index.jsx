@@ -89,7 +89,11 @@ export const SalesHistory = () => {
                             </tbody>
                         </table>
                         <div className="mt-4 font-semibold fixed">
-                            Total do mês: R$ {registros.reduce((acc, item) => acc + (item.total_value || 0), 0)}
+                            Total do mês: {registros.reduce((acc, item) => acc + (item.total_value || 0), 0).toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}
+
                         </div>
                     </div>
                 ))}
