@@ -6,7 +6,7 @@ import { useLoader } from "../../contexts";
 import { Delete, Edit, Plus, Reflesh } from "../../libs/icons";
 import { CategoryService } from "../../service/category/CategoryService";
 
-export const Categories = () => {
+export const Categories = ({ showComponent }) => {
     const { setLoading } = useLoader();
 
     const [categories, setCategories] = useState([]);
@@ -112,9 +112,10 @@ export const Categories = () => {
     };
 
     return (
-        <div className="mb-5 sm:rounded-lg rounded-md w-[350px] overflow-x-auto">
-            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
-            >Categorias</h2>
+        <div className={`w-full ${showComponent === 2 ? "flex" : "hidden"} flex-col mt-5`}>
+            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold">
+                Categorias
+            </h2>
 
             <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

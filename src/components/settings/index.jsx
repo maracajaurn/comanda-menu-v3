@@ -8,7 +8,7 @@ import { Delete, Reflesh } from "../../libs/icons";
 
 import { SettingService } from "../../service/setting/SettingService";
 
-export const Settings = () => {
+export const Settings = ({ showComponent }) => {
     const { toggleView } = useToggleView();
     const { setLoading } = useLoader();
 
@@ -143,9 +143,10 @@ export const Settings = () => {
     };
 
     return (
-        <div className="mt-5 flex flex-col gap-6">
-            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
-            >Configurações</h2>
+        <div className={`w-full ${showComponent === 3 ? "flex" : "hidden"} mt-5 flex flex-col gap-6`}>
+            <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold">
+                Configurações
+            </h2>
 
             <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
                 Nome do Estabelecimento
@@ -225,7 +226,7 @@ export const Settings = () => {
 
             <button
                 className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                                    rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
                 onClick={() => updateSetting()}
             ><Reflesh />Atualizar Pix</button>
         </div>

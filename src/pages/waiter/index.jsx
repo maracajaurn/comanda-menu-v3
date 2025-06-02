@@ -235,10 +235,10 @@ export const Waiter = () => {
         <>
             <Navbar title={`${client}`} url />
 
-            <div className="w-[95%] min-h-[85vh] pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center gap-5">
+            <div className="w-[95%] min-h-[85vh] pb-[190px] px-3 rounded-xl flex flex-col items-center gap-10">
+                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-between gap-5">
                     {listProducts.map((e, index) => (
-                        <div key={index} className="w-full sm:w-[280px] flex justify-between items-center px-3 py-1 bg-slate-100/50 rounded-xl shadow-md">
+                        <div key={index} className="w-full sm:w-[280px] md:w-[350px] xl:w-[550px] flex justify-between items-center px-3 py-1 bg-slate-100/50 rounded-xl shadow-md">
                             <div className="flex flex-col mr-1">
                                 <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x </span> {e.product_name}</h3>
 

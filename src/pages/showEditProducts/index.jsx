@@ -155,7 +155,7 @@ export const ShowEditProducts = () => {
 
                 <div className=" w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
                     {currentItems.map((product) => (
-                        <div key={product.product_id} className="w-full sm:w-[280px] flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 rounded-xl shadow-md">
+                        <div key={product.product_id} className="w-full sm:w-[280px] md:w-[350px] xl:w-[550px] flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 rounded-xl shadow-md">
                             <div className="w-2/3 flex gap-5 items-center">
                                 {product.image && (
                                     <img src={product.image}
