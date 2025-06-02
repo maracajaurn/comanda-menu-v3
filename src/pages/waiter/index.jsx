@@ -236,57 +236,59 @@ export const Waiter = () => {
             <Navbar title={`${client}`} url />
 
             <div className="w-[95%] min-h-[85vh] pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                {listProducts.map((e, index) => (
-                    <div key={index} className="flex justify-between items-center px-3 py-1 w-full bg-slate-100/50 rounded-xl shadow-md">
-                        <div className="flex flex-col mr-1">
-                            <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x - </span> {e.product_name}</h3>
+                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center gap-5">
+                    {listProducts.map((e, index) => (
+                        <div key={index} className="w-full sm:w-[280px] flex justify-between items-center px-3 py-1 bg-slate-100/50 rounded-xl shadow-md">
+                            <div className="flex flex-col mr-1">
+                                <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x </span> {e.product_name}</h3>
 
-                            <h4 className="text-slate-500 text-[15px] font-semibold">R$ {e.total_price.toFixed(2).replace(".", ",")}</h4>
+                                <h4 className="text-slate-500 text-[15px] font-semibold">R$ {e.total_price.toFixed(2).replace(".", ",")}</h4>
 
-                            {e.obs && (
-                                <h3 className="text-slate-500 text-[15px] font-semibold"><span className="text-[#EB8F00]">OBS</span>: {e.obs}</h3>
-                            )}
+                                {e.obs && (
+                                    <h3 className="text-slate-500 text-[15px] font-semibold"><span className="text-[#EB8F00]">OBS</span>: {e.obs}</h3>
+                                )}
 
-                            {e.status === 0 && (
-                                <h3 className="text-[#EB8F00] text-[15px] font-semibold">Pedido Pronto</h3>
-                            )}
+                                {e.status === 0 && (
+                                    <h3 className="text-[#EB8F00] text-[15px] font-semibold">Pedido Pronto</h3>
+                                )}
+                            </div>
+
+                            <div className="flex gap-2 border-l-2 pl-3 text-white">
+
+                                {e.status ? (
+                                    <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
+                                        <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                            onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "-")}
+                                        ><Minus /></button>
+
+                                        <p className="text-[#EB8F00]">
+                                            {(updateOrder.order_id === e.order_id ? updateOrder.data.quantity ?? e.quantity : e.quantity)}
+                                        </p>
+
+                                        <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                            onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "+")}
+                                        ><Plus /></button>
+                                    </div>
+                                ) : (
+
+                                    <div className="flex flex-col-reverse items-center border-2 border-slate-500/30 rounded-md">
+                                        <button className="p-1 border-t-2 border-slate-500/30 text-slate-900/30"
+                                        ><Minus /></button>
+
+                                        <p className="text-[#EB8F00]">{e.quantity}</p>
+
+                                        <button className="p-1 border-b-2 border-slate-500/30 text-slate-900/30"
+                                        ><Plus /></button>
+                                    </div>
+                                )}
+
+                                <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
+                                    onClick={() => deleteItem(e.order_id, e.product_name, e.screen, e.quantity, e.product_id, e.stock)}
+                                ><Delete /></button>
+                            </div>
                         </div>
-
-                        <div className="flex gap-2 border-l-2 pl-3 text-white">
-
-                            {e.status ? (
-                                <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
-                                    <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "-")}
-                                    ><Minus /></button>
-
-                                    <p className="text-[#EB8F00]">
-                                        {(updateOrder.order_id === e.order_id ? updateOrder.data.quantity ?? e.quantity : e.quantity)}
-                                    </p>
-
-                                    <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                        onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "+")}
-                                    ><Plus /></button>
-                                </div>
-                            ) : (
-
-                                <div className="flex flex-col-reverse items-center border-2 border-slate-500/30 rounded-md">
-                                    <button className="p-1 border-t-2 border-slate-500/30 text-slate-900/30"
-                                    ><Minus /></button>
-
-                                    <p className="text-[#EB8F00]">{e.quantity}</p>
-
-                                    <button className="p-1 border-b-2 border-slate-500/30 text-slate-900/30"
-                                    ><Plus /></button>
-                                </div>
-                            )}
-
-                            <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                onClick={() => deleteItem(e.order_id, e.product_name, e.screen, e.quantity, e.product_id, e.stock)}
-                            ><Delete /></button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
                 <button className="mt-[30px] flex gap-1 p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] hover:text-white transition-all delay-75"
                     onClick={() => navigate(`/garcom/comanda/${id}/add-product`)}

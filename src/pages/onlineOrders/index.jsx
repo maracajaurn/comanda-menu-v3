@@ -101,9 +101,9 @@ export const OnlineOrders = () => {
     return (
         <>
             <Navbar title="Pedidos Online" isLogout />
-            
+
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                <CardProductPreparation oreders={oreders} orderReady={orderReady}/>
+                <CardProductPreparation oreders={oreders} orderReady={orderReady} />
             </div>
         </>
     );

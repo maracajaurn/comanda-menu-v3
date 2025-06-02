@@ -11,7 +11,7 @@ export const Sidebar = ({ items = [{ label: "Home", link: "/" }] }) => {
     const { toggleViewSidebar, setToggleViewSidebar } = useToggleViewSidebar();
 
     return (
-        <div className={`${toggleViewSidebar ? "absolute top-0 left-0 w-full h-full bg-neutral-600/90" : "w-0"}`}>
+        <div className={`${toggleViewSidebar ? "absolute top-0 left-0 w-full h-full bg-slate-950/50" : "w-0"} z-10`}>
             <div className={`flex flex-row-reverse justify-between gap-2 h-full ${toggleViewSidebar ? "w-[300px] px-2 pt-5" : "w-[0px]"} fixed z-50 top-0 left-0 bg-white transition-all duration-500 ease-in-out mt-[64px]`}>
                 <button className="h-[50px] w-[50px] flex justify-center items-center text-gray-500 hover:border-gray-800"
                     onClick={() => setToggleViewSidebar(false)} >
