@@ -3,13 +3,13 @@ import { Sidebar } from "../components";
 
 const listItems = [
     { label: "Administração", link: "/admin" },
+    { label: "Histórico de vendas", link: "/sales_history" },
     { label: "Comandas", link: "/garcom/comandas" },
     { label: "Online", link: "/created_online" },
     { label: "Cozinha", link: "/cozinha/producao" },
     { label: "Bar", link: "/barmen/producao" },
     { label: "Produtos", link: "/produtos" },
     { label: "Configurações", link: "/usuarios" },
-    { label: "Histórico de vendas", link: "/sales_history" },
 ];
 
 export const LayoutBase = ({ children }) => {
