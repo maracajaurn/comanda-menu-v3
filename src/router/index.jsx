@@ -28,6 +28,8 @@ import {
 
     NotAuthorized,
     NotFound,
+
+    SalesHistory,
 } from "../pages";
 
 export const AppRoutes = () => {
@@ -41,6 +43,9 @@ export const AppRoutes = () => {
 
             <Route path={`/admin`} element={
                 <Admin />
+            } />
+            <Route path={`/sales_history`} element={
+                <SalesHistory />
             } />
             <Route path={`/usuarios`} element={
                 <ManageUser />

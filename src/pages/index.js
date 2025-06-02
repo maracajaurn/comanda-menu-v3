@@ -21,4 +21,6 @@ export {
     RegisterClient, WaitForProducts
 } from "./clientMenu";
 
-export { NotAuthorized, NotFound } from "./error"
+export { NotAuthorized, NotFound } from "./error";
+
+export { SalesHistory } from "./salesHistory";

@@ -9,7 +9,7 @@ const listItems = [
     { label: "Bar", link: "/barmen/producao" },
     { label: "Produtos", link: "/produtos" },
     { label: "Configurações", link: "/usuarios" },
-    // { label: "Histórico de vendas", link: "/historico" },
+    { label: "Histórico de vendas", link: "/sales_history" },
 ];
 
 export const LayoutBase = ({ children }) => {
