@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { BarsClose } from "../../libs/icons";
@@ -9,6 +9,26 @@ export const Sidebar = ({ items = [{ label: "Home", link: "/" }] }) => {
     const navigate = useNavigate();
 
     const { toggleViewSidebar, setToggleViewSidebar } = useToggleViewSidebar();
+
+    const atualScroll = window.scrollY;
+
+    const scroll = useCallback(() => {
+        window.scrollTo({
+            top: atualScroll,
+            behavior: 'smooth'
+        });
+    }, [atualScroll]);
+
+    useEffect(() => {
+        if (toggleViewSidebar) {
+            window.addEventListener("scroll", scroll);
+            return () => {
+                window.removeEventListener("scroll", scroll);
+            };
+        } else {
+            window.removeEventListener("scroll", scroll);
+        };
+    }, [toggleViewSidebar]);
 
     return (
         <div className={`${toggleViewSidebar ? "absolute top-0 left-0 w-full h-full bg-slate-950/50" : "w-0"} z-10`}>
