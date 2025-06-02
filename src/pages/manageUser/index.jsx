@@ -13,17 +13,17 @@ export const ManageUser = () => {
 
                 <div className="w-full flex justify-between items-center gap-2">
                     <button
-                        className="w-1/3 text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                        className={`${showComponent === 1 && "bg-[#EB8F00] text-white border-[#EB8F00]"} border-2 border-[#1C1D26] transition-all delay-75 w-1/3 text-center p-2 rounded-md font-semibold`}
                         onClick={() => setShowComponent(1)}>
                         Usuários
                     </button>
                     <button
-                        className="w-1/3 text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                        className={`${showComponent === 2 && "bg-[#EB8F00] text-white border-[#EB8F00]"} border-2 border-[#1C1D26] transition-all delay-75 w-1/3 text-center p-2 rounded-md font-semibold`}
                         onClick={() => setShowComponent(2)}>
                         Categorias
                     </button>
                     <button
-                        className="w-1/3 text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold"
+                        className={`${showComponent === 3 && "bg-[#EB8F00] text-white border-[#EB8F00]"} border-2 border-[#1C1D26] transition-all delay-75 w-1/3 text-center p-2 rounded-md font-semibold`}
                         onClick={() => setShowComponent(3)}>
                         Configurações
                     </button>

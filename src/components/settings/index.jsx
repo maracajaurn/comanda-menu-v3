@@ -226,7 +226,7 @@ export const Settings = ({ showComponent }) => {
 
             <button
                 className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                                    rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
                 onClick={() => updateSetting()}
             ><Reflesh />Atualizar Pix</button>
         </div>
