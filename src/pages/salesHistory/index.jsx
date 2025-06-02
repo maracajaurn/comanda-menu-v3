@@ -36,7 +36,7 @@ export const SalesHistory = () => {
     return (
         <>
             <Navbar title="Histórico de Vendas" url />
-            <div className="w-full px-5 flex flex-col items-center gap-24 self-start mt-10">
+            <div className="w-full h-full px-5 flex flex-col items-center gap-24 self-start mt-10 overflow-auto">
                 {Object.entries(group).map(([mes, registros]) => (
                     <div key={mes} className="w-full mx-2 overflow-auto sm:w-[500px] md:w-[800px] lg:w-[1000px]">
                         <h2 className="text-xl font-bold mb-2 fixed">Mês: {mes}</h2>
@@ -89,7 +89,11 @@ export const SalesHistory = () => {
                             </tbody>
                         </table>
                         <div className="mt-4 font-semibold fixed">
-                            Total do mês: R$ {registros.reduce((acc, item) => acc + (item.total_value || 0), 0)}
+                            Total do mês: {registros.reduce((acc, item) => acc + (item.total_value || 0), 0).toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}
+
                         </div>
                     </div>
                 ))}

@@ -196,7 +196,10 @@ export const Admin = () => {
                             <Money />
                             <div className="text-end">
                                 <p className="text-slate-400">Receita Total Gerada</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.total_value || 0).toFixed(2).replace(".", ",")}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.total_value || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}</p>
                             </div>
                         </div>
                     </div>
@@ -233,7 +236,10 @@ export const Admin = () => {
                             <Grafic />
                             <div className="text-end">
                                 <p className="text-slate-400">Pix</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.pix || 0).toFixed(2).replace(".", ",")}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.pix || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}</p>
                             </div>
                         </div>
 
@@ -242,7 +248,10 @@ export const Admin = () => {
                             <MoneyF />
                             <div className="text-end">
                                 <p className="text-slate-400">Dinheiro</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.cash || 0).toFixed(2).replace(".", ",")}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.cash || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}</p>
                             </div>
                         </div>
 
@@ -251,7 +260,10 @@ export const Admin = () => {
                             <Card />
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Crédito</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.credit || 0).toFixed(2).replace(".", ",")}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.credit || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}</p>
                             </div>
                         </div>
 
@@ -260,7 +272,10 @@ export const Admin = () => {
                             <Card />
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Débito</p>
-                                <p className="text-2xl">R$ {parseFloat(cashier.debit || 0).toFixed(2).replace(".", ",")}</p>
+                                <p className="text-2xl">R$ {parseFloat(cashier.debit || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                            })}</p>
                             </div>
                         </div>
                     </div>
