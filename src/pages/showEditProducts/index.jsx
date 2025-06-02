@@ -140,7 +140,7 @@ export const ShowEditProducts = () => {
         <>
             <Navbar title={"Meus Produtos"} url />
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-6">
-                
+
                 <ModalProduct action={action} id={idProduct} />
                 <div className="flex flex-col-reverse justify-center gap-5 px-3 py-5 w-full rounded-xl">
                     <Filter filter={filter} setFilter={setFilter} />
@@ -153,31 +153,33 @@ export const ShowEditProducts = () => {
                     <div className="font-semibold text-xl">Nenhum produto foi encontrado</div>
                 )}
 
-                {currentItems.map((product) => (
-                    <div key={product.product_id} className="flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 w-full rounded-xl shadow-md">
-                        <div className="w-2/3 flex gap-5 items-center">
-                            {product.image && (
-                                <img src={product.image}
-                                    className="w-[70px] h-[70px] object-cover rounded-xl" />
-                            )}
-                            <div className="flex flex-col gap-1">
-                                <h3 className="text-slate-900 font-bold">{product.stock} - {product.product_name}</h3>
-                                <h3 className="text-slate-500 text-[15px] font-semibold">R$ {product.price.toFixed(2).replace(".", ",")}</h3>
-                                <h3 className="text-[#EB8F00] text-[15px]">{product.name_category}</h3>
+                <div className=" w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
+                    {currentItems.map((product) => (
+                        <div key={product.product_id} className="w-full sm:w-[280px] flex justify-between gap-3 bg-slate-100/50 items-center px-3 py-2 rounded-xl shadow-md">
+                            <div className="w-2/3 flex gap-5 items-center">
+                                {product.image && (
+                                    <img src={product.image}
+                                        className="w-[70px] h-[70px] object-cover rounded-xl" />
+                                )}
+                                <div className="flex flex-col gap-1">
+                                    <h3 className="text-slate-900 font-bold">{product.stock} - {product.product_name}</h3>
+                                    <h3 className="text-slate-500 text-[15px] font-semibold">R$ {product.price.toFixed(2).replace(".", ",")}</h3>
+                                    <h3 className="text-[#EB8F00] text-[15px]">{product.name_category}</h3>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-8 border-l-2 pl-3">
+                                <button className=" text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                    onClick={() => haldletoggleViewModal("edit", product.product_id)}
+                                ><Edit /></button>
+
+                                <button className=" text-slate-900 hover:text-red-500 transition-all delay-75"
+                                    onClick={() => deleteById(product.product_id)}
+                                ><Delete /></button>
                             </div>
                         </div>
-
-                        <div className="flex gap-8 border-l-2 pl-3">
-                            <button className=" text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => haldletoggleViewModal("edit", product.product_id)}
-                            ><Edit /></button>
-
-                            <button className=" text-slate-900 hover:text-red-500 transition-all delay-75"
-                                onClick={() => deleteById(product.product_id)}
-                            ><Delete /></button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
                 {totalPages > 1 && (
                     <div className="w-full flex justify-between items-center gap-3 mt-5">

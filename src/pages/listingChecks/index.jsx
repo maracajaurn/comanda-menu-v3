@@ -64,13 +64,15 @@ export const ListingChecks = () => {
             <Navbar title={`Todas as comandas`} isLogout />
             <div className="w-[95%] min-h-[90vh] py-3 rounded-xl flex items-center flex-col gap-5">
                 <NewCheck />
-                
+
 
                 {rows.length > 10 && (
                     <Filter filter={filter} setFilter={setFilter} placeholder="Buscar comanda..." />
                 )}
 
-                <CardCheck listCheck={itensFiltrados} navigate={navigate} />
+                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
+                    <CardCheck listCheck={itensFiltrados} navigate={navigate} />
+                </div>
 
                 <button className="mt-[100px] flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
                     onClick={() => setToggleView(true)}

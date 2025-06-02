@@ -28,11 +28,12 @@ export const ModalProduct = ({ action, id }) => {
     };
 
     const createProduct = () => {
-        setLoading(true);
-
-        if (value.product_name === "" || value.category_id === "" || value.price === 0) {
-            return toast.error("preencha todos os campos");
+        if (value.product_name === "" || value.category_id === "0" || value.price === 0) {
+            toast.error("preencha todos os campos");
+            return
         };
+
+        setLoading(true);
 
         const data = {
             product_name: value.product_name,
@@ -88,9 +89,9 @@ export const ModalProduct = ({ action, id }) => {
     }, []);
 
     const updateById = () => {
-
-        if (value.product_name === "" || value.category_id === "" || value.price === 0) {
-            return toast.error("preencha todos os campos");
+        if (value.product_name === "" || value.category_id === "0" || value.price === 0) {
+            toast.error("preencha todos os campos");
+            return
         };
 
         setLoading(true);
@@ -108,7 +109,8 @@ export const ModalProduct = ({ action, id }) => {
             .then((result) => {
 
                 if (!result.status) {
-                    return toast.error(result.message);
+                    toast.error(result.message);
+                    return
                 };
 
                 setValue(prev => ({
@@ -120,11 +122,13 @@ export const ModalProduct = ({ action, id }) => {
 
                 setToggleView(false);
                 setLoading(false);
-                return toast.success(result.message);
+                toast.success(result.message);
+                return
             })
             .catch((error) => {
                 setLoading(false);
-                return toast.error(error.message);
+                toast.error(error.message);
+                return
             });
     };
 
@@ -135,12 +139,14 @@ export const ModalProduct = ({ action, id }) => {
             // Verifica se o arquivo é uma imagem
             const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
             if (!validTypes.includes(file.type)) {
-                return toast.error("Apenas arquivos de imagem (JPG, PNG, WEBP) são permitidos.");
+                toast.error("Apenas arquivos de imagem (JPG, PNG, WEBP) são permitidos.");
+                return
             };
 
             // Verifica se o tamanho do arquivo é maior que 5 mb
             if (file.size > 5 * 1024 * 1024) {
-                return toast.error("A imagem deve ser menor que 5 MB.");
+                toast.error("A imagem deve ser menor que 5 MB.");
+                return
             };
 
             const img = new Image();
@@ -226,7 +232,7 @@ export const ModalProduct = ({ action, id }) => {
 
     return (
         <div className={`${toggleView ? "flex" : "hidden"} fixed top-0 left-0 w-full h-[100dvh] flex flex-col gap-10 justify-center items-center bg-slate-950/50`}>
-            
+
             <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-2 overflow-auto">
                 <div className="p-5 bg-[#EB8F00] w-full">
                     <h6 className="text-white text-center font-bold uppercase text-[18px]">{action === "new" ? "Cadastrar Produto" : "Atualizar Produto"}</h6>
@@ -282,9 +288,16 @@ export const ModalProduct = ({ action, id }) => {
                         name="category"
                         value={value.category_id}
                         onChange={(category) => handleInput("category_id", category)}>
-                        {categories.map((category) => (
-                            <option key={category.category_id} value={category.category_id} >{category.name_category}</option>
-                        ))}
+                        {categories.length > 0 ? (
+                            <>
+                                <option value={0} >Selecione uma categoria</option>
+                                {categories.map((category) => (
+                                    <option key={category.category_id} value={category.category_id} >{category.name_category}</option>
+                                ))}
+                            </>
+                        ) : (
+                            <option value={0}>Cadastre uma categoria primeiro</option>
+                        )}
                     </select>
                 </label>
 

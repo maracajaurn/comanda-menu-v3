@@ -2,7 +2,7 @@ export const CardProductPreparation = ({ oreders = [], orderReady }) => {
     return (
         <>
             {oreders. length ? oreders.map((item) => (
-                <div key={item.order_id} className={`flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/50 rounded-xl shadow-md`}>
+                <div key={item.order_id} className="flex flex-col justify-center items-center px-3 py-5 w-full bg-slate-100/50 rounded-xl shadow-md">
 
                     <h3 className="font-bold">{item.name_client}</h3>
 

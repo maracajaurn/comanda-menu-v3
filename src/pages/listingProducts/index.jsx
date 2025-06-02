@@ -215,7 +215,7 @@ export const ListingProducts = () => {
         <>
             <Navbar title={`Produtos`} url />
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
-                
+
                 <ListinProductsForCheck products={[]} />
                 <div className="fixed bottom-0 flex items-center justify-center w-full bg-[#EB8F00] p-1 text-center text-slate-100">
                     <div className="flex flex-col w-2/3">
@@ -237,51 +237,53 @@ export const ListingProducts = () => {
 
                 <Filter filter={filtro} setFilter={setFiltro} />
 
-                {currentItems.map((item, index) => (
-                    <div key={index} className={`flex justify-between items-center px-3 py-1 w-full rounded-xl bg-slate-100/50 shadow-md`}>
+                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
+                    {currentItems.map((item, index) => (
+                        <div key={index} className="w-full sm:w-[300px] flex justify-between items-center px-3 py-1 rounded-xl bg-slate-100/50 shadow-md">
 
-                        <div className="w-2/3 flex flex-col items-start">
-                            <h3 className="text-slate-900 font-bold">{item.stock} - {item.product_name}</h3>
-                            <h3 className="text-slate-500 text-[15px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
-                            <h3 className="text-[#EB8F00] text-[15px] font-semibold">{item.name_category}</h3>
-                            {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
-                                <label >
-                                    <input
-                                        type="text" placeholder="Observação"
-                                        className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
-                                        onChange={(e) => obsProduct(item.product_id, e.target.value)}
-                                    />
-                                </label>
-                            )}
-                        </div>
-
-                        <div className="h-full ml-5 flex items-center justify-center gap-3 border-l-2 pl-3">
-                            <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
-                                <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, item.stock, "-")}
-                                ><Minus /></button>
-
-                                <p className="text-[#EB8F00] font-somibold">
-                                    {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
-                                </p>
-
-                                <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                    onClick={() => alterQnt(item.product_id, item.stock, "+")}
-                                ><Plus /></button>
+                            <div className="w-2/3 flex flex-col items-start">
+                                <h3 className="text-slate-900 font-bold">{item.stock} - {item.product_name}</h3>
+                                <h3 className="text-slate-500 text-[15px] font-semibold">R$ {item.price.toFixed(2).replace(".", ",")}</h3>
+                                <h3 className="text-[#EB8F00] text-[15px] font-semibold">{item.name_category}</h3>
+                                {selectedProduct.findIndex(product => product[1] === item.product_id) !== -1 && (
+                                    <label >
+                                        <input
+                                            type="text" placeholder="Observação"
+                                            className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
+                                            onChange={(e) => obsProduct(item.product_id, e.target.value)}
+                                        />
+                                    </label>
+                                )}
                             </div>
 
-                            <div className="flex gap-4 flex-col">
-                                <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-blue-500 hover:border-blue-500 transition-all delay-75"
-                                    onClick={() => addProduct(item.product_id, item.screen)}
-                                ><Plus /></button>
+                            <div className="h-full ml-5 flex items-center justify-center gap-3 border-l-2 pl-3">
+                                <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
+                                    <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                        onClick={() => alterQnt(item.product_id, item.stock, "-")}
+                                    ><Minus /></button>
 
-                                <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
-                                    onClick={() => removeProduct(item.product_id, item.screen)}
-                                ><Delete /></button>
+                                    <p className="text-[#EB8F00] font-somibold">
+                                        {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
+                                    </p>
+
+                                    <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                        onClick={() => alterQnt(item.product_id, item.stock, "+")}
+                                    ><Plus /></button>
+                                </div>
+
+                                <div className="flex gap-4 flex-col">
+                                    <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-blue-500 hover:border-blue-500 transition-all delay-75"
+                                        onClick={() => addProduct(item.product_id, item.screen)}
+                                    ><Plus /></button>
+
+                                    <button className="text-[#1C1D26] p-2 rounded-md border-2 hover:text-red-600 hover:border-red-600 transition-all delay-75"
+                                        onClick={() => removeProduct(item.product_id, item.screen)}
+                                    ><Delete /></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
                 {totalPages > 1 && (
                     <div className="w-full flex justify-between items-center gap-3 mt-5">

@@ -9,7 +9,7 @@ export const CardCheck = ({ listCheck = [], navigate }) => {
     return (
         <>
             {listCheck.length > 0 ? listCheck.map((item) => (
-                <div className="flex justify-between items-center px-5 py-3 w-full rounded-xl bg-slate-100/50 shadow-md"
+                <div className="w-full sm:w-[280px] flex justify-between items-center gap-10 px-5 py-3 rounded-xl bg-slate-100/50 shadow-md"
                     key={item.check_id}>
 
                     <div className="flex flex-col">
