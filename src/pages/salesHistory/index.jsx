@@ -36,11 +36,11 @@ export const SalesHistory = () => {
     return (
         <>
             <Navbar title="Histórico de Vendas" url />
-            <div className="w-full h-full px-5 flex flex-col items-center gap-24 self-start mt-10 overflow-auto">
+            <div className="w-full h-full mb-10 px-5 flex flex-col items-center gap-24 self-start mt-10">
                 {Object.entries(group).map(([mes, registros]) => (
-                    <div key={mes} className="w-full mx-2 overflow-auto sm:w-[500px] md:w-[800px] lg:w-[1000px]">
-                        <h2 className="text-xl font-bold mb-2 fixed">Mês: {mes}</h2>
-                        <table className="w-full mt-10 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <div key={mes} className="w-full mx-2 overflow-y-auto sm:w-[500px] md:w-[800px] lg:w-[1000px]">
+                        <h2 className="text-xl font-bold">Mês: {mes}</h2>
+                        <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" className="px-2 py-2 text-center">
@@ -88,12 +88,11 @@ export const SalesHistory = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <div className="mt-4 font-semibold fixed">
+                        <div className="mt-4 font-semibold">
                             Total do mês: {registros.reduce((acc, item) => acc + (item.total_value || 0), 0).toLocaleString('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
                             })}
-
                         </div>
                     </div>
                 ))}
