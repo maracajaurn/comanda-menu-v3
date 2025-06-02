@@ -17,7 +17,7 @@ export const SalesHistory = () => {
             .then((result) => {
                 const agrupado = result.reduce((acc, item) => {
                     const date = new Date(item.updated_at);
-                    const chave = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    const chave = `${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
 
                     if (!acc[chave]) acc[chave] = [];
                     acc[chave].push(item);
@@ -74,7 +74,7 @@ export const SalesHistory = () => {
                             </thead>
                             <tbody className="">
                                 {registros.map((item, index) => (
-                                    <tr key={item.cashier_id} className="odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                    <tr key={item.cashier_id} className="odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 text-center">
                                         <td className="px-2 py-2 text-nowrap">{index + 1}</td>
                                         <td className="px-2 py-2 text-nowrap">{item.lenght_cheks || 0}</td>
                                         <td className="px-2 py-2 text-nowrap">{item.lenght_products || 0}</td>
@@ -83,7 +83,7 @@ export const SalesHistory = () => {
                                         <td className="px-2 py-2 text-nowrap">R$ {item.debit || "0,00"}</td>
                                         <td className="px-2 py-2 text-nowrap">R$ {item.credit || "0,00"}</td>
                                         <td className="px-2 py-2 text-nowrap">R$ {item.cash || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">{new Date(item.updated_at).toLocaleDateString()}</td>
+                                        <td className="px-2 py-2 text-nowrap">{new Date(item.updated_at).toLocaleDateString('pt-BR')}</td>
                                     </tr>
                                 ))}
                             </tbody>
