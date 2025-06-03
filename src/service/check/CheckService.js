@@ -112,6 +112,22 @@ const closeCheck = async (pay_form, check_id) => {
     };
 };
 
+const insetNotifyId = async (check_id, notify_id) => {
+    try {
+        const res = await API.put(`/api/check/insert_notify_id/${check_id}`, { notify_id });
+
+        return res.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        }
+    };
+};
+
 const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/check/${id}`);
@@ -154,6 +170,7 @@ export const CheckService = {
 
     updateById,
     closeCheck,
+    insetNotifyId,
 
     deleteAll,
     deleteById,

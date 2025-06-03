@@ -11,16 +11,18 @@ import { ProductService } from "../../service/product/ProductService";
 import { useToggleView, useLoader } from "../../contexts"
 import { useDebounce } from "../../hooks/UseDebounce";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+import { useFCM } from "../../hooks/UseFCM";
 
 export const Menu = () => {
-
-    const { id } = useParams();
+    const { setLoading } = useLoader();
+    const navigate = useNavigate();
     const { setToggleView } = useToggleView();
     const { debounce } = useDebounce(500);
-    const { setLoading } = useLoader();
-    const { verifyIfClientId } = useVerifyIfClientId(id);
 
-    const navigate = useNavigate();
+    const { id } = useParams();
+    const { verifyIfClientId } = useVerifyIfClientId(id);
+    useFCM(id);
+
 
     // listagem de produtos do db
     const [listProducts, setListProducts] = useState([]);

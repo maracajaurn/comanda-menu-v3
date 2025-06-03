@@ -7,15 +7,13 @@ import { QRCode } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { PaymentService } from "../../service/payment/PaymentService";
 
 export const ToPay = () => {
-
     const { setLoading } = useLoader();
-
     const navigate = useNavigate();
-
     const inputRef = useRef();
 
     const { id } = useParams();
@@ -23,6 +21,7 @@ export const ToPay = () => {
     const payment_id = searchParams.get("payment_id");
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
+    useFCM(id);
 
     const [pix, setPix] = useState({
         qr_code: "",

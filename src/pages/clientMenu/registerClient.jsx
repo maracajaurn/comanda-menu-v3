@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
-import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 
 import { Navbar } from "../../components";
 

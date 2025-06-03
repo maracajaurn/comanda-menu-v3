@@ -11,6 +11,7 @@ import { Navbar, CardProductPreparation } from "../../components";
 
 import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
+import { NotificationService } from "../../service/notification/NotificationService";
 
 export const OnlineOrders = () => {
 
@@ -60,15 +61,7 @@ export const OnlineOrders = () => {
     }, "online");
 
     // sinalizar pedido pronto
-    const orderReady = (
-        order_id,
-        name_client,
-        name_product,
-
-        check_id,
-        quantity,
-        obs,
-    ) => {
+    const orderReady = (order_id, name_client, name_product, check_id, quantity, obs, token) => {
 
         const order = {
             check_id,
@@ -83,9 +76,13 @@ export const OnlineOrders = () => {
             .then((result) => {
                 if (result.status) {
                     setLoading(false);
-                    toast.success(result.message);
                     socket.emit("order_ready", { client: name_client, product: name_product, check_id: check_id });
                     getOrders();
+
+                    if (token) {
+                        notifi_client(token, check_id, name_product);
+                    };
+                    
                     return
                 };
 
@@ -95,6 +92,23 @@ export const OnlineOrders = () => {
             .catch((error) => {
                 setLoading(false);
                 return toast.error(error);
+            });
+    };
+
+    const notifi_client = (token, check_id, product_name) => {
+        const payload = {
+            token,
+            title: "Pedido pronto",
+            body: `Aê! Tem pedido pronto aí, ehm..\n\n${product_name} pronto, corre! 😉`,
+            link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
+        };
+
+        NotificationService.notifyUser(payload)
+            .then((result) => {
+                toast.success(result.message);
+            })
+            .catch((error) => {
+                toast.error(error.message);
             });
     };
 

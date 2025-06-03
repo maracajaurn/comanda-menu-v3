@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useLoader } from "../../contexts";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { Navbar } from "../../components";
 
@@ -12,6 +13,7 @@ export const PaymentFailure = () => {
 
     const navigate = useNavigate();
     const { id } = useParams();
+    useFCM(id);
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
 

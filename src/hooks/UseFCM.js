@@ -3,6 +3,8 @@ import { onMessage, } from "firebase/messaging";
 import { fetchToken, messaging } from "../firebase";
 import toast from "react-hot-toast";
 
+import { CheckService } from "../service/check/CheckService";
+
 async function getNotificationPermissionAndToken() {
     if (!("Notification" in window)) {
         toast.info("Esse navegador não suporta notificações!");
@@ -24,7 +26,7 @@ async function getNotificationPermissionAndToken() {
     return null;
 };
 
-export const useFCM = () => {
+export const useFCM = ({ check_id }) => {
     const [token, setToken] = useState(null);
     const retryLoadToken = useRef(0);
 
@@ -32,13 +34,13 @@ export const useFCM = () => {
         const newToken = await getNotificationPermissionAndToken();
 
         if (Notification.permission === "denied") {
-            toast.error("Altere a permissão de notificação manualmente nas configurações do navegador.");
+            toast.error("Ative as de notificações manualmente nas configurações do navegador");
             return;
         };
 
         if (!newToken) {
-            if (retryLoadToken.current >= 3) {
-                toast.error("Não foi possível carregar o token de notificação. Tente novamente mais tarde.");
+            if (retryLoadToken.current >= 5) {
+                toast.error("Não foi possível carregar o token de notificação");
                 return;
             };
 
@@ -48,6 +50,13 @@ export const useFCM = () => {
             setTimeout(() => loadToken(), 1500);
             return;
         };
+
+        // Salvar token no servidor
+        CheckService.insetNotifyId(check_id, newToken)
+            .then(() => { })
+            .catch((error) => {
+                toast.error(error.message);
+            });
 
         setToken(newToken);
     };
@@ -64,8 +73,6 @@ export const useFCM = () => {
         const setupListener = async () => {
             if (!token) return;
 
-            console.log(token);
-
             const msg = await messaging();
 
             if (!msg) return;
@@ -81,6 +88,13 @@ export const useFCM = () => {
                         max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
                         <div className="flex-1 w-0 p-4">
                             <div className="flex items-start">
+                                <div className="flex-shrink-0 pt-0.5">
+                                    <img
+                                        className="h-10 w-10 rounded-full"
+                                        src="/favicon.ico"
+                                        alt="Logo do site"
+                                    />
+                                </div>
                                 <div className="ml-3 flex-1">
                                     <p className="text-sm font-medium text-gray-900">
                                         {payload.notification?.title}
