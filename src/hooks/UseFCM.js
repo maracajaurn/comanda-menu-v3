@@ -74,24 +74,38 @@ export const useFCM = () => {
                 console.log("Notificação recebida:", payload);
                 if (Notification.permission !== "granted") return;
 
-                const link = payload.fcmOptions?.link || payload.data?.link;
+                const link = payload.fcmOptions?.link
 
-                toast(
-                    `${payload.notification?.title}: ${payload.notification?.body}`,
-                    link ? {
-                        action: {
-                            label: "Abrir",
-                            onClick: () => window.location.href = link,
-                        },
-                    } : undefined,
-                );
+                toast.custom((t) => (
+                    <div className={`${t.visible ? 'animate-enter' : 'animate-leave'}
+                        max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+                        <div className="flex-1 w-0 p-4">
+                            <div className="flex items-start">
+                                <div className="ml-3 flex-1">
+                                    <p className="text-sm font-medium text-gray-900">
+                                        {payload.notification?.title}
+                                    </p>
+                                    <p className="mt-1 text-sm text-gray-500">
+                                        {payload.notification?.body}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex border-l border-gray-200">
+                            <button
+                                onClick={() => {
+                                    toast.dismiss(t.id);
+                                    window.location.href = link;
+                                }}
+                                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Abrir
+                            </button>
+                        </div>
+                    </div>
+                ));
 
-                const notify = new Notification(
-                    payload.notification?.title || "Nova mensagem",
-                    {
-                        body: payload.notification?.body || "Uma nova mensagem chegou!",
-                        data: { url: link },
-                    }
+                const notify = new Notification(payload.notification?.title,
+                    { body: payload.notification?.body, data: { url: link } }
                 );
 
                 notify.onclick = (event) => {
