@@ -33,6 +33,8 @@ export const useFCM = ({ check_id }) => {
     const loadToken = async () => {
         const newToken = await getNotificationPermissionAndToken();
 
+        console.log(newToken);
+
         if (Notification.permission === "denied") {
             toast.error("Ative as de notificações manualmente nas configurações do navegador");
             return;
