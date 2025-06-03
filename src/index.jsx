@@ -16,10 +16,10 @@ if ("serviceWorker" in navigator) {
     .register('/firebase-messaging-sw.js')
     .then((registration) => {
       if (process.env.REACT_APP_NODE_ENV === "development") {
-        // console.log("Service Worker registrado com sucesso:", registration.scope);
+        console.log("Service Worker registrado com sucesso:", registration.scope);
       };
     })
-    .catch((err) => {
+    .catch((error) => {
       console.error("Erro ao registrar o Service Worker:", err);
     });
 };

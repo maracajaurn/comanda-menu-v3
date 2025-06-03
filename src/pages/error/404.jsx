@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useLoader } from "../../contexts";
 
 import { Navbar } from "../../components";
@@ -8,7 +10,9 @@ export const NotFound = () => {
 
     const { setLoading } = useLoader();
 
-    setLoading(false);
+    useEffect(() => {
+        setLoading(false);
+    }, []);
 
     return (
         <>
