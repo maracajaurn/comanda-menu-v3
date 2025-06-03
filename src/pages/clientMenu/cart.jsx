@@ -7,19 +7,20 @@ import { Delete } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { CheckService } from "../../service/check/CheckService";
 import { ProductService } from "../../service/product/ProductService";
 import { PaymentService } from "../../service/payment/PaymentService";
 
 export const Cart = () => {
-
     const { setLoading } = useLoader();
-
-    const { id } = useParams();
     const navidate = useNavigate();
 
+    const { id } = useParams();
+
     const { verifyIfClientId } = useVerifyIfClientId(id);
+    useFCM(id);
 
     const [products, setProducts] = useState([]);
     const [productsSelected, setProductsSelected] = useState([]);

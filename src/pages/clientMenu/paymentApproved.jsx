@@ -8,6 +8,8 @@ import { CheckProduct } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
+import { useFCM } from "../../hooks/UseFCM";
+
 
 import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
@@ -22,6 +24,7 @@ export const PaymentApproved = () => {
     const { id } = useParams();
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
+    useFCM(id);
 
     const [searchParams] = useSearchParams();
 
