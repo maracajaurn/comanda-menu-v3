@@ -99,7 +99,7 @@ export const OnlineOrders = () => {
         const payload = {
             token,
             title: "Pedido pronto",
-            body: `Aê, ${name_client}! Tem pedido pronto aí, ehm..<br/>${product_name} pronto, corre! 😉`,
+            body: `Aê, ${name_client}! Tem pedido pronto aí, ehm... \n${product_name} pronto, corre! 😉`,
             link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
         };
 
