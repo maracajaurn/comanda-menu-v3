@@ -23,7 +23,6 @@ export const Menu = () => {
     const { verifyIfClientId } = useVerifyIfClientId(id);
     useFCM(id);
 
-
     // listagem de produtos do db
     const [listProducts, setListProducts] = useState([]);
 

@@ -26,7 +26,7 @@ async function getNotificationPermissionAndToken() {
     return null;
 };
 
-export const useFCM = (check_id) => {
+export const useFCM = (check_id = null) => {
     const [token, setToken] = useState(null);
     const retryLoadToken = useRef(0);
 
@@ -51,12 +51,14 @@ export const useFCM = (check_id) => {
             return;
         };
 
-        // Salvar token no servidor
-        CheckService.insetNotifyId(check_id, newToken)
+        if ((newToken || token) && check_id) {
+            // Salvar token no servidor
+            CheckService.insetNotifyId(check_id, newToken)
             .then(() => { })
             .catch((error) => {
                 toast.error(error.message);
             });
+        };
 
         setToken(newToken);
     };
