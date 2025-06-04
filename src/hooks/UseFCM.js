@@ -26,14 +26,12 @@ async function getNotificationPermissionAndToken() {
     return null;
 };
 
-export const useFCM = ({ check_id }) => {
+export const useFCM = (check_id) => {
     const [token, setToken] = useState(null);
     const retryLoadToken = useRef(0);
 
     const loadToken = async () => {
         const newToken = await getNotificationPermissionAndToken();
-
-        console.log(newToken);
 
         if (Notification.permission === "denied") {
             toast.error("Ative as de notificações manualmente nas configurações do navegador");
@@ -41,7 +39,7 @@ export const useFCM = ({ check_id }) => {
         };
 
         if (!newToken) {
-            if (retryLoadToken.current >= 5) {
+            if (retryLoadToken.current >= 3) {
                 toast.error("Não foi possível carregar o token de notificação");
                 return;
             };
@@ -49,7 +47,7 @@ export const useFCM = ({ check_id }) => {
             retryLoadToken.current += 1;
             toast.error("Erro ao carregar token. Tentando novamente...");
 
-            setTimeout(() => loadToken(), 1500);
+            setTimeout(() => loadToken(), 2000);
             return;
         };
 
