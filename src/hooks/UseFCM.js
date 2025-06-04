@@ -118,7 +118,7 @@ export const useFCM = (check_id = null) => {
                             </button>
                         </div>
                     </div>
-                ));
+                ), { duration: 5000 });
 
                 const notify = new Notification(payload.notification?.title,
                     { body: payload.notification?.body, data: { url: link } }
