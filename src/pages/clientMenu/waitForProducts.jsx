@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Navbar, Check } from "../../components";
 
 import { useLoader } from "../../contexts";
-import { useNotification } from "../../hooks/Notifications";
+
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 import { useFCM } from "../../hooks/UseFCM";
 
@@ -17,7 +17,7 @@ export const WaitForProducts = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const notify = useNotification();
+    
     useFCM(id);
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
@@ -43,30 +43,6 @@ export const WaitForProducts = () => {
         getCheck();
         getOrders();
     }, [id]);
-
-    // order_ready
-    useEffect(() => {
-        socket.on("order_ready", (data) => {
-            if (data.check_id !== parseInt(id)) return;
-            notify(data.check_id, data.client);
-            toast((t) => (
-                <div className="flex gap-3">
-                    <div className="flex flex-col justify-center items-center">
-                        <h6 className="text-center">Pedido <span className="font-semibold">{data.product}</span> pronto na comanda</h6>
-                        <span className="font-semibold">{data.client}</span>
-                    </div>
-                    <button className="bg-[#EB8F00] text-white rounded-md p-2"
-                        onClick={() => toast.dismiss(t.id)}
-                    >OK</button>
-                </div>
-            ), { duration: 1000000 });
-            getOrders();
-        });
-
-        toast.dismiss();
-
-        return () => { socket.off("order_ready") };
-    }, []);
 
     const getOrders = useCallback(() => {
         OrderService.get_orders_by_check(id)
