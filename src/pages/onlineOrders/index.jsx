@@ -80,7 +80,7 @@ export const OnlineOrders = () => {
                     getOrders();
 
                     if (token) {
-                        notifi_client(token, check_id, name_product);
+                        notifi_client(token, check_id, name_product, name_client);
                     };
                     
                     return
@@ -95,11 +95,11 @@ export const OnlineOrders = () => {
             });
     };
 
-    const notifi_client = (token, check_id, product_name) => {
+    const notifi_client = (token, check_id, product_name, name_client) => {
         const payload = {
             token,
             title: "Pedido pronto",
-            body: `Aê! Tem pedido pronto aí, ehm..\n\n${product_name} pronto, corre! 😉`,
+            body: `Aê, ${name_client}! Tem pedido pronto aí, ehm..<br/>${product_name} pronto, corre! 😉`,
             link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
         };
 
