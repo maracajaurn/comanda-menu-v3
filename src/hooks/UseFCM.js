@@ -51,10 +51,15 @@ export const useFCM = (check_id = null) => {
             return;
         };
 
+        console.log("new token:", newToken);
+        console.log("check_id:", check_id);
+
         if ((newToken || token) && check_id) {
             // Salvar token no servidor
             CheckService.insetNotifyId(check_id, newToken)
-            .then(() => { })
+            .then((result) => {
+                console.log(result);
+            })
             .catch((error) => {
                 toast.error(error.message);
             });
