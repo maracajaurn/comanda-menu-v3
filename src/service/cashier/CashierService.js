@@ -4,11 +4,7 @@ const get = async () => {
     try {
         const res = await API.get("/api/cashier");
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -16,7 +12,7 @@ const get = async () => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -24,11 +20,7 @@ const getById = async (id) => {
     try {
         const res = await API.get(`/api/cashier/${id}`);
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -36,7 +28,7 @@ const getById = async (id) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -44,11 +36,7 @@ const getByStatus = async (status) => {
     try {
         const res = await API.get(`/api/cashier/status/${status}`);
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -56,7 +44,7 @@ const getByStatus = async (status) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -64,11 +52,7 @@ const close = async (cashier_id) => {
     try {
         const res = await API.put(`/api/cashier/close/${cashier_id}`);
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -76,7 +60,7 @@ const close = async (cashier_id) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -84,11 +68,7 @@ const update = async (id, data) => {
     try {
         const res = await API.put(`/api/cashier/${id}`, data);
 
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -96,19 +76,15 @@ const update = async (id, data) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
 const deleteById = async (id) => {
     try {
         const res = await API.delete(`/api/cashier/${id}`);
-
-        if (res.data) {
-            return res.data;
-        };
-
-        return new Error(res.message);
+      
+        return res.data;
     } catch (error) {
         if (error.response) {
             throw new Error(error.response.data.message || "Erro na resposta da API");
@@ -116,7 +92,7 @@ const deleteById = async (id) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
