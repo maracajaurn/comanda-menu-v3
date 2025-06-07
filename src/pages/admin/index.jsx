@@ -4,10 +4,10 @@ import toast from "react-hot-toast";
 
 import html2canvas from 'html2canvas';
 
-import { Navbar, Sidebar } from "../../components";
+import { Navbar } from "../../components";
 import { useLoader } from "../../contexts";
 import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
-import { Grafic, Money, MoneyF, Swath, Print, Cam, Card } from "../../libs/icons";
+import { Grafic, Money, MoneyF, Swath, Cam, Card } from "../../libs/icons";
 
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService";
@@ -113,73 +113,6 @@ export const Admin = () => {
         getCashierOpen();
     };
 
-    const printCashier = () => {
-        const janelaDeImpressao = window.open('', '_blank');
-        janelaDeImpressao.document.write(`
-            <html>
-                <head>
-                    <title>Imprimir</title>
-                    <style>
-                        body {
-                            font-family: monospace;
-                            font-size: 12px;
-                            padding: 0;
-                            margin: 0;
-                            width: 80mm;
-                        }
-                        .container {
-                            padding: 10px;
-                        }
-                        .center {
-                            text-align: center;
-                        }
-                        .bold {
-                            font-weight: bold;
-                        }
-                        .section {
-                            margin: 10px 0;
-                        }
-                        hr {
-                            border: none;
-                            border-top: 1px dashed #000;
-                            margin: 8px 0;
-                        }
-                        p {
-                            margin: 4px 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="center section">
-                            <p class="bold">FECHAMENTO DE CAIXA</p>
-                            <hr />
-                        </div>
-                        <div class="section">
-                            <p>Receita Total Gerada: <span class="bold">R$ ${Number(cashier.total_value).toFixed(2).replace(".", ",")}</span></p>
-                            <p>Total de Comandas: <span class="bold">${cashier.lenght_cheks}</span></p>
-                            <p>Total de Produtos Vendidos: <span class="bold">${cashier.lenght_products}</span></p>
-                        </div>
-                        <hr />
-                        <div class="section">
-                            <p class="bold">Vendas por Categoria</p>
-                            <p>Pix: <span class="bold">R$ ${Number(cashier.pix).toFixed(2).replace(".", ",") || "0,00"}</span></p>
-                            <p>Dinheiro: <span class="bold">R$ ${Number(cashier.cash).toFixed(2).replace(".", ",") || "0,00"}</span></p>
-                            <p>Cartão Crédito: <span class="bold">R$ ${Number(cashier.credit).toFixed(2).replace(".", ",") || "0,00"}</span></p>
-                            <p>Cartão Débito: <span class="bold">R$ ${Number(cashier.debit).toFixed(2).replace(".", ",") || "0,00"}</span></p>
-                        </div>
-                        <hr />
-                        <div class="center section">
-                            <p>Obrigado!</p>
-                        </div>
-                    </div>
-                </body>
-            </html>
-        `);
-        janelaDeImpressao.document.close();
-        janelaDeImpressao.print();
-    };
-
     return (
         <>
             <Navbar title={"Resumo do dia"} isLogout sidebar />
@@ -197,9 +130,9 @@ export const Admin = () => {
                             <div className="text-end">
                                 <p className="text-slate-400">Receita Total Gerada</p>
                                 <p className="text-2xl">R$ {parseFloat(cashier.total_value || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}</p>
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
                             </div>
                         </div>
                     </div>
@@ -237,9 +170,9 @@ export const Admin = () => {
                             <div className="text-end">
                                 <p className="text-slate-400">Pix</p>
                                 <p className="text-2xl">R$ {parseFloat(cashier.pix || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}</p>
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
                             </div>
                         </div>
 
@@ -249,9 +182,9 @@ export const Admin = () => {
                             <div className="text-end">
                                 <p className="text-slate-400">Dinheiro</p>
                                 <p className="text-2xl">R$ {parseFloat(cashier.cash || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}</p>
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
                             </div>
                         </div>
 
@@ -261,9 +194,9 @@ export const Admin = () => {
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Crédito</p>
                                 <p className="text-2xl">R$ {parseFloat(cashier.credit || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}</p>
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
                             </div>
                         </div>
 
@@ -273,9 +206,9 @@ export const Admin = () => {
                             <div className="text-end">
                                 <p className="text-slate-400">Cartão Débito</p>
                                 <p className="text-2xl">R$ {parseFloat(cashier.debit || 0).toFixed(2).replace(".", ",").toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}</p>
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                })}</p>
                             </div>
                         </div>
                     </div>
@@ -284,18 +217,19 @@ export const Admin = () => {
                 <footer className="w-full flex flex-col gap-3 justify-between items-center py-3 bg-[#EB8F00] text-slate-100">
                     <h5 className="text-[28px] font-semibold">Finalizar o dia</h5>
 
-                    <div className="flex gap-5 justify-center items-center">
-                        <button className="w-1/2 flex items-center gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
-                            onClick={() => printCashier()}
-                        ><Print /> Imprimir</button>
-                        <button className="w-1/2 flex items-center gap-3 p-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
-                            onClick={() => screenshotCashier()}
-                        ><Cam /> Print</button>
-                    </div>
+                    <div className="flex flex-row-reverse gap-3">
+                        <button className="w-12 flex justify-center items-center text-[20px] rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
+                            onClick={() => screenshotCashier()}>
+                            <Cam />
+                        </button>
 
-                    <button className="w-[260px] py-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
-                        onClick={() => closeCashier()}
-                    >Fechar caixa</button>
+                        <button className="px-14 py-2 text-[20px] font-bold rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] hover:text-[#1C1D26] border-2 border-transparent hover:border-[#1C1D26] transition-all delay-75"
+                            onClick={() => closeCashier()}>
+                            Fechar caixa
+                        </button>
+
+                        <div className="w-12"></div>
+                    </div>
                 </footer>
             </div>
         </>

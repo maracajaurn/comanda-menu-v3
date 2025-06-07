@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { Navbar, Calc, Check } from "../../components";
+import { Print } from "../../libs/icons";
 
 import { useLoader } from "../../contexts";
 
@@ -36,6 +37,8 @@ export const CloseCheck = () => {
         serveice_change: 0,
         service_change_percentage: 0,
         image_pix: "",
+        service_change_printer: 0,
+        printer_name: ""
     });
 
     const [visibilityCalc, setVisibilityCal] = useState(false);
@@ -222,6 +225,10 @@ export const CloseCheck = () => {
             });
     }, [check]);
 
+    const print = (name_client, items, total_value) => {
+        socket.emit("print_check", { name_client, items, total_value, printer_name: setting.printer_name });
+    };
+
     return (
         <>
             <Navbar title={`Fechar`} url />
@@ -235,6 +242,13 @@ export const CloseCheck = () => {
                     status={false}
                     serveice_change={setting.serveice_change ? setting.service_change_percentage : false}
                 />
+
+                {String(setting.service_change_printer) === "1" && (
+                    <button className="px-5 py-2 flex justify-center items-center text-white rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                        onClick={() => print(check.name_client, products, check.total_value)}>
+                        <Print />
+                    </button>
+                )}
 
                 <label className="flex flex-col text-slate-900 text-[20px] font-semibold">
                     Pagar com:
