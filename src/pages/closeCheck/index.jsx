@@ -226,7 +226,7 @@ export const CloseCheck = () => {
     }, [check]);
 
     const print = (name_client, items, total_value) => {
-        socket.emit("print_check", { name_client, items, total_value, printer_name: "POS-80C" });
+        socket.emit("print_check", { name_client, items, total_value, printer_name: setting.printer_name });
     };
 
     return (
