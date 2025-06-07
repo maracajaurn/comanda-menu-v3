@@ -18,7 +18,9 @@ export const Settings = ({ showComponent }) => {
         serveice_change: 0,
         service_change_percentage: 0,
         image_pix: "",
-        color: ""
+        color: "",
+        service_change_printer: 0,
+        printer_name: "",
     });
 
     useEffect(() => {
@@ -35,7 +37,9 @@ export const Settings = ({ showComponent }) => {
             serveice_change: setting.serveice_change,
             service_change_percentage: setting.service_change_percentage,
             image_pix: setting.image_pix,
-            color: setting.color
+            color: setting.color,
+            service_change_printer: setting.service_change_printer,
+            printer_name: setting.printer_name
         };
 
         if (!setting.setting_id) {
@@ -102,15 +106,18 @@ export const Settings = ({ showComponent }) => {
                                     service_change_percentage: result[0].service_change_percentage,
                                     color: result[0].color,
                                     image_pix: base64Image,
+                                    service_change_printer: result[0].service_change_printer,
+                                    printer_name: result[0].printer_name,
                                 }));
 
                                 return;
                             })
                             .catch((error) => {
-                                return toast.error('Erro ao converter a imagem: ' + error.message);
+                                toast.error('Erro ao converter a imagem: ' + error.message);
                             });
                     } else {
-                        return setSetting(result[0]);
+                        setSetting(result[0]);
+                        return
                     };
                 };
 
@@ -172,20 +179,45 @@ export const Settings = ({ showComponent }) => {
                 </select>
             </label>
 
+            {String(setting.serveice_change) === "1" && (
+                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                    Percentual de Taxa de Serviço (%)
+                    <input
+                        type="number"
+                        id="serviceChargePercentage"
+                        name="serviceChargePercentage"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        onChange={(e) => handleSetting("service_change_percentage", e)}
+                        value={setting.service_change_percentage}
+                    />
+                </label>
+            )}
+
             <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
-                Percentual de Taxa de Serviço (%)
-                <input
-                    type="number"
-                    id="serviceChargePercentage"
-                    name="serviceChargePercentage"
-                    min="0"
-                    max="100"
-                    step="0.1"
-                    className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    onChange={(e) => handleSetting("service_change_percentage", e)}
-                    value={setting.service_change_percentage}
-                />
+                Imprimir comprovantes?
+                <select className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="serviceCharge"
+                    name="serviceCharge"
+                    value={setting.service_change_printer}
+                    onChange={(e) => handleSetting("service_change_printer", e)}>
+                    <option value="1" >Sim</option>
+                    <option value="0" >Não</option>
+                </select>
             </label>
+
+            {String(setting.service_change_printer) === "1" && (
+                <label className="text-slate-700 text-sm font-bold mb-2 flex flex-col">
+                    Nome da impressora
+                    <input type="text"
+                        className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        onChange={(e) => handleSetting("printer_name", e)}
+                        value={setting.printer_name}
+                    />
+                </label>
+            )}
 
             <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col items-center gap-3`}>
                 <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
