@@ -34,6 +34,7 @@ export const CloseCheck = () => {
     const [products, setProducts] = useState([]);
 
     const [setting, setSetting] = useState({
+        estabishment_name: "",
         serveice_change: 0,
         service_change_percentage: 0,
         image_pix: "",
@@ -231,7 +232,7 @@ export const CloseCheck = () => {
             items,
             total_value,
             printer_name: setting.printer_name,
-            name_estabeleciment: setting.name_estabeleciment
+            estabishment_name: setting.estabishment_name
         });
     };
 
