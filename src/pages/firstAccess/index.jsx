@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useLoader } from "../../contexts";
@@ -9,6 +10,8 @@ import { Plus } from "../../libs/icons"
 import { LoginService } from "../../service/login/LoginService";
 
 export const FirstAccess = () => {
+    const navigate = useNavigate();
+
     const { setLoading } = useLoader();
     setLoading(false);
 
@@ -16,35 +19,39 @@ export const FirstAccess = () => {
         username: "",
         email: "",
         password: "",
-        func: "garcom",
+        func: "admin",
     });
 
     const handleInput = (field, event) => {
         setValue(prev => ({ ...prev, [field]: event.target.value }));
     };
 
-    const create_user = async () => {
+    const create_user = useCallback(() => {
         setLoading(true);
 
-        await LoginService.firt_access(value)
+        LoginService.firt_access(value)
             .then((result) => {
-                toast.success(result.message);
-                setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
-                return setLoading(false);
+                if (result.status) {
+                    toast.success(result.message);
+                    navigate("/login");
+                    return
+                };
+
+                toast.error(result.message);
+                setLoading(false);
+                return
             })
             .catch((error) => {
-                return toast.error(error.message);
+                toast.error(error.message);
+                return
             });
-    };
+    }, [value]);
 
     return (
         <>
-            <Navbar />
-            
+            <Navbar url="Primeiro acesso" />
+
             <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-5 overflow-hidden">
-                <div className="p-5 bg-[#EB8F00] w-full">
-                    <h6 className="text-white text-center font-bold uppercase text-[18px]">Primeiro acesso</h6>
-                </div>
                 <label className="text-slate-700 text-sm font-bold mb-2">
                     <input
                         type="text"
@@ -73,19 +80,6 @@ export const FirstAccess = () => {
                         onChange={(e) => handleInput("password", e)}
                         value={value.password}
                     />
-                </label>
-
-                <label className="flex flex-col text-slate-900 font-semibold">
-                    <select className="w-[250px] border p-3 rounded-xl"
-                        id={value.func}
-                        name="func"
-                        value={value.func}
-                        onChange={(e) => handleInput("func", e)}>
-                        <option value={`garcom`} >Garçom</option>
-                        <option value={`barmen`} >Barmen</option>
-                        <option value={`cozinha`} >Cozinha</option>
-                        <option value={`admin`} >Administrador</option>
-                    </select>
                 </label>
 
                 <button className="flex gap-1 justify-center w-[250px] p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
