@@ -26,7 +26,7 @@ export const RegisterClient = () => {
         setLoading(false);
 
         const func = localStorage.getItem("func");
-        if (func === "admin") {
+        if (func) {
             localStorage.removeItem("func");
             localStorage.removeItem("token");
         };
@@ -45,7 +45,8 @@ export const RegisterClient = () => {
         CashierService.getByStatus(1)
             .then((result) => {
                 if (result.length > 0) {
-                    return createCheck(result[0].cashier_id);
+                    createCheck(result[0].cashier_id);
+                    return
                 };
 
                 setLoading(false);
@@ -67,7 +68,8 @@ export const RegisterClient = () => {
             .then((result) => {
                 if (result.status) {
                     localStorage.setItem("token", result.token);
-                    return getCashier();
+                    getCashier();
+                    return
                 };
 
                 setLoading(false);
@@ -80,7 +82,6 @@ export const RegisterClient = () => {
     }, [value]);
 
     const createCheck = useCallback((cashier_id) => {
-
         const data = {
             name_client: value.name_client,
             cashier_id,

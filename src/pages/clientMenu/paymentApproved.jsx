@@ -89,6 +89,7 @@ export const PaymentApproved = () => {
                     localStorage.removeItem("screens");
                     localStorage.removeItem("list_stock");
                     socket.emit("new_order", objSocket);
+                    setProducts([]);
                     setPaymentInCheck();
                     return toast.success(result.message)
                 } else {
