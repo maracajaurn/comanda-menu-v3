@@ -7,11 +7,13 @@ import { Cart } from "../../libs/icons";
 import { Navbar, LoadingItem, CardProduct, Filter } from "../../components";
 
 import { ProductService } from "../../service/product/ProductService";
+import { SettingService } from "../../service/setting/SettingService";
 
 import { useToggleView, useLoader } from "../../contexts"
 import { useDebounce } from "../../hooks/UseDebounce";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 import { useFCM } from "../../hooks/UseFCM";
+
 
 export const Menu = () => {
     const { setLoading } = useLoader();
@@ -22,6 +24,10 @@ export const Menu = () => {
     const { id } = useParams();
     const { verifyIfClientId } = useVerifyIfClientId(id);
     useFCM(id);
+
+    const [setting, setSetting] = useState({
+        estabishment_name: "",
+    });
 
     // listagem de produtos do db
     const [listProducts, setListProducts] = useState([]);
@@ -42,8 +48,6 @@ export const Menu = () => {
         verifyIfClientId();
 
         setLoading(false);
-        const get_func = localStorage.getItem("func");
-        const if_check_id = localStorage.getItem("check_id");
         const if_selected_product = localStorage.getItem("selected_product");
 
         localStorage.removeItem("screens");
@@ -52,12 +56,9 @@ export const Menu = () => {
             setSelectedProduct(JSON.parse(if_selected_product));
         };
 
-        if (get_func !== "admin" && !if_check_id) {
-            navigate(-1);
-        };
-
         setToggleView(false);
         getAllProducts();
+        getSetting();
     }, []);
 
     useEffect(() => {
@@ -109,6 +110,26 @@ export const Menu = () => {
                 isFetching.current = false;
             });
     }, [page, listProducts]);
+
+    const getSetting = useCallback(() => {
+        SettingService.get()
+            .then((result) => {
+                if (result[0]) {
+                    console.log(result[0])
+                    setSetting(result[0]);
+                };
+
+                if (result?.status === false) {
+                    setLoading(false);
+                    return toast.error(result.message);
+                };
+
+                return setLoading(false);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -259,7 +280,7 @@ export const Menu = () => {
 
     return (
         <>
-            <Navbar title="Bar Areia Vermelha" />
+            <Navbar title={`${setting.estabishment_name}`} />
             <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
 
                 <Filter filter={filter} setFilter={setFilter} />
