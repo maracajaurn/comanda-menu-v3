@@ -3,7 +3,7 @@ import { API } from "../axiosConfig";
 const getAll = async () => {
     try {
         const res = await API.get("/api/user");
-        
+
         return res.data;
     } catch (error) {
         if (error.response) {
@@ -12,7 +12,7 @@ const getAll = async () => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -28,7 +28,7 @@ const getById = async (id) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -44,7 +44,7 @@ const create = async (data) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -60,7 +60,7 @@ const updateById = async (id, data) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
     };
 };
 
@@ -76,7 +76,23 @@ const deleteById = async (id) => {
             throw new Error("Sem resposta do servidor");
         } else {
             throw new Error(error.message);
-        }
+        };
+    };
+};
+
+const insert_notify_id = async (id, notify_id) => {
+    try {
+        const res = await API.put(`/api/user/insert_notify_id/${id}`, { notify_id });
+
+        return res.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        };
     };
 };
 
@@ -86,4 +102,5 @@ export const UsuarioService = {
     getById,
     updateById,
     deleteById,
+    insert_notify_id,
 };

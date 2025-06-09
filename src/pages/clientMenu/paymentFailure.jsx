@@ -13,7 +13,7 @@ export const PaymentFailure = () => {
 
     const navigate = useNavigate();
     const { id } = useParams();
-    useFCM(id);
+    useFCM(id, true);
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
 

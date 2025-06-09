@@ -63,7 +63,7 @@ export const AppRoutes = () => {
             <Route path={`/garcom/comanda/:id`} element={
                 <Waiter />
             } />
-            <Route path={`/garcom/comandas`} element={
+            <Route path={`/:id/garcom/comandas`} element={
                 <ListingChecks />
             } />
             <Route path={`/garcom/comanda/:id/add-product`} element={
@@ -73,10 +73,10 @@ export const AppRoutes = () => {
                 <CloseCheck />
             } />
 
-            <Route path={`/cozinha/producao`} element={
+            <Route path={`/:id/cozinha/producao`} element={
                 <Cousine />
             } />
-            <Route path={`/barmen/producao`} element={
+            <Route path={`/:id/barmen/producao`} element={
                 <Bartender />
             } />
 
@@ -88,7 +88,7 @@ export const AppRoutes = () => {
             <Route path={`/:id/payment_failure`} element={<PaymentFailure />} />
             <Route path={`/:id/wait_for_product`} element={<WaitForProducts />} />
 
-            <Route path={`/created_online`} element={<OnlineOrders/>} />
+            <Route path={`/:id/created_online`} element={<OnlineOrders/>} />
         </Routes>
     );
 };

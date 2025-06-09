@@ -23,7 +23,7 @@ export const Menu = () => {
 
     const { id } = useParams();
     const { verifyIfClientId } = useVerifyIfClientId(id);
-    useFCM(id);
+    useFCM(id, true);
 
     const [setting, setSetting] = useState({
         estabishment_name: "",

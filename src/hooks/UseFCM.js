@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { onMessage, } from "firebase/messaging";
 import { fetchToken, messaging } from "../firebase";
 import toast from "react-hot-toast";
 
 import { CheckService } from "../service/check/CheckService";
+import { UsuarioService } from "../service/usuario/UsuarioService";
 
 async function getNotificationPermissionAndToken() {
     if (!("Notification" in window)) {
@@ -26,9 +27,23 @@ async function getNotificationPermissionAndToken() {
     return null;
 };
 
-export const useFCM = (check_id = null) => {
+export const useFCM = (id = null, isClient = true) => {
     const [token, setToken] = useState(null);
     const retryLoadToken = useRef(0);
+
+    const insert_notify_id_cleint = useCallback((check_id, newToken) => {
+        CheckService.insetNotifyId(check_id, newToken)
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
+
+    const insert_notify_id_user = useCallback((user_id, newToken) => {
+        UsuarioService.insert_notify_id(user_id, newToken)
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
 
     const loadToken = async () => {
         const newToken = await getNotificationPermissionAndToken();
@@ -51,12 +66,14 @@ export const useFCM = (check_id = null) => {
             return;
         };
 
-        if ((newToken || token) && check_id) {
-            // Salvar token no servidor
-            CheckService.insetNotifyId(check_id, newToken)
-                .catch((error) => {
-                    toast.error(error.message);
-                });
+        if ((newToken || token) && id) {
+            const isToken = newToken || token;
+
+            if (isClient) {
+                insert_notify_id_cleint(id, isToken);
+            } else {
+                insert_notify_id_user(id, isToken);
+            };
         };
 
         setToken(newToken);

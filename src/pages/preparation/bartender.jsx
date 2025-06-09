@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { Navbar, CardProductPreparation } from "../../components";
 
 import { useLoader } from "../../contexts";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
 
@@ -18,6 +19,9 @@ export const Bartender = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
+    const { id } = useParams();
+
+    useFCM(id, false);
 
     useEffect(() => {
         setLoading(true);
@@ -88,7 +92,7 @@ export const Bartender = () => {
     return (
         <>
             <Navbar title="Barmen" isLogout />
-            
+
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
                 <CardProductPreparation oreders={oreders} orderReady={orderReady} />
             </div>
