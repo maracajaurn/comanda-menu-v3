@@ -11,10 +11,13 @@ import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
 
 import socket from "../../service/socket";
 import { OrderService } from "../../service/order/OrderService";
+import { UsuarioService } from "../../service/usuario/UsuarioService";
+import { NotificationService } from "../../service/notification/NotificationService";
 
 export const Bartender = () => {
 
     const [oreders, setOrders] = useState([]);
+    const [notifi_id, setNotifi_id] = useState([]);
 
     const navigate = useNavigate();
 
@@ -32,6 +35,7 @@ export const Bartender = () => {
         };
 
         getOrders();
+        getUsers();
     }, []);
 
     // buscar todos pedidos
@@ -56,12 +60,20 @@ export const Bartender = () => {
             });
     }, []);
 
+    const getUsers = useCallback(() => {
+        UsuarioService.getByFunc("garcom")
+            .then((result) => {
+                setNotifi_id(result);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
+
     useSocketOrderEvents(getOrders, "bar");
 
     // sinalizar pedido pronto
-    const orderReady = (
-        order_id, name_client, name_product, check_id, quantity, obs,
-    ) => {
+    const orderReady = (order_id, name_client, name_product, check_id, quantity, obs) => {
 
         const order = {
             check_id, status: 0,
@@ -89,12 +101,39 @@ export const Bartender = () => {
             });
     };
 
+    const notifi_client = useCallback((check_id, product_name) => {
+        let list_payload = [];
+
+        notifi_id.map((token) => {
+            const payload = {
+                token,
+                title: "Pedido pronto",
+                body: `Aê! Tem pedido pronto aí, ehm... \n${product_name} pronto!`,
+                link: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/garcom/comanda/${check_id}`,
+            };
+
+            list_payload.push(payload);
+        });
+
+        NotificationService.notifyUser(list_payload)
+            .then((result) => {
+                toast.success(result.message);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, [notifi_id]);
+
     return (
         <>
             <Navbar title="Barmen" isLogout />
 
             <div className="w-[95%] min-h-[85vh] pt-3 pb-[190px] px-3 rounded-xl flex items-center flex-col gap-10">
-                <CardProductPreparation oreders={oreders} orderReady={orderReady} />
+                <CardProductPreparation
+                    oreders={oreders}
+                    orderReady={orderReady}
+                    notify={notifi_client}
+                />
             </div>
         </>
     );
