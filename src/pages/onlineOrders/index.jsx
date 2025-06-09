@@ -82,7 +82,7 @@ export const OnlineOrders = () => {
                     if (token) {
                         notifi_client(token, check_id, name_product, name_client);
                     };
-                    
+
                     return
                 };
 
@@ -96,12 +96,12 @@ export const OnlineOrders = () => {
     };
 
     const notifi_client = (token, check_id, product_name, name_client) => {
-        const payload = {
+        const payload = [{
             token,
             title: "Pedido pronto",
             body: `Aê, ${name_client}! Tem pedido pronto aí, ehm... \n${product_name} pronto, corre! 😉`,
             link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
-        };
+        }];
 
         NotificationService.notifyUser(payload)
             .then((result) => {

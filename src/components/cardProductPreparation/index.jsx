@@ -1,4 +1,4 @@
-export const CardProductPreparation = ({ oreders = [], orderReady }) => {
+export const CardProductPreparation = ({ oreders = [], orderReady, notify = () => { } }) => {
     return (
         <>
             {oreders.length ? oreders.map((item) => (
@@ -22,7 +22,19 @@ export const CardProductPreparation = ({ oreders = [], orderReady }) => {
                             <div className=" flex gap-3 border-l-2 pl-3 text-white">
                                 <button className="flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
                                     disabled={!item.status}
-                                    onClick={() => orderReady(item.order_id, item.name_client, item.product_name, item.check_id, item.quantity, item.obs, item.notify_id)}
+                                    onClick={() => {
+                                        orderReady(
+                                            item.order_id,
+                                            item.name_client,
+                                            item.product_name,
+                                            item.check_id,
+                                            item.quantity,
+                                            item.obs,
+                                            item.notify_id
+                                        );
+
+                                        notify(item.check_id, item.product_name);
+                                    }}
                                 >{item.status ? "Pronto" : "Finalizado"}</button>
                             </div>
                         </div>

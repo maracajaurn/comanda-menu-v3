@@ -32,6 +32,22 @@ const getById = async (id) => {
     };
 };
 
+const getByFunc = async (func) => {
+    try {
+        const res = await API.get(`/api/user/get_by_func/${func}`);
+
+        return res.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || "Erro na resposta da API");
+        } else if (error.request) {
+            throw new Error("Sem resposta do servidor");
+        } else {
+            throw new Error(error.message);
+        };
+    };
+};
+
 const create = async (data) => {
     try {
         const res = await API.post("/api/user", data);
@@ -100,6 +116,7 @@ export const UsuarioService = {
     create,
     getAll,
     getById,
+    getByFunc,
     updateById,
     deleteById,
     insert_notify_id,

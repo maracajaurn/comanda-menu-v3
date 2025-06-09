@@ -66,7 +66,7 @@ export const useFCM = (id = null, isClient = true) => {
             return;
         };
 
-        if ((newToken || token) && id) {
+        if ((newToken || token) && (id !== "admin")) {
             const isToken = newToken || token;
 
             if (isClient) {
