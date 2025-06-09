@@ -18,7 +18,7 @@ export const WaitForProducts = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     
-    useFCM(id);
+    useFCM(id, true);
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
 

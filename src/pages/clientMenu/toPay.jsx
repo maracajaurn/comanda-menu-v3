@@ -21,7 +21,7 @@ export const ToPay = () => {
     const payment_id = searchParams.get("payment_id");
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
-    useFCM(id);
+    useFCM(id, true);
 
     const [pix, setPix] = useState({
         qr_code: "",

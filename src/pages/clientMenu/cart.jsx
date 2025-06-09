@@ -20,7 +20,7 @@ export const Cart = () => {
     const { id } = useParams();
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
-    useFCM(id);
+    useFCM(id, true);
 
     const [products, setProducts] = useState([]);
     const [productsSelected, setProductsSelected] = useState([]);

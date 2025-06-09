@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { useToggleView, useLoader } from "../../contexts";
 
 import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { Plus } from "../../libs/icons";
 
@@ -20,6 +21,10 @@ export const ListingChecks = () => {
 
     const { toggleView, setToggleView } = useToggleView();
     const { setLoading } = useLoader();
+
+    const { id } = useParams();
+    
+    useFCM(id, false);
 
     useEffect(() => {
         setLoading(true);

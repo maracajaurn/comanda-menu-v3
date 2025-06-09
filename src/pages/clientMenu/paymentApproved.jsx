@@ -24,7 +24,7 @@ export const PaymentApproved = () => {
     const { id } = useParams();
 
     const { verifyIfClientId } = useVerifyIfClientId(id);
-    useFCM(id);
+    useFCM(id, true);
 
     const [searchParams] = useSearchParams();
 

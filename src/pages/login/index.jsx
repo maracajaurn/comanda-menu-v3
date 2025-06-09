@@ -54,16 +54,16 @@ export const Login = () => {
                     localStorage.setItem("func", result.func);
 
                     if (result.func === "barmen" || result.func === "cozinha") {
-                        navigate(`/${result.func}/producao`);
+                        navigate(`/${result.user_id}/${result.func}/producao`);
                         return;
                     } else if (result.func === "admin") {
                         navigate(`/admin`);
                         return;
                     } else if (result.func === "garcom") {
-                        navigate(`/${result.func}/comandas`);
+                        navigate(`/${result.user_id}/${result.func}/comandas`);
                         return;
                     } else if (result.func === "online") {
-                        navigate("/created_online");
+                        navigate(`/${result.user_id}/created_online`);
                         return;
                     };
                 };
