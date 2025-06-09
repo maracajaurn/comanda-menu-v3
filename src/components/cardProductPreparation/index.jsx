@@ -33,7 +33,7 @@ export const CardProductPreparation = ({ oreders = [], orderReady, notify = () =
                                             item.notify_id
                                         );
 
-                                        notify();
+                                        notify(item.check_id, item.product_name);
                                     }}
                                 >{item.status ? "Pronto" : "Finalizado"}</button>
                             </div>
