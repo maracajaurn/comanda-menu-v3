@@ -4,10 +4,10 @@ import { Sidebar } from "../components";
 const listItems = [
     { label: "Administração", link: "/admin" },
     { label: "Histórico de vendas", link: "/sales_history" },
-    { label: "Comandas", link: "/garcom/comandas" },
-    { label: "Online", link: "/created_online" },
-    { label: "Cozinha", link: "/cozinha/producao" },
-    { label: "Bar", link: "/barmen/producao" },
+    { label: "Comandas", link: "/admin/garcom/comandas" },
+    { label: "Online", link: "/admin/created_online" },
+    { label: "Cozinha", link: "/admin/cozinha/producao" },
+    { label: "Bar", link: "/admin/barmen/producao" },
     { label: "Produtos", link: "/produtos" },
     { label: "Configurações", link: "/usuarios" },
 ];
