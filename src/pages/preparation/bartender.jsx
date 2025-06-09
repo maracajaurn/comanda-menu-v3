@@ -104,12 +104,12 @@ export const Bartender = () => {
     const notifi_client = useCallback((check_id, product_name) => {
         let list_payload = [];
 
-        notifi_id.map((token) => {
+        notifi_id.map((item) => {
             const payload = {
-                token,
+                token: item.notify_id,
                 title: "Pedido pronto",
                 body: `Aê! Tem pedido pronto aí, ehm... \n${product_name} pronto!`,
-                link: `${process.env.REACT_APP_BASE_URL_FRONT}/${id}/garcom/comanda/${check_id}`,
+                link: `${process.env.REACT_APP_BASE_URL_FRONT}/${item.user_id}/garcom/comanda/${check_id}`,
             };
 
             list_payload.push(payload);
