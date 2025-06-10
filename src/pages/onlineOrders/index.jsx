@@ -98,9 +98,15 @@ export const OnlineOrders = () => {
     const notifi_client = (token, check_id, product_name, name_client) => {
         const payload = [{
             token,
-            title: "Pedido pronto",
-            body: `Aê, ${name_client}! Tem pedido pronto aí, ehm... \n${product_name} pronto, corre! 😉`,
-            link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
+            notification: {
+                title: "Pedido pronto",
+                body: `Aê, ${name_client}! Tem pedido pronto aí, ehm... \n${product_name} pronto, corre! 😉`,
+            },
+            webpush: {
+                fcmOptions: {
+                    link: `${process.env.REACT_APP_BASE_URL_FRONT}/${check_id}/wait_for_product`,
+                },
+            },
         }];
 
         NotificationService.notifyUser(payload)

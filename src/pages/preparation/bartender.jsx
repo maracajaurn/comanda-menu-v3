@@ -107,9 +107,15 @@ export const Bartender = () => {
         notifi_id.map((item) => {
             const payload = {
                 token: item.notify_id,
-                title: "Pedido pronto",
-                body: `Aê! Tem pedido pronto aí, ehm... \n${product_name} pronto!`,
-                link: `${process.env.REACT_APP_BASE_URL_FRONT}/${item.user_id}/garcom/comanda/${check_id}`,
+                notification: {
+                    title: "Pedido pronto",
+                    body: `Aê! Tem pedido pronto aí, ehm... \n${product_name} pronto!`,
+                },
+                webpush: {
+                    fcmOptions: {
+                        link: `${process.env.REACT_APP_BASE_URL_FRONT}/${item.user_id}/garcom/comanda/${check_id}`,
+                    },
+                },
             };
 
             list_payload.push(payload);
