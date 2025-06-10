@@ -22,6 +22,7 @@ export const Waiter = () => {
     const navigate = useNavigate();
 
     const { id } = useParams();
+    const { user_id } = useParams();
 
     const { setToggleView } = useToggleView();
     const { setLoading } = useLoader();
@@ -291,11 +292,11 @@ export const Waiter = () => {
                 </div>
 
                 <button className="mt-[30px] flex gap-1 p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] hover:text-white transition-all delay-75"
-                    onClick={() => navigate(`/garcom/comanda/${id}/add-product`)}
+                    onClick={() => navigate(`/${user_id}/garcom/comanda/${id}/add-product`)}
                 ><Plus /> Adicionar item</button>
             </div>
 
-            <Footer id={id} totalValue={totalPrice} checkStatus={checkStatus} />
+            <Footer id={id} totalValue={totalPrice} checkStatus={checkStatus} user_id={user_id} />
         </>
     );
 };

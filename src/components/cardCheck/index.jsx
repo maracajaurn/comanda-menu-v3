@@ -2,7 +2,7 @@ import { useToggleView } from "../../contexts";
 
 import { Plus } from "../../libs/icons";
 
-export const CardCheck = ({ listCheck = [], navigate }) => {
+export const CardCheck = ({ listCheck = [], navigate, user_id }) => {
 
     const { setToggleView } = useToggleView();
 
@@ -21,7 +21,7 @@ export const CardCheck = ({ listCheck = [], navigate }) => {
                     </div>
 
                     <button className="p-2 rounded-md bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
-                        onClick={() => navigate(`/garcom/comanda/${item.check_id}`)}
+                        onClick={() => navigate(`/${user_id}/garcom/comanda/${item.check_id}`)}
                     ><Plus /></button>
                 </div>
             )) : (

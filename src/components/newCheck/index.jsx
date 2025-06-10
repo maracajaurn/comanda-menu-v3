@@ -12,7 +12,7 @@ import { useToggleView } from "../../contexts";
 import { CheckService } from "../../service/check/CheckService";
 import { CashierService } from "../../service/cashier/CashierService"
 
-export const NewCheck = ({ is_client = false }) => {
+export const NewCheck = ({ is_client = false, user_id }) => {
 
     const navigate = useNavigate();
 
@@ -58,7 +58,7 @@ export const NewCheck = ({ is_client = false }) => {
                     if (result.status) {
                         setToggleView(false);
                         localStorage.removeItem("check_id");
-                        navigate(`/garcom/comanda/${result.check_id}`);
+                        navigate(`/${user_id}/garcom/comanda/${result.check_id}`);
 
                         socket.emit("nova_comanda", data);
                         toast.success(result.message);

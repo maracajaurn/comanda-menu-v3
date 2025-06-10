@@ -122,9 +122,6 @@ export const Bartender = () => {
         });
 
         NotificationService.notifyUser(list_payload)
-            .then((result) => {
-                toast.success(result.message);
-            })
             .catch((error) => {
                 toast.error(error.message);
             });
