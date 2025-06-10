@@ -6,6 +6,7 @@ import { useLoader } from "../../contexts";
 
 import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
 import { useAlarm } from "../../hooks/UseAlert";
+import { useFCM } from "../../hooks/UseFCM";
 
 import { Navbar, CardProductPreparation } from "../../components";
 
@@ -21,6 +22,9 @@ export const OnlineOrders = () => {
 
     const { setLoading } = useLoader();
     const { playAlarm } = useAlarm();
+    const { user_id } = useParams();
+
+    useFCM(user_id, false);
 
     useEffect(() => {
         setLoading(true);
