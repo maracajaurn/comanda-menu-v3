@@ -86,7 +86,7 @@ export const ClosedChecks = () => {
                             </div>
 
                             <button className=" p-2 rounded-md bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
-                                onClick={() => navigate(`/garcom/comanda/${e.check_id}`)}
+                                onClick={() => navigate(`/admin/garcom/comanda/${e.check_id}`)}
                             ><Plus /></button>
                         </div>
                     )) : (
