@@ -26,16 +26,16 @@ export const Login = () => {
     useEffect(() => {
         setLoading(false);
         const get_func = localStorage.getItem("func");
+        const user_id = localStorage.getItem("user_id");
 
         if (get_func === "barmen" || get_func === "cozinha") {
-            navigate(`${get_func}/producao`)
+            navigate(`/${user_id}/${get_func}/producao`)
         } else if (get_func === "admin") {
             navigate("/admin")
         } else if (get_func === "garcom") {
-            navigate(`/${get_func}/comandas`)
+            navigate(`/${user_id}/${get_func}/comandas`)
         };
     }, []);
-
 
     const login = async () => {
 
@@ -52,6 +52,7 @@ export const Login = () => {
 
                     localStorage.setItem("token", result.token);
                     localStorage.setItem("func", result.func);
+                    localStorage.setItem("user_id", result.user_id);
 
                     if (result.func === "barmen" || result.func === "cozinha") {
                         navigate(`/${result.user_id}/${result.func}/producao`);

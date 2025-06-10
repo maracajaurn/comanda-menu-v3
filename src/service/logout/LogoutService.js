@@ -7,6 +7,7 @@ const logout = () => {
     localStorage.removeItem("client_id");
     localStorage.removeItem("check_id");
     localStorage.removeItem("func");
+    localStorage.removeItem("user_id");
 };
 
 export const LogoutService = {
