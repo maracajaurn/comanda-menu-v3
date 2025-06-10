@@ -45,13 +45,13 @@ export const AppRoutes = () => {
             <Route path="/comandasFinalizadas" element={<ClosedChecks />} />
             <Route path="/produtos" element={<ShowEditProducts />} />
 
-            <Route path="/:id/garcom/comanda" element={<Waiter />} />
-            <Route path="/:id/garcom/comandas" element={<ListingChecks />} />
-            <Route path="/garcom/comanda/:id/add-product" element={<ListingProducts />} />
-            <Route path="/garcom/comanda/:id/fechar-comanda" element={<CloseCheck />} />
+            <Route path="/:user_id/garcom/comanda/:id" element={<Waiter />} />
+            <Route path="/:user_id/garcom/comandas" element={<ListingChecks />} />
+            <Route path="/:user_id/garcom/comanda/:id/add-product" element={<ListingProducts />} />
+            <Route path="/:user_id/garcom/comanda/:id/fechar-comanda" element={<CloseCheck />} />
 
-            <Route path="/:id/cozinha/producao" element={<Cousine />} />
-            <Route path="/:id/barmen/producao" element={<Bartender />} />
+            <Route path="/:user_id/cozinha/producao" element={<Cousine />} />
+            <Route path="/:user_id/barmen/producao" element={<Bartender />} />
 
             <Route path="/register_client" element={<RegisterClient />} />
             <Route path="/:id/products" element={<Menu />} />

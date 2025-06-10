@@ -23,6 +23,7 @@ export const ListingChecks = () => {
     const { setLoading } = useLoader();
 
     const { id } = useParams();
+    const { user_id } = useParams();
     
     useFCM(id, false);
 
@@ -68,15 +69,14 @@ export const ListingChecks = () => {
         <>
             <Navbar title={`Todas as comandas`} isLogout />
             <div className="w-[95%] min-h-[90vh] py-3 rounded-xl flex items-center flex-col gap-5">
-                <NewCheck />
-
+                <NewCheck user_id={user_id} />
 
                 {rows.length > 10 && (
                     <Filter filter={filter} setFilter={setFilter} placeholder="Buscar comanda..." />
                 )}
 
                 <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
-                    <CardCheck listCheck={itensFiltrados} navigate={navigate} />
+                    <CardCheck listCheck={itensFiltrados} navigate={navigate} user_id={user_id} />
                 </div>
 
                 <button className="mt-[100px] flex gap-1 font-semibold rounded-xl p-3 bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
