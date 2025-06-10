@@ -22,9 +22,9 @@ export const Cousine = () => {
     const navigate = useNavigate();
 
     const { setLoading } = useLoader();
-    const { id } = useParams();
+    const { user_id } = useParams();
 
-    useFCM(id, false);
+    useFCM(user_id, false);
 
     useEffect(() => {
         setLoading(true);
