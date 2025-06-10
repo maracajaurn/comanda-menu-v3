@@ -66,15 +66,18 @@ export const useFCM = (id = null, isClient = true) => {
             return;
         };
 
-        if ((newToken || token) && (id !== "admin")) {
-            const isToken = newToken || token;
+        if (id && id !== "admin") {
+            const isToken = newToken ?? token;
 
-            if (isClient) {
-                insert_notify_id_cleint(id, isToken);
-            } else {
-                insert_notify_id_user(id, isToken);
+            if (isToken) {
+                if (isClient) {
+                    insert_notify_id_cleint(id, isToken);
+                } else {
+                    insert_notify_id_user(id, isToken);
+                };
             };
         };
+
 
         setToken(newToken);
     };
