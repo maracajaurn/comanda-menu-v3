@@ -10,6 +10,8 @@ import { Plus, Delete, Minus, Close, ClipBoard } from "../../libs/icons";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 import { ProductService } from "../../service/product/ProductService";
+import { UsuarioService } from "../../service/usuario/UsuarioService";
+import { NotificationService } from "../../service/notification/NotificationService";
 
 import socket from "../../service/socket";
 import { useToggleView, useLoader } from "../../contexts"
@@ -34,6 +36,7 @@ export const ListingProducts = () => {
 
     // Produto selecionado
     const [selectedProduct, setSelectedProduct] = useState([]);
+    const [notifi_id, setNotifi_id] = useState([]);
 
     // armazena um array com todos as categorias de produtos 
     // que serão adicionados à comanda
@@ -54,6 +57,7 @@ export const ListingProducts = () => {
         setToggleView(false);
         getAllProducts();
         getCheckById();
+        getUsers();
     }, []);
 
     const getAllProducts = useCallback(() => {
@@ -97,6 +101,17 @@ export const ListingProducts = () => {
                 return toast.error(error.message);
             });
     }, [id]);
+
+    const getUsers = useCallback(() => {
+        const funcs = ["garcom"];
+        UsuarioService.getByFunc(funcs)
+            .then((result) => {
+                setNotifi_id(result);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
 
     // adicionar produtos
     const addProduct = (product_id, screen) => {
@@ -169,7 +184,7 @@ export const ListingProducts = () => {
 
         setLoading(true);
 
-        const qtn = []
+        const qtn = [];
 
         listProducts.filter((item) => {
             selectedProduct.filter((selected) => {
@@ -187,6 +202,8 @@ export const ListingProducts = () => {
                         screens: created_for === 0 ? screens : ["online"]
                     };
 
+                    notify();
+
                     socket.emit("new_order", objSocket);
                     setLoading(false);
                     toast.success(result.message)
@@ -200,6 +217,32 @@ export const ListingProducts = () => {
                 return toast.error(error.message);
             });
     }, [selectedProduct, screens]);
+
+    const notify = useCallback(() => {
+        let list_payload = [];
+
+        notifi_id.map((item) => {
+            const payload = {
+                token: item.notify_id,
+                notification: {
+                    title: "Novo pedido",
+                    body: "Aê! Tem pedido entrando, vê lá!",
+                },
+                webpush: {
+                    fcmOptions: {
+                        link: `${process.env.REACT_APP_BASE_URL_FRONT}/${item.func}/producao`,
+                    },
+                },
+            };
+
+            list_payload.push(payload);
+        });
+
+        NotificationService.notifyUser(list_payload)
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, [notifi_id]);
 
     const itensFiltrados = listProducts.filter(item =>
         item.product_name.toLowerCase().includes(filtro.toLowerCase())
