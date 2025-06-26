@@ -115,7 +115,6 @@ export const Menu = () => {
         SettingService.get()
             .then((result) => {
                 if (result[0]) {
-                    console.log(result[0])
                     setSetting(result[0]);
                 };
 
