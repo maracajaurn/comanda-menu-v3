@@ -36,12 +36,12 @@ export const Navbar = ({ title, url, isLogout, userId }) => {
         LogoutService.logout(userId)
             .then((result) => {
                 toast.success(result.message);
+                navigate("/login");
+                setToggleViewSidebar(false);
             })
             .catch((error) => {
                 toast.error(error.message);
             });
-        setToggleViewSidebar(false);
-        navigate("/login");
     };
 
     const get_func = localStorage.getItem("func");
