@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { Navbar } from "../../components";
+import { Navbar, CInput } from "../../components";
 
 import { useLoader } from "../../contexts";
 
@@ -20,7 +20,7 @@ export const Login = () => {
     });
 
     const handleInput = (field, event) => {
-        setValue(prev => ({ ...prev, [field]: event.target.value }));
+        setValue(prev => ({ ...prev, [field]: event }));
     };
 
     useEffect(() => {
@@ -77,39 +77,28 @@ export const Login = () => {
                 return toast.error(error.message)
             });
     };
-
+    
     return (
         <div className="h-full w-full">
             <Navbar title="Bem-vindo" />
             <div className="h-full flex justify-center items-center flex-col">
-                
-                <div className="mb-4">
-                    <label className="text-slate-700 text-sm font-bold mb-2">
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            className="focus:border-slate-800 w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="E-mail"
-                            onChange={(e) => handleInput("email", e)}
-                            value={value.email}
-                        />
-                    </label>
-                </div>
+                <CInput
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="E-mail"
+                    onChange={(e) => handleInput("email", e)}
+                    value={value.email}
+                />
 
-                <div className="mb-4">
-                    <label className="text-slate-700 text-sm font-bold mb-2">
-                        <input
-                            type="password"
-                            id="pass"
-                            name="pass"
-                            className="focus:border-slate-800 w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Senha"
-                            onChange={(e) => handleInput("password", e)}
-                            value={value.password}
-                        />
-                    </label>
-                </div>
+                <CInput
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Senha"
+                    onChange={(e) => handleInput("password", e)}
+                    value={value.password}
+                />
 
                 <button className="w-[250px] font-semibold flex justify-center p-3 text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75 uppercase"
                     onClick={() => login()}
