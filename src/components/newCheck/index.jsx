@@ -76,7 +76,7 @@ export const NewCheck = ({ is_client = false, user_id }) => {
     }, [value]);
 
     return (
-        <div className={`${toggleView ? "block" : "hidden"} fixed top-0 left-0 h-[100dvh] w-[100vw] bg-slate-950/50 py-3 px-1 flex flex-col justify-center items-center gap-5`}>
+        <div className={`${toggleView ? "block" : "hidden"} fixed top-0 left-0 h-[100dvh] w-[100vw] bg-slate-950/50 backdrop-blur-sm py-3 px-1 flex flex-col justify-center items-center gap-5`}>
             
             <div className="h-[300px] w-[300px] rounded-md border-hidden bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
                 <div className="p-5 bg-[#EB8F00] w-full">

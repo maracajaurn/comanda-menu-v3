@@ -32,9 +32,9 @@ const getById = async (id) => {
     };
 };
 
-const getByFunc = async (func) => {
+const getByFunc = async (funcs) => {
     try {
-        const res = await API.get(`/api/user/get_by_func/${func}`);
+        const res = await API.post(`/api/user/get_by_funcs`, { funcs });
 
         return res.data;
     } catch (error) {

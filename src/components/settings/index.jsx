@@ -1,16 +1,18 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
-import { useLoader } from "../../contexts";
-import { useToggleView } from "../../contexts";
+import { useLoader, useToggleView } from "../../contexts";
+import { useDebounce } from "../../hooks/UseDebounce";
 
-import { Delete, Reflesh } from "../../libs/icons";
+import { Delete } from "../../libs/icons";
 
 import { SettingService } from "../../service/setting/SettingService";
 
 export const Settings = ({ showComponent }) => {
     const { toggleView } = useToggleView();
     const { setLoading } = useLoader();
+
+    const { debounce } = useDebounce(1500);
 
     const [setting, setSetting] = useState({
         setting_id: 1,
@@ -23,12 +25,24 @@ export const Settings = ({ showComponent }) => {
         printer_name: "",
     });
 
+    const [hasManualChange, setHasManualChange] = useState(false);
+
     useEffect(() => {
         getSetting();
     }, []);
 
+    useEffect(() => {
+        if (!hasManualChange) return;
+
+        debounce(() => {
+            updateSetting();
+            setHasManualChange(false);
+        });
+    }, [setting]);
+
     const handleSetting = (field, event) => {
-        setSetting(prev => ({ ...prev, [field]: event.target.value }));
+        setSetting(prev => ({ ...prev, [field]: event }));
+        setHasManualChange(true);
     };
 
     const updateSetting = useCallback(() => {
@@ -68,21 +82,35 @@ export const Settings = ({ showComponent }) => {
 
         if (file) {
             // Verifica se o arquivo é uma imagem
-            const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+            const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
             if (!validTypes.includes(file.type)) {
-                toast.error("Apenas arquivos de imagem (JPG, PNG) são permitidos.");
+                toast.error("Apenas arquivos de imagem (JPG, PNG, WEBP) são permitidos.");
                 return
             };
 
             // Verifica se o tamanho do arquivo é maior que 5 mb
-            if (file.size > 16 * 1024 * 1024) {
-                toast.error("A imagem deve ser menor que 16 MB.");
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("A imagem deve ser menor que 5 MB.");
                 return
             };
 
+            const img = new Image();
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setSetting((prev) => ({ ...prev, image_pix: reader.result }));
+
+            reader.onload = (e) => {
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0);
+
+                    const webpDataUrl = canvas.toDataURL("image/webp", 0.8);
+
+                    handleSetting("image_pix", webpDataUrl);
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         };
@@ -150,7 +178,7 @@ export const Settings = ({ showComponent }) => {
     };
 
     return (
-        <div className={`w-full ${showComponent === 3 ? "flex" : "hidden"} mt-5 flex flex-col gap-6`}>
+        <div className={`w-full ${showComponent === 3 ? "flex" : "hidden"} py-5 flex flex-col gap-6`}>
             <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold">
                 Configurações
             </h2>
@@ -162,7 +190,7 @@ export const Settings = ({ showComponent }) => {
                     id="establishmentName"
                     name="establishmentName"
                     className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    onChange={(e) => handleSetting("estabishment_name", e)}
+                    onChange={(e) => handleSetting("estabishment_name", e.target.value)}
                     value={setting.estabishment_name}
                 />
             </label>
@@ -173,7 +201,7 @@ export const Settings = ({ showComponent }) => {
                     id="serviceCharge"
                     name="serviceCharge"
                     value={setting.serveice_change}
-                    onChange={(e) => handleSetting("serveice_change", e)}>
+                    onChange={(e) => handleSetting("serveice_change", e.target.value)}>
                     <option value="1" >Sim</option>
                     <option value="0" >Não</option>
                 </select>
@@ -190,7 +218,7 @@ export const Settings = ({ showComponent }) => {
                         max="100"
                         step="0.1"
                         className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onChange={(e) => handleSetting("service_change_percentage", e)}
+                        onChange={(e) => handleSetting("service_change_percentage", e.target.value)}
                         value={setting.service_change_percentage}
                     />
                 </label>
@@ -202,7 +230,7 @@ export const Settings = ({ showComponent }) => {
                     id="serviceCharge"
                     name="serviceCharge"
                     value={setting.service_change_printer}
-                    onChange={(e) => handleSetting("service_change_printer", e)}>
+                    onChange={(e) => handleSetting("service_change_printer", e.target.value)}>
                     <option value="1" >Sim</option>
                     <option value="0" >Não</option>
                 </select>
@@ -213,38 +241,36 @@ export const Settings = ({ showComponent }) => {
                     Nome da impressora
                     <input type="text"
                         className="w-full border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        onChange={(e) => handleSetting("printer_name", e)}
+                        onChange={(e) => handleSetting("printer_name", e.target.value)}
                         value={setting.printer_name}
                     />
                 </label>
             )}
 
-            <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col items-center gap-3`}>
+            <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col gap-3`}>
                 <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
-                    <button
-                        type="button"
-                        onClick={() => document.getElementById("qrcodepix").click()}
-                        className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all"
-                    >
-                        QR Code Pix
-                    </button>
-
                     {setting.image_pix && (
-                        <div className="relative w-2/3">
+                        <div className="flex">
                             <img
                                 className="w-[250px] rounded-xl object-cover"
                                 src={setting.image_pix}
                                 alt="Imagem do QR Code Pix"
                             />
                             <button
+                                className="p-2 h-10 text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all delay-75"
                                 type="button"
-                                onClick={() => setSetting((prev) => ({ ...prev, image_pix: "" }))}
-                                className="absolute bottom-2 right-2 p-2 bg-white text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all"
-                            >
+                                onClick={() => handleSetting("image_pix", "")}>
                                 <Delete />
                             </button>
                         </div>
                     )}
+
+                    <button
+                        type="button"
+                        onClick={() => document.getElementById("qrcodepix").click()}
+                        className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all">
+                        QR Code Pix
+                    </button>
                 </div>
 
                 <input
@@ -255,12 +281,6 @@ export const Settings = ({ showComponent }) => {
                     onChange={handleImageUpload}
                 />
             </label>
-
-            <button
-                className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                onClick={() => updateSetting()}
-            ><Reflesh />Atualizar Pix</button>
         </div>
     );
 };

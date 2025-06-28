@@ -61,7 +61,8 @@ export const Cousine = () => {
     }, []);
 
     const getUsers = useCallback(() => {
-        UsuarioService.getByFunc("garcom")
+        const funcs = ["garcom"];
+        UsuarioService.getByFunc(funcs)
             .then((result) => {
                 setNotifi_id(result);
             })
@@ -101,7 +102,7 @@ export const Cousine = () => {
             });
     };
 
-    const notifi_client = useCallback((check_id, product_name) => {
+    const notify = useCallback((check_id, product_name) => {
         let list_payload = [];
 
         notifi_id.map((item) => {
@@ -135,7 +136,7 @@ export const Cousine = () => {
                 <CardProductPreparation
                     oreders={oreders}
                     orderReady={orderReady}
-                    notify={notifi_client}
+                    notify={notify}
                 />
             </div>
         </>

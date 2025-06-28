@@ -17,3 +17,5 @@ export { Categories } from "./categories";
 export { Settings } from "./settings";
 
 export { Sidebar } from "./sidebar";
+
+export { CInput } from "./cInput";

@@ -1,6 +1,8 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import {
+    Home,
+
     Login,
 
     Admin,
@@ -35,6 +37,8 @@ import {
 export const AppRoutes = () => {
     return (
         <Routes>
+            <Route path="/" element={<Home />} />
+
             <Route path="/login" element={<Login />} />
             <Route path="/first_access" element={<FirstAccess />} />
             <Route path="/401" element={<NotAuthorized />} />
