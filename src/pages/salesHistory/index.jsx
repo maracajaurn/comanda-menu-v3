@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 import { Navbar } from "../../components/navbar";
@@ -13,90 +13,148 @@ export const SalesHistory = () => {
     const [group, setGroup] = useState({});
 
     useEffect(() => {
+        setLoading(true);
         CashierService.get()
             .then((result) => {
-                const agrupado = result.reduce((acc, item) => {
+                const grouped = result.reduce((acc, item) => {
                     const date = new Date(item.updated_at);
-                    const chave = `${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+                    const key = `${String(date.getMonth() + 1).padStart(2, "0")}-${date.getFullYear()}`;
 
-                    if (!acc[chave]) acc[chave] = [];
-                    acc[chave].push(item);
+                    if (!acc[key]) acc[key] = [];
+                    acc[key].push(item);
 
                     return acc;
                 }, {});
 
-                setGroup(agrupado);
+                setGroup(grouped);
                 setLoading(false);
             })
             .catch((error) => {
                 toast.error(error.message);
+                setLoading(false);
             });
     }, []);
 
     return (
         <>
             <Navbar title="Histórico de Vendas" url />
-            <div className="w-full h-full mb-10 px-5 flex flex-col items-center gap-24 self-start mt-10">
-                {Object.entries(group).map(([mes, registros]) => (
-                    <div key={mes} className="w-full mx-2 overflow-y-auto sm:w-[500px] md:w-[800px] lg:w-[1000px]">
-                        <h2 className="text-xl font-bold">Mês: {mes}</h2>
-                        <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        #
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Comandas
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Produtos
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Total
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Pix
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Débito
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Crédito
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Dinheiro
-                                    </th>
-                                    <th scope="col" className="px-2 py-2 text-center">
-                                        Fechado
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="">
-                                {registros.map((item, index) => (
-                                    <tr key={item.cashier_id} className="odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 text-center">
-                                        <td className="px-2 py-2 text-nowrap">{index + 1}</td>
-                                        <td className="px-2 py-2 text-nowrap">{item.lenght_cheks || 0}</td>
-                                        <td className="px-2 py-2 text-nowrap">{item.lenght_products || 0}</td>
-                                        <td className="px-2 py-2 text-nowrap">R$ {item.total_value || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">R$ {item.pix || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">R$ {item.debit || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">R$ {item.credit || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">R$ {item.cash || "0,00"}</td>
-                                        <td className="px-2 py-2 text-nowrap">{new Date(item.updated_at).toLocaleDateString('pt-BR')}</td>
+
+            <main className="w-full max-w-[1100px] mx-auto px-6 my-10">
+                {Object.entries(group).length === 0 && (
+                    <p className="text-center text-gray-500 mt-20">Nenhum dado encontrado.</p>
+                )}
+
+                {Object.entries(group).map(([month, records]) => (
+                    <section
+                        key={month}
+                        className="mb-12 bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                        <header className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-semibold text-[#1C1D26]">
+                                Mês: {month}
+                            </h2>
+                            <button
+                                className="px-4 py-2 bg-[#EB8F00] text-white rounded-lg font-semibold hover:bg-[#d17900] transition"
+                                onClick={() => toast("Função de exportar ainda não implementada")}
+                                aria-label={`Exportar dados do mês ${month}`}>
+                                Exportar
+                            </button>
+                        </header>
+
+                        <div className="overflow-x-auto rounded-md">
+                            <table className="min-w-full table-auto border-collapse text-sm text-[#1C1D26]">
+                                <thead className="bg-[#EB8F00] text-white sticky top-0">
+                                    <tr>
+                                        {[
+                                            "#",
+                                            "Comandas",
+                                            "Produtos",
+                                            "Total",
+                                            "Pix",
+                                            "Débito",
+                                            "Crédito",
+                                            "Dinheiro",
+                                            "Fechado",
+                                        ].map((head) => (
+                                            <th
+                                                key={head}
+                                                className="py-3 px-5 whitespace-nowrap font-semibold border-r border-orange-300 last:border-r-0">
+                                                {head}
+                                            </th>
+                                        ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div className="mt-4 font-semibold">
-                            Total do mês: {registros.reduce((acc, item) => acc + (item.total_value || 0), 0).toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            })}
+                                </thead>
+                                <tbody>
+                                    {records.map((item, index) => (
+                                        <tr
+                                            key={item.cashier_id}
+                                            className={`border-b border-gray-200 hover:bg-[#FFF4DB] transition-colors ${index % 2 === 0 ? "bg-[#FFFDF7]" : "bg-white"
+                                                }`} >
+                                            <td className="px-5 py-3">{index + 1}</td>
+                                            <td className="px-5 py-3">{item.lenght_cheks || 0}</td>
+                                            <td className="px-5 py-3">{item.lenght_products || 0}</td>
+                                            <td className="px-5 py-3 font-semibold">
+                                                {item.total_value
+                                                    ? item.total_value.toLocaleString("pt-BR", {
+                                                        style: "currency",
+                                                        currency: "BRL",
+                                                    })
+                                                    : "R$ 0,00"}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                {item.pix
+                                                    ? item.pix.toLocaleString("pt-BR", {
+                                                        style: "currency",
+                                                        currency: "BRL",
+                                                    })
+                                                    : "R$ 0,00"}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                {item.debit
+                                                    ? item.debit.toLocaleString("pt-BR", {
+                                                        style: "currency",
+                                                        currency: "BRL",
+                                                    })
+                                                    : "R$ 0,00"}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                {item.credit
+                                                    ? item.credit.toLocaleString("pt-BR", {
+                                                        style: "currency",
+                                                        currency: "BRL",
+                                                    })
+                                                    : "R$ 0,00"}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                {item.cash
+                                                    ? item.cash.toLocaleString("pt-BR", {
+                                                        style: "currency",
+                                                        currency: "BRL",
+                                                    })
+                                                    : "R$ 0,00"}
+                                            </td>
+                                            <td className="px-5 py-3">
+                                                {new Date(item.updated_at).toLocaleDateString("pt-BR")}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
+
+                        <footer className="mt-6 text-right">
+                            <p className="text-lg font-semibold text-[#EB8F00]">
+                                Total do mês:{" "}
+                                {records
+                                    .reduce((acc, item) => acc + (item.total_value || 0), 0)
+                                    .toLocaleString("pt-BR", {
+                                        style: "currency",
+                                        currency: "BRL",
+                                    })}
+                            </p>
+                        </footer>
+                    </section>
                 ))}
-            </div>
+            </main>
         </>
     );
 };

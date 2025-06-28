@@ -28,113 +28,114 @@ export const ManagerUser = ({ showComponent }) => {
     };
 
     const getAllUsers = useCallback(() => {
+        setLoading(true);
         UsuarioService.getAll()
             .then((result) => {
                 if (result.length > 0) {
                     setListUser(result);
                     setLoading(false);
-                    return
-                };
-
+                    return;
+                }
                 if (result?.status === false) {
-                    setLoading(false);
                     toast.error(result.message);
-                    return
-                };
-
+                    setLoading(false);
+                    return;
+                }
                 setLoading(false);
-                return
             })
             .catch((error) => {
-                setLoading(false);
                 toast.error(error.message);
-                return
+                setLoading(false);
             });
     }, []);
 
-    const deleteUser = (setting_id) => {
+    const deleteUser = (user_id) => {
         setLoading(true);
-        UsuarioService.deleteById(setting_id)
+        UsuarioService.deleteById(user_id)
             .then((result) => {
                 if (result.status) {
+                    toast.success(result.message || "Usuário deletado");
+                    getAllUsers();
                     setLoading(false);
-                    getAllUsers()
-                    toast.success(`${result.message || "Usuário deletado"}`);
-                    return
-                };
-
-                toast.error(result.message || "Ocoreu um erro ao realizar a operação.")
-                return
+                    return;
+                }
+                toast.error(result.message || "Erro ao deletar usuário");
+                setLoading(false);
             })
             .catch((error) => {
+                toast.error(error.message || "Erro ao deletar usuário");
                 setLoading(false);
-                toast.error(error.message || "Ocoreu um erro ao realizar a operação.")
-                return
             });
     };
 
     return (
-        <div className={`w-full ${showComponent === 1 ? "flex" : "hidden"} flex-col mt-5`}>
+        <div className={`${showComponent === 1 ? "flex" : "hidden"} flex-col mt-5 w-full max-w-[1100px] mx-auto px-4`}>
             <ModalUser action={action} id={id} />
 
             <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold">
                 Usuários
             </h2>
 
-            <div className="overflow-x-auto w-full mt-5">
-                <table className="w-full mt-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div className="overflow-x-auto mt-6 rounded-lg shadow-md border border-gray-200">
+                <table className="min-w-full text-sm text-[#1C1D26]">
+                    <thead className="bg-[#EB8F00] text-white sticky top-0">
                         <tr>
-                            <th scope="col" className="px-2 py-2 text-center">
-                                Usuário
-                            </th>
-                            <th scope="col" className="px-2 py-2 text-center">
-                                E-Mail
-                            </th>
-                            <th scope="col" className="px-2 py-2 text-center">
-                                Função
-                            </th>
-                            <th scope="col" className="px-2 py-2 text-center">
-                                Ação
-                            </th>
+                            {["Usuário", "E-Mail", "Função", "Ação"].map((header) => (
+                                <th key={header} className="px-6 py-3 whitespace-nowrap font-semibold text-center border-r border-orange-300 last:border-r-0">
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {listUser.map((item) => (
-                            <tr key={item.user_id} className="odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td scope="row" className="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {item.username}
+                        {listUser.map((item, idx) => (
+                            <tr
+                                key={item.user_id}
+                                className={`border-b border-gray-200 ${idx % 2 === 0 ? "bg-[#FFFDF7]" : "bg-white"
+                                    } hover:bg-[#FFF4DB] transition-colors`}
+                            >
+                                <td className="px-6 py-3 text-center font-medium">{item.username}</td>
+                                <td className="px-6 py-3 text-center break-all">{item.email}</td>
+                                <td className="px-6 py-3 text-center font-semibold">
+                                    {item.func === "admin"
+                                        ? "ADM"
+                                        : item.func === "garcom"
+                                            ? "Garçom"
+                                            : item.func === "barmen"
+                                                ? "Barmen"
+                                                : item.func === "cozinha"
+                                                    ? "Cozinha"
+                                                    : "Online"}
                                 </td>
-                                <td className="px-2 py-2">
-                                    {item.email}
-                                </td>
-                                <td className="px-2 py-2">
-                                    {item.func === 'admin' ? 'ADM' :
-                                        item.func === 'garcom' ? 'Garçom' :
-                                            item.func === 'barmen' ? 'Barmen' :
-                                                item.func === 'cozinha' ? 'Cozinha' :
-                                                    'Online'}
-                                </td>
-                                <td className="px-2 py-2 flex justify-center">
+                                <td className="px-6 py-3 text-center flex justify-center gap-3">
                                     <button
-                                        className="p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                        className="p-2 rounded-md text-white bg-[#EB8F00] hover:bg-[#1C1D26] hover:text-white transition-colors"
                                         onClick={() => handleModal("update", item.user_id)}
-                                    ><Edit /></button>
-
+                                        aria-label={`Editar usuário ${item.username}`}
+                                    >
+                                        <Edit />
+                                    </button>
                                     <button
-                                        className="p-2 rounded-md text-white hover:text-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
+                                        className="p-2 rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors"
                                         onClick={() => deleteUser(item.user_id)}
-                                    ><Delete /></button>
+                                        aria-label={`Deletar usuário ${item.username}`}
+                                    >
+                                        <Delete />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-            <button className="flex gap-1 justify-center w-full p-3 font-semibold text-white self-center mt-5
-                            rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
+
+            <button
+                className="mt-6 flex items-center justify-center gap-2 w-full max-w-xs mx-auto p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-colors duration-200"
                 onClick={() => handleModal("new")}
-            ><Plus />Cadastrar usuário</button>
+                aria-label="Cadastrar novo usuário"
+            >
+                <Plus /> Cadastrar usuário
+            </button>
         </div>
-    )
+    );
 };

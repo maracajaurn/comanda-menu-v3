@@ -94,7 +94,7 @@ export const NewCheck = ({ is_client = false, user_id }) => {
 
                 <div className="flex flex-col gap-3">
                     <input
-                        className="text-gray-700 border rounded-xl w-full p-3 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         type="text"
                         placeholder="Nome do cliente"
                         onChange={(e) => handleInput("name_client", e)}
@@ -102,7 +102,7 @@ export const NewCheck = ({ is_client = false, user_id }) => {
                     />
 
                     <input
-                        className="text-gray-700 border rounded-xl w-full p-3 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         type="text"
                         placeholder="Observação"
                         onChange={(e) => handleInput("obs", e)}

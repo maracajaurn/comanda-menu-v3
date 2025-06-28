@@ -249,7 +249,7 @@ export const ModalProduct = ({ action, id }) => {
                     <input
                         type="text"
                         placeholder="Nome do produto"
-                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("product_name", e)}
                         value={value.product_name}
                     />
@@ -257,14 +257,14 @@ export const ModalProduct = ({ action, id }) => {
                     <input
                         type="number"
                         placeholder="Preço"
-                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("price", e)}
                         value={value.price}
                     />
 
                     <textarea
                         placeholder="Descrição"
-                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("description", e)}
                         value={value.description || ""}
                     />
@@ -272,13 +272,13 @@ export const ModalProduct = ({ action, id }) => {
                     <input
                         type="number"
                         placeholder="Estoque"
-                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("stock", e)}
                         value={value.stock}
                     />
 
                     <select
-                        className="w-full border p-3 rounded-xl text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         value={value.category_id}
                         onChange={(e) => handleInput("category_id", e)}>
                         <option value={0}>Selecione uma categoria</option>
