@@ -227,6 +227,7 @@ export const ListingProducts = () => {
                 notification: {
                     title: "Novo pedido",
                     body: "Aê! Tem pedido entrando, vê lá!",
+                    icon: `/favicon.ico`
                 },
                 webpush: {
                     fcmOptions: {
