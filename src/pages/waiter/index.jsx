@@ -236,29 +236,32 @@ export const Waiter = () => {
         <>
             <Navbar title={`${client}`} url />
 
-            <div className="w-[95%] min-h-[85vh] pb-[190px] px-3 rounded-xl flex flex-col items-center gap-10">
-                <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-between gap-5">
+            <div className="w-full max-w-7xl mx-auto px-4 min-h-[85vh] pb-[190px] flex flex-col items-center gap-10">
+                <div className="w-full flex flex-wrap justify-center gap-6">
                     {listProducts.map((e, index) => (
-                        <div key={index} className="w-full sm:w-[280px] md:w-[350px] xl:w-[550px] flex justify-between items-center px-3 py-1 bg-slate-100/50 rounded-xl shadow-md">
-                            <div className="flex flex-col mr-1">
-                                <h3 className="text-slate-900 font-bold flex gap-1"><span>{e.quantity}x </span> {e.product_name}</h3>
-
-                                <h4 className="text-slate-500 text-[15px] font-semibold">R$ {e.total_price.toFixed(2).replace(".", ",")}</h4>
-
+                        <div key={index} className="w-full sm:w-[300px] md:w-[400px] xl:w-[550px] flex justify-between items-center px-4 py-3 bg-slate-100/50 rounded-xl shadow-md">
+                            <div className="flex flex-col gap-1 max-w-[70%]">
+                                <h3 className="text-slate-900 font-bold flex gap-1">
+                                    <span>{e.quantity}x</span> {e.product_name}
+                                </h3>
+                                <h4 className="text-slate-500 text-sm font-semibold">
+                                    R$ {e.total_price.toFixed(2).replace(".", ",")}
+                                </h4>
                                 {e.obs && (
-                                    <h3 className="text-slate-500 text-[15px] font-semibold"><span className="text-[#EB8F00]">OBS</span>: {e.obs}</h3>
+                                    <h3 className="text-slate-500 text-sm font-semibold">
+                                        <span className="text-[#EB8F00] font-bold">OBS:</span> {e.obs}
+                                    </h3>
                                 )}
-
                                 {e.status === 0 && (
-                                    <h3 className="text-[#EB8F00] text-[15px] font-semibold">Pedido Pronto</h3>
+                                    <h3 className="text-[#EB8F00] text-sm font-semibold">Pedido Pronto</h3>
                                 )}
                             </div>
 
                             <div className="flex gap-2 border-l-2 pl-3 text-white">
 
                                 {e.status ? (
-                                    <div className="flex flex-col-reverse items-center gap-1 border-2 border-slate-500 rounded-md">
-                                        <button className="p-1 border-t-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                    <div className="flex flex-col-reverse items-center border border-slate-500 rounded-md">
+                                        <button className="px-2 py-1 border-t border-slate-500 text-slate-900 hover:text-[#EB8F00] transition"
                                             onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "-")}
                                         ><Minus /></button>
 
@@ -266,12 +269,11 @@ export const Waiter = () => {
                                             {(updateOrder.order_id === e.order_id ? updateOrder.data.quantity ?? e.quantity : e.quantity)}
                                         </p>
 
-                                        <button className="p-1 border-b-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
+                                        <button className="px-2 py-1 border-b border-slate-500 text-slate-900 hover:text-[#EB8F00] transition"
                                             onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "+")}
                                         ><Plus /></button>
                                     </div>
                                 ) : (
-
                                     <div className="flex flex-col-reverse items-center border-2 border-slate-500/30 rounded-md">
                                         <button className="p-1 border-t-2 border-slate-500/30 text-slate-900/30"
                                         ><Minus /></button>
@@ -291,9 +293,11 @@ export const Waiter = () => {
                     ))}
                 </div>
 
-                <button className="mt-[30px] flex gap-1 p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] hover:text-white transition-all delay-75"
-                    onClick={() => navigate(`/${user_id}/garcom/comanda/${id}/add-product`)}
-                ><Plus /> Adicionar item</button>
+                <button
+                    className="mt-12 flex items-center gap-2 font-semibold px-6 py-3 rounded-xl bg-[#EB8F00] text-white hover:bg-[#1C1D26] transition-all"
+                    onClick={() => navigate(`/${user_id}/garcom/comanda/${id}/add-product`)}>
+                    <Plus /> Adicionar item
+                </button>
             </div>
 
             <Footer id={id} totalValue={totalPrice} checkStatus={checkStatus} user_id={user_id} />
