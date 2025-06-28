@@ -9,7 +9,7 @@ export const CardCheck = ({ listCheck = [], navigate, user_id }) => {
     return (
         <>
             {listCheck.length > 0 ? (
-                <div className="w-full flex flex-col md:flex-row gap-6">
+                <div className="w-full flex flex-col md:flex-row md:flex-wrap gap-6">
                     {listCheck.map((item) => (
                         <div
                             className="flex justify-between items-center bg-slate-100/70 rounded-xl shadow-md px-5 py-4 w-full max-w-xl mx-auto"
