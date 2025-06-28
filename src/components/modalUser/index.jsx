@@ -6,7 +6,6 @@ import { useToggleView } from "../../contexts";
 import { UsuarioService } from "../../service/usuario/UsuarioService";
 
 export const ModalUser = ({ action, id }) => {
-
     const { toggleView, setToggleView } = useToggleView();
 
     const [value, setValue] = useState({
@@ -20,136 +19,108 @@ export const ModalUser = ({ action, id }) => {
         setValue(prev => ({ ...prev, [field]: event.target.value }));
     };
 
-    const createUser = () => {
-        if (value.username === "" || value.email === "" || value.password === "" | value.func === "") {
-            return toast.error("Preencha todos os campos!");
-        };
-
-        const data = {
-            username: value.username,
-            email: value.email,
-            password: value.password,
-            func: value.func
-        };
-
-        UsuarioService.create(data)
-            .then((result) => {
-                toast.success(`${result.message}`);
-            })
-            .catch((error) => { return toast.error(error.message) });
-
-        setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
-
-        setToggleView(false);
-
+    const clearForm = () => {
+        setValue({ username: "", email: "", password: "", func: "garcom" });
     };
 
-    const updateById = () => {
-        if (value.username === "" || value.email === "" || value.password === "" | value.func === "") {
-            return toast.error("Preencha todos os campos!");
-        };
+    const validateFields = () => {
+        const { username, email, password, func } = value;
+        return username && email && password && func;
+    };
 
-        const data = {
-            username: value.username,
-            email: value.email,
-            password: value.password,
-            func: value.func
-        };
+    const handleSubmit = () => {
+        if (!validateFields()) return toast.error("Preencha todos os campos!");
 
-        try {
-            UsuarioService.updateById(id, data)
-                .then((result) => {
-                    toast.success(`${result.message}`);
-                })
-                .catch((error) => { return toast.error(error) });
+        const data = { ...value };
 
-            setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
-            setToggleView(false);
+        const request = action === "new"
+            ? UsuarioService.create(data)
+            : UsuarioService.updateById(id, data);
 
-        } catch (error) {
-            return toast.error(error);
-        };
+        request
+            .then(result => toast.success(result.message))
+            .catch(err => toast.error(err.message || "Erro inesperado."));
+
+        clearForm();
+        setToggleView(false);
     };
 
     const loadUser = () => {
         UsuarioService.getById(id)
-            .then((result) => {
-                setValue(prev => ({
-                    ...prev,
-                    func: result[0].func,
+            .then(result => {
+                setValue({
+                    username: result[0].username,
                     email: result[0].email,
-                    username: result[0].username
-                }));
+                    func: result[0].func,
+                    password: ""
+                });
             })
-            .catch((error) => { return toast.error(error.message) });
+            .catch(error => toast.error(error.message));
     };
 
     useEffect(() => {
-        if (action === "update") {
-            loadUser();
-        } else {
-            setValue(prev => ({ ...prev, password: "", email: "", username: "" }));
-        };
+        if (action === "update") loadUser();
+        else clearForm();
     }, [action, id]);
 
     return (
-        <div className={`${toggleView ? "flex" : "hidden"} fixed top-0 left-0 w-full h-[100dvh] flex flex-col gap-10 justify-center items-center bg-slate-950/50 backdrop-blur-sm`}>
-            
-            <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-5 overflow-hidden">
-                <div className="p-5 bg-[#EB8F00] w-full">
-                    <h6 className="text-white text-center font-bold uppercase text-[18px]">{action === "new" ? "Cadastrar Usuário" : "Atualizar Usuário"}</h6>
-                </div>
-                <label className="text-slate-700 text-sm font-bold mb-2">
+        <div className={`${toggleView ? "flex" : "hidden"} fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center px-4`}>
+            <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-sm p-6 flex flex-col gap-4">
+                <button
+                    onClick={() => setToggleView(false)}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
+                    aria-label="Fechar modal">
+                    <Close />
+                </button>
+
+                <h2 className="text-xl font-bold text-center text-gray-800">
+                    {action === "new" ? "Cadastrar Usuário" : "Atualizar Usuário"}
+                </h2>
+
+                <div className="flex flex-col gap-3">
                     <input
                         type="text"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Nome de usuário"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("username", e)}
                         value={value.username}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
                     <input
                         type="email"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="E-mail"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("email", e)}
                         value={value.email}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
                     <input
                         type="password"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Senha"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         onChange={(e) => handleInput("password", e)}
                         value={value.password}
                     />
-                </label>
 
-                <label className="flex flex-col text-slate-900 font-semibold">
-                    <select className="w-[250px] border p-3 rounded-xl"
-                        id={value.func}
-                        name="func"
+                    <select
+                        className="w-full border p-3 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         value={value.func}
                         onChange={(e) => handleInput("func", e)}>
-                        <option value={`admin`} >Administrador</option>
-                        <option value={`garcom`} >Garçom</option>
-                        <option value={`barmen`} >Barmen</option>
-                        <option value={`cozinha`} >Cozinha</option>
-                        <option value={`online`} >Online</option>
+                        <option value="admin">Administrador</option>
+                        <option value="garcom">Garçom</option>
+                        <option value="barmen">Barmen</option>
+                        <option value="cozinha">Cozinha</option>
+                        <option value="online">Online</option>
                     </select>
-                </label>
+                </div>
 
-                <button className="flex gap-1 justify-center w-[250px] p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                    onClick={() => { action === "new" ? createUser() : updateById() }}
-                ><Plus /> {action === "new" ? "Cadastrar usuário" : "Atualizar usuário"}</button>
+                <button
+                    onClick={handleSubmit}
+                    className="mt-4 w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl transition-all">
+                    <Plus />
+                    {action === "new" ? "Cadastrar usuário" : "Atualizar usuário"}
+                </button>
             </div>
-            <button className="flex justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                onClick={() => setToggleView(false)}
-            ><Close /></button>
         </div>
     );
 };

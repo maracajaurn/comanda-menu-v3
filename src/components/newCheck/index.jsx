@@ -76,53 +76,47 @@ export const NewCheck = ({ is_client = false, user_id }) => {
     }, [value]);
 
     return (
-        <div className={`${toggleView ? "block" : "hidden"} fixed top-0 left-0 h-[100dvh] w-[100vw] bg-slate-950/50 backdrop-blur-sm py-3 px-1 flex flex-col justify-center items-center gap-5`}>
-            
-            <div className="h-[300px] w-[300px] rounded-md border-hidden bg-white pb-10 flex flex-col justify-between items-center overflow-hidden">
-                <div className="p-5 bg-[#EB8F00] w-full">
-                    <h6 className="text-white text-center font-bold uppercase text-[18px]">Nova comanda</h6>
-                </div>
-                <div className="flex flex-col items-center gap-3">
+        <div className={`${toggleView ? "flex" : "hidden"} fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center px-4`}>
+            <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md p-6 flex flex-col gap-4">
 
-                    <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
-                        <input
-                            className="text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            id="name_client"
-                            name="name_client"
-                            required
-                            placeholder="Nome do cliente"
-                            onChange={(e) => handleInput("name_client", e)}
-                            value={value.name_client}
-                        />
-                    </label>
+                <h2 className="text-xl font-bold text-center text-gray-800">
+                    Nova Comanda
+                </h2>
 
-                    <label className="w-[270px] text-sm font-bold mb-2 text-[#1C1D26]">
-                        <input
-                            className="text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            id="indicacao"
-                            name="obs"
-                            required
-                            placeholder="Observação"
-                            onChange={(e) => handleInput("obs", e)}
-                            value={value.obs}
-                        />
-                    </label>
+                <div className="flex flex-col gap-3">
+                    <input
+                        className="text-gray-700 border rounded-xl w-full p-3 focus:ring-2 focus:ring-amber-500"
+                        type="text"
+                        placeholder="Nome do cliente"
+                        onChange={(e) => handleInput("name_client", e)}
+                        value={value.name_client}
+                    />
+
+                    <input
+                        className="text-gray-700 border rounded-xl w-full p-3 focus:ring-2 focus:ring-amber-500"
+                        type="text"
+                        placeholder="Observação"
+                        onChange={(e) => handleInput("obs", e)}
+                        value={value.obs}
+                    />
                 </div>
 
-                <button onClick={() => createCheck()}
+                <button
+                    onClick={() => createCheck()}
                     disabled={loading}
-                    className="w-[270px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
-                >Cadastrar</button>
+                    className="w-full bg-amber-500 text-white font-semibold p-3 rounded-xl hover:bg-amber-600 transition">
+                    Cadastrar
+                </button>
+
+                {!is_client && (
+                    <button
+                        onClick={() => setToggleView(false)}
+                        className="mt-2 flex justify-center items-center gap-2 p-3 font-semibold text-white rounded-xl bg-amber-500 hover:bg-[#1C1D26] transition-all">
+                        <Close />
+                        Fechar
+                    </button>
+                )}
             </div>
-
-            {!is_client && (
-                <button className="flex justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                    onClick={() => setToggleView(false)}
-                ><Close /></button>
-            )}
-
         </div>
     );
 };
