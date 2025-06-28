@@ -9,12 +9,11 @@ export const CardCheck = ({ listCheck = [], navigate, user_id }) => {
     return (
         <>
             {listCheck.length > 0 ? (
-                <div className="w-full flex flex-col gap-6">
+                <div className="w-full flex flex-col md:flex-row gap-6">
                     {listCheck.map((item) => (
                         <div
                             className="flex justify-between items-center bg-slate-100/70 rounded-xl shadow-md px-5 py-4 w-full max-w-xl mx-auto"
-                            key={item.check_id}
-                        >
+                            key={item.check_id}>
                             <div className="flex flex-col gap-1">
                                 <h3 className="text-slate-900 font-bold text-lg">{item.name_client}</h3>
                                 {item.obs && (
@@ -31,8 +30,7 @@ export const CardCheck = ({ listCheck = [], navigate, user_id }) => {
 
                             <button
                                 className="p-3 rounded-full bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all duration-200"
-                                onClick={() => navigate(`/${user_id}/garcom/comanda/${item.check_id}`)}
-                            >
+                                onClick={() => navigate(`/${user_id}/garcom/comanda/${item.check_id}`)}>
                                 <Plus />
                             </button>
                         </div>
@@ -50,8 +48,7 @@ export const CardCheck = ({ listCheck = [], navigate, user_id }) => {
 
                     <button
                         className="p-3 rounded-full bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all duration-200"
-                        onClick={() => setToggleView(true)}
-                    >
+                        onClick={() => setToggleView(true)}>
                         <Plus />
                     </button>
                 </div>
