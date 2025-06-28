@@ -31,7 +31,7 @@ export const Login = () => {
         if (get_func === "barmen" || get_func === "cozinha") {
             navigate(`/${user_id}/${get_func}/producao`)
         } else if (get_func === "admin") {
-            navigate("/admin")
+            navigate(`/${user_id}/admin`);
         } else if (get_func === "garcom") {
             navigate(`/${user_id}/${get_func}/comandas`)
         };
@@ -58,7 +58,7 @@ export const Login = () => {
                         navigate(`/${result.user_id}/${result.func}/producao`);
                         return;
                     } else if (result.func === "admin") {
-                        navigate(`/admin`);
+                        navigate(`/${result.user_id}/admin`);
                         return;
                     } else if (result.func === "garcom") {
                         navigate(`/${result.user_id}/${result.func}/comandas`);
