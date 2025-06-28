@@ -178,7 +178,7 @@ export const Settings = ({ showComponent }) => {
     };
 
     return (
-        <div className={`w-full ${showComponent === 3 ? "flex" : "hidden"} mt-5 flex flex-col gap-6`}>
+        <div className={`w-full ${showComponent === 3 ? "flex" : "hidden"} py-5 flex flex-col gap-6`}>
             <h2 className="w-full text-center p-2 border-2 rounded-md border-[#1C1D26] text-[#1C1D26] font-semibold">
                 Configurações
             </h2>
@@ -249,29 +249,28 @@ export const Settings = ({ showComponent }) => {
 
             <label className={`${toggleView ? "-z-10" : ""} relative w-full flex flex-col gap-3`}>
                 <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-3 relative">
-                    <button
-                        type="button"
-                        onClick={() => document.getElementById("qrcodepix").click()}
-                        className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all">
-                        QR Code Pix
-                    </button>
-
                     {setting.image_pix && (
-                        <div className="relative">
+                        <div className="flex">
                             <img
                                 className="w-[250px] rounded-xl object-cover"
                                 src={setting.image_pix}
                                 alt="Imagem do QR Code Pix"
                             />
                             <button
+                                className="p-2 h-10 text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all delay-75"
                                 type="button"
-                                onClick={(e) => handleSetting("image_pix", "")}
-                                className="absolute bottom-2 right-2 p-2 bg-white text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all"
-                            >
+                                onClick={() => handleSetting("image_pix", "")}>
                                 <Delete />
                             </button>
                         </div>
                     )}
+
+                    <button
+                        type="button"
+                        onClick={() => document.getElementById("qrcodepix").click()}
+                        className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all">
+                        QR Code Pix
+                    </button>
                 </div>
 
                 <input
