@@ -79,6 +79,15 @@ export const NewCheck = ({ is_client = false, user_id }) => {
         <div className={`${toggleView ? "flex" : "hidden"} fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center px-4`}>
             <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md p-6 flex flex-col gap-4">
 
+                {!is_client && (
+                    <button
+                        onClick={() => setToggleView(false)}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
+                        aria-label="Fechar">
+                        <Close />
+                    </button>
+                )}
+
                 <h2 className="text-xl font-bold text-center text-gray-800">
                     Nova Comanda
                 </h2>
@@ -107,15 +116,6 @@ export const NewCheck = ({ is_client = false, user_id }) => {
                     className="w-full bg-amber-500 text-white font-semibold p-3 rounded-xl hover:bg-amber-600 transition">
                     Cadastrar
                 </button>
-
-                {!is_client && (
-                    <button
-                        onClick={() => setToggleView(false)}
-                        className="mt-2 flex justify-center items-center gap-2 p-3 font-semibold text-white rounded-xl bg-amber-500 hover:bg-[#1C1D26] transition-all">
-                        <Close />
-                        Fechar
-                    </button>
-                )}
             </div>
         </div>
     );
