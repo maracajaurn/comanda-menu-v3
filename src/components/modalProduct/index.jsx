@@ -231,121 +231,104 @@ export const ModalProduct = ({ action, id }) => {
     }, [id]);
 
     return (
-        <div className={`${toggleView ? "flex" : "hidden"} fixed top-0 left-0 w-full h-[100dvh] flex flex-col gap-4 justify-center z-10 items-center bg-slate-950/50 backdrop-blur-sm`}>
+        <div className={`${toggleView ? "flex" : "hidden"} fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center px-4`}>
+            <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-lg p-6 overflow-auto max-h-[90vh] flex flex-col gap-4">
 
-            <div className="bg-white min-h-[300px] w-[300px] pb-5 rounded-md flex justify-center items-center flex-col gap-1 overflow-auto">
-                <div className="p-5 bg-[#EB8F00] w-full">
-                    <h6 className="text-white text-center font-bold uppercase text-[18px]">{action === "new" ? "Cadastrar Produto" : "Atualizar Produto"}</h6>
-                </div>
+                <button
+                    className="absolute top-4 right-4 text-gray-500 hover:text-black transition"
+                    onClick={() => setToggleView(false)}
+                    aria-label="Fechar">
+                    <Close />
+                </button>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
-                    <p>Nome do produto</p>
+                <h2 className="text-xl font-bold text-center text-gray-800">
+                    {action === "new" ? "Cadastrar Produto" : "Atualizar Produto"}
+                </h2>
+
+                <div className="flex flex-col gap-3">
                     <input
                         type="text"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Produto"
-                        onChange={(change) => handleInput("product_name", change)}
+                        placeholder="Nome do produto"
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        onChange={(e) => handleInput("product_name", e)}
                         value={value.product_name}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
-                    <p>Preço</p>
                     <input
                         type="number"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Preço"
-                        onChange={(change) => handleInput("price", change)}
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        onChange={(e) => handleInput("price", e)}
                         value={value.price}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
-                    <p>Descrição</p>
                     <textarea
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Descrição"
-                        onChange={(change) => handleInput("description", change)}
-                        value={value.description || undefined}
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        onChange={(e) => handleInput("description", e)}
+                        value={value.description || ""}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
-                    <p>Estoque</p>
                     <input
                         type="number"
-                        className="w-[250px] border rounded-xl p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Estoque"
-                        onChange={(change) => handleInput("stock", change)}
+                        className="w-full border rounded-xl p-3 text-gray-700 focus:ring-2 focus:ring-amber-500"
+                        onChange={(e) => handleInput("stock", e)}
                         value={value.stock}
                     />
-                </label>
 
-                <label className="text-slate-700 text-sm font-bold mb-2">
-                    <p>Categoria</p>
-                    <select className="w-[250px] border p-3 rounded-xl"
-                        id={"category"}
-                        name="category"
+                    <select
+                        className="w-full border p-3 rounded-xl text-gray-700 focus:ring-2 focus:ring-amber-500"
                         value={value.category_id}
-                        onChange={(category) => handleInput("category_id", category)}>
-                        {categories.length > 0 ? (
-                            <>
-                                <option value={0} >Selecione uma categoria</option>
-                                {categories.map((category) => (
-                                    <option key={category.category_id} value={category.category_id} >{category.name_category}</option>
-                                ))}
-                            </>
-                        ) : (
-                            <option value={0}>Cadastre uma categoria primeiro</option>
-                        )}
+                        onChange={(e) => handleInput("category_id", e)}>
+                        <option value={0}>Selecione uma categoria</option>
+                        {categories.map(cat => (
+                            <option key={cat.category_id} value={cat.category_id}>
+                                {cat.name_category}
+                            </option>
+                        ))}
                     </select>
-                </label>
 
-                <label className={`relative w-[90%] flex flex-col items-center gap-3`}>
-                    <div className="w-full flex flex-col items-center gap-3 border rounded-xl p-2 relative">
+                    <div className="flex flex-col items-center gap-2">
                         <button
-                            type="button"
                             onClick={() => document.getElementById("qrcodepix").click()}
-                            className="w-full py-2 bg-[#EB8F00] text-white font-semibold rounded-lg hover:bg-[#1C1D26] transition-all"
-                        >
+                            className="w-full py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-all"
+                            type="button">
                             Imagem do produto
                         </button>
 
                         {value.image && (
-                            <div className="relative w-2/3">
+                            <div className="relative mt-2">
                                 <img
-                                    className="w-[250px] rounded-xl object-cover"
                                     src={value.image}
-                                    alt="Imagem do produto"
+                                    alt="Produto"
+                                    className="w-full rounded-xl max-w-xs object-cover"
                                 />
                                 <button
-                                    type="button"
-                                    onClick={() => setValue((prev) => ({ ...prev, image: "" }))}
-                                    className="absolute bottom-0 right-0 p-2 bg-white text-red-600 rounded-full shadow-md hover:bg-red-100 transition-all"
-                                >
+                                    onClick={() => setValue((prev) => ({ ...prev, image: null }))}
+                                    className="absolute top-2 right-2 bg-white text-red-500 p-2 rounded-full shadow hover:bg-red-100"
+                                    type="button">
                                     <Delete />
                                 </button>
                             </div>
                         )}
+
+                        <input
+                            type="file"
+                            id="qrcodepix"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                        />
                     </div>
+                </div>
 
-                    <input
-                        type="file"
-                        id="qrcodepix"
-                        name="qrcodepix"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                    />
-                </label>
-
-                <button className="flex justify-center w-[250px] p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                    onClick={() => action === "new" ? createProduct() : updateById()}
-                ><Plus /> {action === "new" ? "Cadastrar" : "Atualizar"}</button>
+                <button
+                    className="mt-4 w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl transition-all"
+                    onClick={() => action === "new" ? createProduct() : updateById()}>
+                    <Plus />
+                    {action === "new" ? "Cadastrar" : "Atualizar"}
+                </button>
             </div>
-
-            <button className="flex justify-center p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75"
-                onClick={() => setToggleView(false)}
-            ><Close /></button>
         </div>
     );
 };
