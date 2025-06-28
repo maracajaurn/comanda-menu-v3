@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import { useToggleView, useToggleViewSidebar } from "../../contexts";
 import { LogoutService } from "../../service/logout/LogoutService";
@@ -7,7 +8,7 @@ import { useConnectionMonitor } from "../../hooks/ConnectionMonitor";
 
 import { Back, ArrowRight, BarsOpen } from "../../libs/icons";
 
-export const Navbar = ({ title, url, isLogout }) => {
+export const Navbar = ({ title, url, isLogout, userId }) => {
 
     const { toggleViewSidebar, setToggleViewSidebar } = useToggleViewSidebar();
 
@@ -32,13 +33,19 @@ export const Navbar = ({ title, url, isLogout }) => {
     };
 
     const logout = () => {
-        LogoutService.logout();
+        LogoutService.logout(userId)
+            .then((result) => {
+                toast.success(result.message);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
         setToggleViewSidebar(false);
         navigate("/login");
     };
 
     const get_func = localStorage.getItem("func");
-    const isAdminPage = location.pathname === "/admin";
+    const isAdminPage = location.pathname === `/${userId}/admin`;
 
     return (
         <nav className={`fixed top-0 z-10 w-full h-16 px-5 flex ${url ? "justify-between" : isLogout ? "justify-between" : "justify-center"} items-center bg-[#EB8F00] text-slate-100`}>
