@@ -14,7 +14,6 @@ import { useDebounce } from "../../hooks/UseDebounce";
 import { useVerifyIfClientId } from "../../hooks/UseVerifyIfClientId";
 import { useFCM } from "../../hooks/UseFCM";
 
-
 export const Menu = () => {
     const { setLoading } = useLoader();
     const navigate = useNavigate();
@@ -279,37 +278,39 @@ export const Menu = () => {
 
     return (
         <>
-            <Navbar title={`${setting.estabishment_name}`} />
-            <div className="w-[95%] min-h-[85vh] pb-[200px] px-3 rounded-xl flex items-center flex-col gap-10">
+            <Navbar title={setting.estabishment_name} />
 
+            <main className="w-[95%] min-h-[85vh] pb-[160px] px-3 rounded-xl flex flex-col gap-10 mx-auto">
                 <Filter filter={filter} setFilter={setFilter} />
 
-                <CardProduct
-                    listProducts={listProducts}
-                    selectedProduct={selectedProduct}
-                    obsProduct={obsProduct}
-                    alterQnt={alterQnt}
-                />
+                <section className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 w-full">
+                    <CardProduct
+                        listProducts={listProducts}
+                        selectedProduct={selectedProduct}
+                        obsProduct={obsProduct}
+                        alterQnt={alterQnt}
+                    />
+                </section>
 
                 {loadingHasMore && <LoadingItem />}
 
-                <div className="cart fixed bottom-0 right-0 p-5 flex justify-center items-center animate-bounce">
-                    <div className="flex gap-3 z-50 relative">
-                        {selectedProduct.length > 0 && (
-                            <div className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full absolute border-2 shadow-2xl -top-1 -left-1 z-10">
-                                <h5 className="text-black">{selectedProduct.length}</h5>
-                            </div>
-                        )}
-
-                        <button className={`
-                            ${selectedProduct.length === 0 && "hidden"} w-[50px] h-[50px] p-3 rounded-[100%] text-white font-semibold 
-                            bg-[#171821] hover:text-[#171821] hover:bg-[#EB8F00] transition-all delay-75`}
-                            onClick={() => { navigate(`/${id}/cart`); setToggleView(false) }}
-                            disabled={selectedProduct.length === 0}
-                        ><Cart /></button>
+                {selectedProduct.length > 0 && (
+                    <div className="fixed bottom-6 right-6 z-50 animate-bounce">
+                        <button
+                            className="relative w-16 h-16 bg-[#171821] hover:bg-[#EB8F00] text-white hover:text-black rounded-full shadow-xl flex items-center justify-center transition-all"
+                            onClick={() => {
+                                navigate(`/${id}/cart`);
+                                setToggleView(false);
+                            }}
+                        >
+                            <Cart />
+                            <span className="absolute -top-2 -left-2 w-6 h-6 bg-white text-black text-xs font-bold rounded-full flex items-center justify-center border shadow">
+                                {selectedProduct.length}
+                            </span>
+                        </button>
                     </div>
-                </div>
-            </div>
+                )}
+            </main>
         </>
     );
 };

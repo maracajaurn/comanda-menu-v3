@@ -2,75 +2,71 @@ import { LoadingItem } from "../loadingItem";
 
 import { Plus, Minus, CheckProduct } from "../../libs/icons";
 
-export const CardProduct = ({ listProducts = [], selectedProduct = [], obsProduct, alterQnt }) => {
-    return (
-        <>
-            {listProducts.length > 0 ? listProducts.map((item, index) =>
-                <div key={index} className="card flex flex-col py-4 px-6 w-full rounded-xl bg-slate-100/50 shadow-md border">
-                    <div className="w-full flex items-center justify-between gap-1">
+export const CardProduct = ({ listProducts, selectedProduct, obsProduct, alterQnt }) => {
+    if (listProducts.length === 0) return <LoadingItem />;
+
+    return listProducts.map((item) => {
+        const selected = selectedProduct.find(p => p[1] === item.product_id);
+        const qnt = selected?.[2] || 0;
+        const obs = selected?.[3] || "";
+
+        return (
+            <div key={item.product_id} className="bg-white/90 rounded-xl border shadow p-5 flex flex-col gap-4">
+
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                    <div className="relative w-full md:w-[180px] h-[120px] rounded-md overflow-hidden bg-slate-200">
                         {item.image ? (
-                            <div className="h-[120px] w-[180px] rounded-md bg-slate-300"
-                                style={{
-                                    backgroundImage: `url(${item.image})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center'
-                                }}>
-                                <div className={`
-                                        ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
-                                        w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
-                                    <h6 className="text-white"><CheckProduct /></h6>
-                                </div>
-                            </div>
+                            <img src={item.image} alt={item.product_name} className="w-full h-full object-cover" />
                         ) : (
-                            <div className="h-[120px] w-[180px] rounded-md bg-slate-300 animate-pulse">
-                                <div className={`
-                                    ${selectedProduct.findIndex(product => product[1] === item.product_id) === -1 && "hidden"}
-                                    w-[30px] h-[30px] flex justify-center items-center bg-green-500 rounded-full relative -top-3 -left-3`}>
-                                    <h6 className="text-white"><CheckProduct /></h6>
-                                </div>
-                            </div>
+                            <div className="w-full h-full bg-slate-300 animate-pulse" />
                         )}
 
-                        <div className="w-full flex flex-col items-center justify-between gap-2 text-center">
-                            <h3 className="text-slate-900 text-[25px] font-bold">{item.product_name}</h3>
-                            <p className="text-slate-500 text-[15px] font-semibold">{item.description}</p>
-                            <h3 className="text-slate-500 text-[30px] font-semibold"><span className="text-[#EB8F00]">R$</span> {item.price.toFixed(2).replace(".", ",")}</h3>
-                        </div>
+                        {selected && (
+                            <div className="absolute top-2 left-2 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center">
+                                <CheckProduct />
+                            </div>
+                        )}
                     </div>
 
-                    <div className="flex justify-between gap-2 mt-5">
-                        <label className="w-full">
-                            {selectedProduct.find(product => product[1] === item.product_id)?.[2] && (
-                                <textarea
-                                    placeholder="Observação"
-                                    className="w-full mt-1 border border-slate-500 rounded-[5px] p-1"
-                                    onChange={(e) => obsProduct(item.product_id, e.target.value)}
-                                    value={selectedProduct.find(product => product[1] === item.product_id)?.[3] || ""}
-                                    disabled={selectedProduct.findIndex(product => product[1] === item.product_id) === -1}
-                                />
-                            )}
-                        </label>
-
-                        <div className="w-[150px] flex self-end justify-center items-center gap-3 border-2 border-slate-500 rounded-md my-5">
-                            <button className="py-1 px-5 border-r-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => alterQnt(item.product_id, item.stock, "+")}
-                            ><Plus /></button>
-
-                            <p className="text-[#EB8F00] font-somibold">
-                                {selectedProduct.find(product => product[1] === item.product_id)?.[2] || 0}
-                            </p>
-
-                            <button className="py-1 px-5 border-l-2 border-slate-500 text-slate-900 hover:text-[#EB8F00] transition-all delay-75"
-                                onClick={() => alterQnt(item.product_id, item.stock, "-")}
-                            ><Minus /></button>
-                        </div>
+                    <div className="flex-1 text-center md:text-left">
+                        <h3 className="text-lg font-bold text-slate-800">{item.product_name}</h3>
+                        <p className="text-sm text-slate-500 line-clamp-2">{item.description}</p>
+                        <h4 className="text-2xl font-semibold text-[#EB8F00]">
+                            R$ <span className="text-slate-600">{item.price.toFixed(2).replace(".", ",")}</span>
+                        </h4>
                     </div>
                 </div>
-            ) : (
-                <>
-                    <LoadingItem />
-                </>
-            )}
-        </>
-    );
+
+                <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
+                    <textarea
+                        placeholder="Observação"
+                        className="w-full p-2 border rounded-md resize-none text-sm"
+                        value={obs}
+                        onChange={(e) => obsProduct(item.product_id, e.target.value)}
+                        disabled={!selected}
+                    />
+
+                    <div className="flex items-center justify-between w-full md:w-[180px] bg-white border border-slate-300 rounded-xl shadow-sm overflow-hidden">
+                        <button
+                            onClick={() => alterQnt(item.product_id, item.stock, "-")}
+                            className="w-1/3 flex items-center justify-center py-2 text-xl text-slate-700 hover:text-[#EB8F00] transition-all hover:scale-105"
+                        >
+                            <Minus />
+                        </button>
+
+                        <span className="w-1/3 text-center font-semibold text-[#EB8F00] text-lg select-none">
+                            {qnt}
+                        </span>
+
+                        <button
+                            onClick={() => alterQnt(item.product_id, item.stock, "+")}
+                            className="w-1/3 flex items-center justify-center py-2 text-xl text-slate-700 hover:text-[#EB8F00] transition-all hover:scale-105"
+                        >
+                            <Plus />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    });
 };
