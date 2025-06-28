@@ -111,6 +111,7 @@ export const Cousine = () => {
                 notification: {
                     title: "Pedido pronto",
                     body: `Aê! Tem pedido pronto aí, ehm... \n${product_name} pronto!`,
+                    icon: `/favicon.ico`
                 },
                 webpush: {
                     fcmOptions: {
