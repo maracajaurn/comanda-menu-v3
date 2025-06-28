@@ -110,43 +110,40 @@ export const RegisterClient = () => {
 
     return (
         <>
-            <div className={`flex justify-center items-center`}>
-                <Navbar title="Bem-vindo" />
-                
-                <div className="w-[300px] rounded-md flex flex-col justify-between items-center gap-10">
-                    <div className="flex flex-col items-center gap-3">
+            <Navbar title="Bem-vindo" />
 
-                        <label className="min-w-[350px] text-sm font-bold mb-2 text-[#1C1D26]">
-                            <input
-                                className="focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                                type="text"
-                                id="name_client"
-                                name="name_client"
-                                required
-                                placeholder="Nome do cliente"
-                                onChange={(e) => handleInput("name_client", e)}
-                                value={value.name_client}
-                            />
-                        </label>
+            <div className="w-full min-h-[85vh] flex items-center justify-center">
+                <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-6 flex flex-col gap-8">
 
-                        <label className="min-w-[350px] h-auto text-sm font-bold mb-2 text-[#1C1D26]">
-                            <textarea
-                                className="h-[150px] focus:border-slate-800 text-[#1C1D26] bg-transparent border rounded-xl w-full p-3 leading-tight focus:outline-none focus:shadow-outline"
-                                type="text"
-                                id="indicacao"
-                                name="obs"
-                                required
-                                placeholder="Observação"
-                                onChange={(e) => handleInput("obs", e)}
-                                value={value.obs}
-                            />
-                        </label>
+                    <div className="flex flex-col gap-4">
+                        <input
+                            type="text"
+                            id="name_client"
+                            name="name_client"
+                            required
+                            placeholder="Nome do cliente"
+                            onChange={(e) => handleInput("name_client", e)}
+                            value={value.name_client}
+                            className="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#EB8F00] placeholder:text-slate-400"
+                        />
+
+                        <textarea
+                            id="indicacao"
+                            name="obs"
+                            required
+                            placeholder="Observação"
+                            onChange={(e) => handleInput("obs", e)}
+                            value={value.obs}
+                            className="w-full h-[140px] border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#EB8F00] placeholder:text-slate-400 resize-none"
+                        />
                     </div>
 
-                    <button onClick={() => authenticateClient()}
+                    <button
+                        onClick={authenticateClient}
                         disabled={loading}
-                        className="min-w-[350px] rounded-xl bg-[#EB8F00] text-white font-semibold p-3 hover:bg-[#1C1D26] hover:text-white"
-                    >Cadastrar</button>
+                        className="w-full rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] text-white font-semibold py-3 transition-colors duration-200 disabled:opacity-50">
+                        {loading ? "Cadastrando..." : "Cadastrar"}
+                    </button>
                 </div>
             </div>
         </>
