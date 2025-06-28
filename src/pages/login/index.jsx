@@ -77,32 +77,40 @@ export const Login = () => {
                 return toast.error(error.message)
             });
     };
-    
+
     return (
-        <div className="h-full w-full">
+        <div className="min-h-screen w-full -mt-[75px] bg-[#F5F5F5] flex flex-col">
             <Navbar title="Bem-vindo" />
-            <div className="h-full flex justify-center items-center flex-col">
-                <CInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="E-mail"
-                    onChange={(e) => handleInput("email", e)}
-                    value={value.email}
-                />
 
-                <CInput
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="Senha"
-                    onChange={(e) => handleInput("password", e)}
-                    value={value.password}
-                />
+            <div className="flex flex-1 justify-center items-center">
+                <div className="w-full max-w-sm p-8 bg-white rounded-xl shadow-md flex flex-col gap-5">
+                    <h2 className="text-center text-2xl font-bold text-[#1C1D26]">Acesse sua conta</h2>
 
-                <button className="w-[250px] font-semibold flex justify-center p-3 text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75 uppercase"
-                    onClick={() => login()}
-                >Login</button>
+                    <CInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="E-mail"
+                        onChange={(e) => handleInput("email", e)}
+                        value={value.email}
+                    />
+
+                    <CInput
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Senha"
+                        onChange={(e) => handleInput("password", e)}
+                        value={value.password}
+                    />
+
+                    <button
+                        className="w-full font-semibold p-3 text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-all delay-75 uppercase"
+                        onClick={() => login()}
+                    >
+                        Login
+                    </button>
+                </div>
             </div>
         </div>
     );
