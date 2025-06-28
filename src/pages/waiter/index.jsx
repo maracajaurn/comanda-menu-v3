@@ -269,18 +269,18 @@ export const Waiter = () => {
                                             {(updateOrder.order_id === e.order_id ? updateOrder.data.quantity ?? e.quantity : e.quantity)}
                                         </p>
 
-                                        <button className="px-2 py-1 border-b border-slate-500 text-slate-900 hover:text-[#EB8F00] transition"
+                                        <button className="px-2 py-1 border-b border-slate-500 text-slate-900 hover:text-green-500 transition"
                                             onClick={() => alterQnt(e.order_id, e.quantity, e.obs, e.screen, e.product_name, e.stock, e.product_id, "+")}
                                         ><Plus /></button>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col-reverse items-center border-2 border-slate-500/30 rounded-md">
-                                        <button className="p-1 border-t-2 border-slate-500/30 text-slate-900/30"
+                                    <div className="flex flex-col-reverse items-center border border-slate-500 rounded-md">
+                                        <button className="px-2 py-1 border-t border-slate-500/30 text-slate-900/30"
                                         ><Minus /></button>
 
                                         <p className="text-[#EB8F00]">{e.quantity}</p>
 
-                                        <button className="p-1 border-b-2 border-slate-500/30 text-slate-900/30"
+                                        <button className="px-2 py-1 border-b border-slate-500/30 text-slate-900/30"
                                         ><Plus /></button>
                                     </div>
                                 )}

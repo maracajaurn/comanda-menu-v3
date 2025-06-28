@@ -43,7 +43,7 @@ export const AppRoutes = () => {
             <Route path="/first_access" element={<FirstAccess />} />
             <Route path="/401" element={<NotAuthorized />} />
 
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/:user_id/admin" element={<Admin />} />
             <Route path="/usuarios" element={<ManageUser />} />
             <Route path="/sales_history" element={<SalesHistory />} />
             <Route path="/comandasFinalizadas" element={<ClosedChecks />} />

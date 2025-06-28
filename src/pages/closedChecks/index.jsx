@@ -2,13 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { Plus } from "../../libs/icons";
+import { Right } from "../../libs/icons";
 
 import { Navbar } from "../../components";
 
 import { useLoader } from "../../contexts";
-
-import { Global, Users } from "../../libs/icons";
 
 import { CheckService } from "../../service/check/CheckService";
 
@@ -57,44 +55,47 @@ export const ClosedChecks = () => {
 
             <div className="w-[95%] min-h-[90vh] py-3 px-5 rounded-xl flex items-center flex-col gap-5">
                 <div className="w-full flex sm:flex-row flex-wrap flex-col items-center justify-center gap-5">
+
                     {rows.length > 0 ? rows.map((e) => (
-                        <div className="w-full sm:w-[280px] md:w-[350px] xl:w-[550px] flex justify-between items-center my-3 px-5 py-3 rounded-xl bg-slate-100/50 shadow-md"
+                        <div className="w-full sm:w-[280px] md:w-[350px] xl:w-[550px] my-3 px-5 py-4 rounded-xl bg-white shadow-md border border-slate-200 flex justify-between items-center gap-3"
                             key={e.check_id}>
 
-                            <div className="flex flex-col">
-                                <h3 className="text-slate-900 font-bold flex flex-col gap-3">
-                                    {e.created_for === 1 ? (
-                                        <span className="text-green-500 flex gap-1"><Global /> Online</span>
-                                    ) : (
-                                        <span className="text-blue-600 flex gap-1"><Users /> Garçom</span>
-                                    )}
-                                    <span>{e.name_client}</span>
-                                </h3>
-                                <h3 className="text-slate-400 font-semibold">{e.obs}</h3>
-                                <h4 className="text-slate-500 text-[15px] font-semibold">
-                                    <span className="font-bold text-[#EB8F00]">Total:</span> R$ {parseFloat(e.total_value || 0).toFixed(2).replace(".", ",")}</h4>
-                                <p className="text-slate-500 text-[15px] font-semibold flex gap-1">
-                                    <span>Pagamento:</span>
-                                    <span className="font-bold text-[#EB8F00] flex flex-nowrap">
+                            <div className="flex flex-col justify-between gap-4">
+
+                                <div className="flex flex-col gap-1">
+                                    <span className={`text-sm font-semibold ${e.created_for === 1 ? "text-green-600" : "text-blue-600"}`}>
+                                        {e.created_for === 1 ? "Online" : "Garçom"}
+                                    </span>
+                                    <h3 className="text-xl text-slate-900 font-bold">{e.name_client}</h3>
+                                    {e.obs && <p className="text-slate-500 text-sm">{e.obs}</p>}
+                                </div>
+
+                                <div className="flex flex-col gap-1 mt-2">
+
+                                    <p className="text-sm text-slate-600">
+                                        <span className="font-semibold text-[#EB8F00]">Total:</span> R$ {parseFloat(e.total_value || 0).toFixed(2).replace(".", ",")}
+                                    </p>
+
+                                    <p className="text-sm text-slate-600">
+                                        <span className="font-semibold text-[#EB8F00]">Pagamento:</span>{" "}
                                         {e.pay_form === "credit" ? "Crédito" :
                                             e.pay_form === "debit" ? "Débito" :
                                                 e.pay_form === "pix" ? "Pix" :
                                                     e.pay_form === "cash" ? "Dinheiro" :
                                                         "Ainda não foi pago"}
-                                    </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
 
-                            <button className=" p-2 rounded-md bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75"
-                                onClick={() => navigate(`/admin/garcom/comanda/${e.check_id}`)}
-                            ><Plus /></button>
+                            <button
+                                className="p-4 h-fit rounded-full bg-[#1C1D26] text-white hover:bg-[#EB8F00] transition-all delay-75 text-sm font-semibold"
+                                onClick={() => navigate(`/admin/garcom/comanda/${e.check_id}`)}>
+                                <Right />
+                            </button>
                         </div>
                     )) : (
-                        <div className="flex justify-between items-center my-3 px-5 py-3 w-full rounded-xl shadow-md">
-
-                            <div className="flex flex-col">
-                                <h3 className="text-slate-900 font-bold">Você não possui comandas finalizadas</h3>
-                            </div>
+                        <div className="w-full px-5 py-6 text-center rounded-xl shadow-md bg-white border border-slate-200">
+                            <h3 className="text-slate-700 font-semibold text-lg">Você não possui comandas finalizadas</h3>
                         </div>
                     )}
                 </div>

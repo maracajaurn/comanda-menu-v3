@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import html2canvas from 'html2canvas';
 
@@ -27,6 +27,7 @@ export const Admin = () => {
     });
     const [date, setData] = useState("");
     const navigate = useNavigate();
+    const { user_id } = useParams();
 
     useEffect(() => {
         setLoading(true);
@@ -100,7 +101,7 @@ export const Admin = () => {
 
     return (
         <>
-            <Navbar title={"Resumo do dia"} isLogout sidebar />
+            <Navbar title={"Resumo do dia"} isLogout sidebar userId={user_id} />
             <div className="w-full pt-5 flex flex-col items-center">
                 <main className="w-full max-w-5xl px-4 my-10 pb-20 flex flex-col items-center gap-14" id="screenshotCashier">
                     <section className="w-full flex flex-col gap-6">
