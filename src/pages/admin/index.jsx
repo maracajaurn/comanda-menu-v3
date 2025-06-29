@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 
 import { Navbar } from "../../components";
 import { useLoader } from "../../contexts";
+import { useFCM } from "../../hooks/UseFCM";
 import { useSocketOrderEvents } from "../../hooks/UseSocketEvents";
 import { Grafic, Money, MoneyF, Swath, Cam, Card } from "../../libs/icons";
 
@@ -28,6 +29,8 @@ export const Admin = () => {
     const [date, setData] = useState("");
     const navigate = useNavigate();
     const { user_id } = useParams();
+
+    useFCM(user_id, false);
 
     useEffect(() => {
         setLoading(true);
