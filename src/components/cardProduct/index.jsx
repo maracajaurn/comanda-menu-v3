@@ -11,7 +11,7 @@ export const CardProduct = ({ listProducts, selectedProduct, obsProduct, alterQn
         const obs = selected?.[3] || "";
 
         return (
-            <div key={item.product_id} className="bg-white/90 rounded-xl border shadow p-5 flex flex-col gap-4">
+            <div key={item.product_id} className="bg-white/90 rounded-xl border shadow p-5 flex flex-col gap-4 animate-fadeUp">
 
                 <div className="flex flex-col md:flex-row gap-4 items-center">
                     <div className="relative w-full md:w-[180px] h-[120px] rounded-md overflow-hidden bg-slate-200">
