@@ -2,11 +2,10 @@ import { useState } from "react";
 import toast from 'react-hot-toast';
 
 export const Calc = ({ visibilityCalc }) => {
-
     const [calculo, setCalculo] = useState("0");
 
     const string = (action) => {
-        setCalculo((oldValue) => oldValue !== "0" ? `${oldValue}${action}` : action);
+        setCalculo((old) => old !== "0" ? `${old}${action}` : action);
     };
 
     const result = () => {
@@ -14,54 +13,71 @@ export const Calc = ({ visibilityCalc }) => {
             if (calculo === "") {
                 toast.error("Digite alguma coisa!", { duration: 1200 });
                 return;
-            };
-
-            const result = parseFloat(eval(calculo)).toFixed(2);
-
-            setCalculo(`${result}`);
-
-        } catch (SyntaxError) {
-            toast.error("Esse calculo está mal feito!", { duration: 1200 });
+            }
+            const resultado = parseFloat(eval(calculo)).toFixed(2);
+            setCalculo(`${resultado}`);
+        } catch {
+            toast.error("Esse cálculo está mal feito!", { duration: 1200 });
             setCalculo("0");
-        };
+        }
     };
 
-    const fontSize = calculo.length >= 9 ? '2.5rem' : '3.5rem';
+    const fontSize = calculo.length >= 10 ? '1.5rem' : '2.2rem';
 
     return (
-        <div className={`border ${visibilityCalc ? '' : 'hidden'} border-[#EBAE4D] rounded-md bg-[#EBAE4D]/25 shadow-2xl w-[300px] h-auto pt-2 flex flex-col justify-center items-center gap-4`}>
-            
-            <textarea className="px-1 w-[95%] h-auto bg-[#EBAD00] rounded-md flex items-center justify-end text-6xl text-right flex-wrap"
-                value={calculo}
-                disabled
-                style={{ fontSize }}  
-            />
-
-            <div className="w-[95%] h-[400px] rounded-md flex flex-col gap-1">
-                <div className="w-full h-[75px] border border-[#EBAE4D] rounded-md flex gap-[4px] justify-center items-center">
-                    <button onClick={(e) => string(e.target.value)} type="button" value="/" className="w-[50px] h-[50px] bg-[#CD7F00]/40 rounded-full">/</button>
-                    <button onClick={(e) => string(e.target.value)} type="button" value="*" className="w-[50px] h-[50px] bg-[#CD7F00]/40 rounded-full">x</button>
-                    <button onClick={(e) => string(e.target.value)} type="button" value="-" className="w-[50px] h-[50px] bg-[#CD7F00]/40 rounded-full">-</button>
-                    <button onClick={(e) => string(e.target.value)} type="button" value="+" className="w-[50px] h-[50px] bg-[#CD7F00]/40 rounded-full">+</button>
-                    <button onClick={() => setCalculo("0")} name="limpar" type="button" value="limpar" className="w-[50px] h-[50px] bg-[#EB4200] rounded-full">←</button>
+        <div className={`transition-all duration-300 ${visibilityCalc ? 'scale-100' : 'scale-0'} origin-top-right`}>
+            <div className="w-[340px] rounded-2xl border border-[#EB8F00] bg-[#1C1D26] shadow-lg p-4 flex flex-col gap-4">
+                {/* DISPLAY */}
+                <div className="bg-[#EB8F00] text-white rounded-xl px-4 py-3 text-right font-mono shadow-inner h-[60px] overflow-x-auto" style={{ fontSize }}>
+                    {calculo}
                 </div>
 
-                <div className="flex flex-wrap-reverse gap-[4px] justify-center items-center border border-[#EBAE4D] rounded-md p-1">
-                    <div className="flex gap-[4px]">
-                        <button onClick={(e) => string(e.target.value)} name="0" type="button" value="0" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">0</button>
-                        <button onClick={(e) => string(e.target.value)} name="." type="button" value="." className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">.</button>
-                        <button onClick={(() => result())} type="button" value="=" className="w-[75px] h-[75px] bg-[#1C1D26]/40 rounded-full">=</button>
-                    </div>
+                {/* OPERADORES */}
+                <div className="grid grid-cols-5 gap-2">
+                    {["/", "*", "-", "+", "←"].map((op, i) => (
+                        <button
+                            key={i}
+                            onClick={() => op === "←" ? setCalculo("0") : string(op)}
+                            className={`rounded-xl text-white font-bold py-3 shadow-md active:scale-95 transition-all
+                                ${op === "←" ? "bg-red-600 hover:bg-red-500" : "bg-[#EB8F00] hover:bg-[#e07f00]"}`}
+                        >
+                            {op === "*" ? "×" : op}
+                        </button>
+                    ))}
+                </div>
 
-                    <button onClick={(e) => string(e.target.value)} name="1" type="button" value="1" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">1</button>
-                    <button onClick={(e) => string(e.target.value)} name="2" type="button" value="2" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">2</button>
-                    <button onClick={(e) => string(e.target.value)} name="3" type="button" value="3" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">3</button>
-                    <button onClick={(e) => string(e.target.value)} name="4" type="button" value="4" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">4</button>
-                    <button onClick={(e) => string(e.target.value)} name="5" type="button" value="5" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">5</button>
-                    <button onClick={(e) => string(e.target.value)} name="6" type="button" value="6" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">6</button>
-                    <button onClick={(e) => string(e.target.value)} name="7" type="button" value="7" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">7</button>
-                    <button onClick={(e) => string(e.target.value)} name="8" type="button" value="8" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">8</button>
-                    <button onClick={(e) => string(e.target.value)} name="9" type="button" value="9" className="w-[75px] h-[75px] bg-[#CD5C00]/40 rounded-full">9</button>
+                {/* NÚMEROS */}
+                <div className="grid grid-cols-3 gap-3">
+                    {[1,2,3,4,5,6,7,8,9].map(n => (
+                        <button
+                            key={n}
+                            value={n}
+                            onClick={(e) => string(e.target.value)}
+                            className="py-4 bg-[#2A2B36] text-white text-xl font-semibold rounded-xl shadow-md hover:bg-[#3a3b46] active:scale-95 transition"
+                        >
+                            {n}
+                        </button>
+                    ))}
+                    <button
+                        onClick={(e) => string(e.target.value)}
+                        value="0"
+                        className="py-4 col-span-1 bg-[#2A2B36] text-white text-xl font-semibold rounded-xl shadow-md hover:bg-[#3a3b46] active:scale-95 transition"
+                    >
+                        0
+                    </button>
+                    <button
+                        onClick={(e) => string(e.target.value)}
+                        value="."
+                        className="py-4 bg-[#2A2B36] text-white text-xl font-semibold rounded-xl shadow-md hover:bg-[#3a3b46] active:scale-95 transition"
+                    >
+                        .
+                    </button>
+                    <button
+                        onClick={result}
+                        className="py-4 bg-[#EB8F00] text-white text-xl font-bold rounded-xl shadow-md hover:bg-[#e07f00] active:scale-95 transition"
+                    >
+                        =
+                    </button>
                 </div>
             </div>
         </div>
