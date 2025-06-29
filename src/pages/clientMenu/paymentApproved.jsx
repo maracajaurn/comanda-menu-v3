@@ -15,6 +15,8 @@ import socket from "../../service/socket";
 import { CheckService } from "../../service/check/CheckService";
 import { OrderService } from "../../service/order/OrderService";
 import { PaymentService } from "../../service/payment/PaymentService";
+import { UsuarioService } from "../../service/usuario/UsuarioService";
+import { NotificationService } from "../../service/notification/NotificationService";
 
 export const PaymentApproved = () => {
 
@@ -30,9 +32,12 @@ export const PaymentApproved = () => {
 
     const [products, setProducts] = useState([]);
     const payment_id = searchParams.get("payment_id");
+    const [notifi_id, setNotifi_id] = useState([]);
 
     useEffect(() => {
+        setLoading(true);
         verifyIfClientId();
+        getUsers();
         setProducts(JSON.parse(localStorage.getItem("selected_product")) || []);
     }, []);
 
@@ -68,9 +73,18 @@ export const PaymentApproved = () => {
             });
     }, [payment_id, products]);
 
-    const createOrder = useCallback(() => {
-        setLoading(true);
+    const getUsers = useCallback(() => {
+        const funcs = ["online"];
+        UsuarioService.getByFunc(funcs)
+            .then((result) => {
+                setNotifi_id(result);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, []);
 
+    const createOrder = useCallback(() => {
         const objSocket = {
             client: localStorage.getItem("client"),
             screens: ["online"],
@@ -91,7 +105,9 @@ export const PaymentApproved = () => {
                     socket.emit("new_order", objSocket);
                     setProducts([]);
                     setPaymentInCheck();
-                    return toast.success(result.message)
+                    notify();
+                    toast.success(result.message)
+                    return
                 } else {
                     return toast.error(result.message);
                 };
@@ -115,6 +131,33 @@ export const PaymentApproved = () => {
                 return toast.error(error.message);
             });
     }, [id]);
+
+    const notify = useCallback(() => {
+        let list_payload = [];
+
+        notifi_id.map((item) => {
+            const payload = {
+                token: item.notify_id,
+                notification: {
+                    title: "Pedido Online",
+                    body: "Aê! Tem pedido entrando, vê lá!",
+                    icon: `/favicon.ico`
+                },
+                webpush: {
+                    fcmOptions: {
+                        link: `${process.env.REACT_APP_BASE_URL_FRONT}/${item.user_id}/created_online`,
+                    },
+                },
+            };
+
+            list_payload.push(payload);
+        });
+
+        NotificationService.notifyUser(list_payload)
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    }, [notifi_id]);
 
     return (
         <>

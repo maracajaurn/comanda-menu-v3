@@ -317,7 +317,7 @@ export const ModalProduct = ({ action, id }) => {
                             type="file"
                             id="qrcodepix"
                             className="hidden"
-                            onChange={handleImageUpload}
+                            onChange={(e) => handleImageUpload(e)}
                         />
                     </div>
                 </div>
