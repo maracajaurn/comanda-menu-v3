@@ -110,7 +110,7 @@ export const RegisterClient = () => {
 
     return (
         <>
-            <Navbar title="Bem-vindo" />
+            <Navbar title="Bem-vindo" url/>
 
             <div className="w-full min-h-[85vh] flex items-center justify-center">
                 <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-6 flex flex-col gap-8">
@@ -128,7 +128,7 @@ export const RegisterClient = () => {
                         />
 
                         <textarea
-                            id="indicacao"
+                            id="obs"
                             name="obs"
                             required
                             placeholder="Observação"
