@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 import { Cart } from "../../libs/icons";
 
-import { Navbar, LoadingItem, CardProduct, Filter } from "../../components";
+import { Navbar, CardProduct, Filter } from "../../components";
 
 import { ProductService } from "../../service/product/ProductService";
 import { SettingService } from "../../service/setting/SettingService";
@@ -224,8 +224,6 @@ export const Menu = () => {
                         alterQnt={alterQnt}
                     />
                 </section>
-
-                {loadingHasMore && <LoadingItem />}
 
                 {selectedProduct.length > 0 && (
                     <div className="fixed bottom-6 right-6 z-50 animate-bounce">
