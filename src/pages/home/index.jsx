@@ -13,19 +13,25 @@ export const Home = () => {
             <Navbar title={"Comanda Menu"} />
             <div className="w-full -mt-10 bg-gray-900 text-white min-h-screen flex flex-col">
                 <main className="flex-grow flex flex-col items-center justify-center px-4 py-10">
-                    <section className="text-center max-w-2xl">
+                    <section className="flex flex-col items-center text-center max-w-2xl">
                         <h1 className="text-4xl md:text-5xl font-bold mb-4">
                             Gerencie comandas com agilidade
                         </h1>
                         <p className="text-lg text-gray-300 mb-6">
                             Uma solução moderna e prática para bares, restaurantes e pubs.
                         </p>
-                        <button
-                            onClick={() => navigate("/login")}
-                            className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl transition"
-                        >
-                            Acessar Sistema
-                        </button>
+                        <div className="flex gap-5">
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-6 py-3 rounded-xl transition">
+                                Acessar Sistema
+                            </button>
+                            <button
+                                onClick={() => navigate("/register_client")}
+                                className="border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black font-semibold px-6 py-3 rounded-xl transition">
+                                Abrir Comanda
+                            </button>
+                        </div>
                     </section>
 
                     <section className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 text-center px-4">
