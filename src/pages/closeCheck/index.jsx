@@ -126,6 +126,7 @@ export const CloseCheck = () => {
                                     estabishment_name: result[0].estabishment_name,
                                     serveice_change: result[0].serveice_change,
                                     service_change_percentage: result[0].service_change_percentage,
+                                    service_change_printer: result[0].service_change_printer,
                                     color: result[0].color,
                                     image_pix: base64Image,
                                 }));
@@ -250,7 +251,7 @@ export const CloseCheck = () => {
                     serveice_change={setting.serveice_change ? setting.service_change_percentage : false}
                 />
 
-                {String(setting.service_change_printer) === "1" && (
+                {setting.service_change_printer === 1 && (
                     <button className="px-5 py-2 flex justify-center items-center text-white rounded-xl bg-[#1C1D26] hover:bg-[#EB8F00] transition-all delay-75"
                         onClick={() => print(check.name_client, products, check.total_value)}>
                         <Print />
