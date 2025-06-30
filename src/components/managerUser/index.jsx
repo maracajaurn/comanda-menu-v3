@@ -92,10 +92,9 @@ export const ManagerUser = ({ showComponent }) => {
                             <tr
                                 key={item.user_id}
                                 className={`border-b border-gray-200 ${idx % 2 === 0 ? "bg-[#FFFDF7]" : "bg-white"
-                                    } hover:bg-[#FFF4DB] transition-colors`}
-                            >
+                                    } hover:bg-[#FFF4DB] transition-colors`}>
                                 <td className="px-6 py-3 text-center font-medium">{item.username}</td>
-                                <td className="px-6 py-3 text-center break-all">{item.email}</td>
+                                <td className="px-6 py-3 text-center break-all text-nowrap">{item.email}</td>
                                 <td className="px-6 py-3 text-center font-semibold">
                                     {item.func === "admin"
                                         ? "ADM"
@@ -111,15 +110,13 @@ export const ManagerUser = ({ showComponent }) => {
                                     <button
                                         className="p-2 rounded-md text-white bg-[#EB8F00] hover:bg-[#1C1D26] hover:text-white transition-colors"
                                         onClick={() => handleModal("update", item.user_id)}
-                                        aria-label={`Editar usuário ${item.username}`}
-                                    >
+                                        aria-label={`Editar usuário ${item.username}`}>
                                         <Edit />
                                     </button>
                                     <button
                                         className="p-2 rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors"
                                         onClick={() => deleteUser(item.user_id)}
-                                        aria-label={`Deletar usuário ${item.username}`}
-                                    >
+                                        aria-label={`Deletar usuário ${item.username}`}>
                                         <Delete />
                                     </button>
                                 </td>
@@ -132,8 +129,7 @@ export const ManagerUser = ({ showComponent }) => {
             <button
                 className="mt-6 flex items-center justify-center gap-2 w-full max-w-xs mx-auto p-3 font-semibold text-white rounded-xl bg-[#EB8F00] hover:bg-[#1C1D26] transition-colors duration-200"
                 onClick={() => handleModal("new")}
-                aria-label="Cadastrar novo usuário"
-            >
+                aria-label="Cadastrar novo usuário">
                 <Plus /> Cadastrar usuário
             </button>
         </div>
