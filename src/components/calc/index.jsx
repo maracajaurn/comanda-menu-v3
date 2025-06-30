@@ -25,7 +25,7 @@ export const Calc = ({ visibilityCalc }) => {
     const fontSize = calculo.length >= 10 ? '1.5rem' : '2.2rem';
 
     return (
-        <div className={`transition-all duration-300 ${visibilityCalc ? 'scale-100' : 'scale-0'} origin-top-right`}>
+        <div className={`transition-all duration-300 ${visibilityCalc ? 'w-auto h-auto scale-100' : 'w-0 h-0 scale-0'} origin-top-right`}>
             <div className="w-[340px] rounded-2xl border border-[#EB8F00] bg-[#1C1D26] shadow-lg p-4 flex flex-col gap-4">
                 {/* DISPLAY */}
                 <div className="bg-[#EB8F00] text-white rounded-xl px-4 py-3 text-right font-mono shadow-inner h-[60px] overflow-x-auto" style={{ fontSize }}>
