@@ -6,6 +6,15 @@ Aplicação **React** desenvolvida para gerenciar comandas e pedidos em bares e 
 
 ## 📦 Sobre o Projeto
 
+- Interface web para bares e restaurantes de pequeno porte.
+- Desenvolvido com React.js e estilizado com Tailwind CSS.
+- Navegação fluida com React Router DOM.
+- Suporte a múltiplos perfis de acesso (Admin, Garçom, Cozinha, Cliente).
+- Comunicação com a API via Axios e autenticação com JWT.
+- Atualizações em tempo real com Socket.IO.
+- Integração com Mercado Pago para pagamentos online.
+- Experiência do cliente otimizada para dispositivos móveis.
+
 ---
 
 ## 🧪 Tecnologias Utilizadas
