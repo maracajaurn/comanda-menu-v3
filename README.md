@@ -180,8 +180,8 @@ A autenticação é baseada em JWT. Os tokens são gerados no login e devem ser 
 Integração com Mercado Pago para gerar links de pagamento e receber notificações de retorno via webhook.
 
 ### 📲 Notificações Push 
-Usa o Firebase Cloud Messaging.
-Cada usuário pode registrar um `notify_id` para receber alertas personalizados.
+- Usa o Firebase Cloud Messaging.
+- Cada usuário pode registrar um `notify_id` para receber alertas personalizados.
 
 ### 🧑‍💻 Autor
 [Jackson Souza da Silva](https://github.com/JackSSads)
