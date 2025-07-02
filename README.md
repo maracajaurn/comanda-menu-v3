@@ -4,7 +4,11 @@ Aplicação **React** desenvolvida para gerenciar comandas e pedidos em bares e 
 
 ---
 
-## ⚙️ Tecnologias Utilizadas
+## 📦 Sobre o Projeto
+
+---
+
+## 🧪 Tecnologias Utilizadas
 
 - **React 18**
 - **React Router DOM v6**
@@ -129,6 +133,36 @@ src/
 ├── index.css
 └── index.jsx
 ```
+
+### 📡 Endpoints Principais
+
+| Caminho                                       | Acesso  | Descrição                             |
+| --------------------------------------------- | ------- | ------------------------------------- |
+| `/`                                           | Público | Página inicial                        |
+| `/login`                                      | Público | Tela de login                         |
+| `/first_access`                               | Público | Primeiro acesso / cadastro inicial    |
+| `/401`                                        | Público | Página de não autorizado              |
+| `/usuarios`                                   | Admin   | Gerenciamento de usuários             |
+| `/sales_history`                              | Admin   | Histórico de vendas                   |
+| `/comandasFinalizadas`                        | Admin   | Comandas encerradas                   |
+| `/produtos`                                   | Admin   | Edição de produtos                    |
+| `/:user_id/admin`                             | Admin   | Painel do administrador               |
+| `/:user_id/garcom/comandas`                   | Garçom  | Lista de comandas                     |
+| `/:user_id/garcom/comanda/:id`                | Garçom  | Visualizar comanda                    |
+| `/:user_id/garcom/comanda/:id/add-product`    | Garçom  | Adicionar produtos à comanda          |
+| `/:user_id/garcom/comanda/:id/fechar-comanda` | Garçom  | Finalizar comanda                     |
+| `/:user_id/cozinha/producao`                  | Cozinha | Tela de produção de pedidos (cozinha) |
+| `/:user_id/barmen/producao`                   | Barman  | Tela de produção de pedidos (bar)     |
+| `/register_client`                            | Público | Registro de nova comanda pelo cliente |
+| `/:id/products`                               | Cliente | Cardápio do cliente                   |
+| `/:id/cart`                                   | Cliente | Carrinho do cliente                   |
+| `/:id/to-pay`                                 | Cliente | Tela de pagamento                     |
+| `/:id/payment_approved`                       | Cliente | Confirmação de pagamento aprovado     |
+| `/:id/payment_failure`                        | Cliente | Falha no pagamento                    |
+| `/:id/wait_for_product`                       | Cliente | Aguardando preparo do pedido          |
+| `/:id/created_online`                         | Cliente | Resumo do pedido online criado        |
+| `*`                                           | Público | Página 404 - Não encontrado           |
+
 
 ### 🔐 Autenticação
 A autenticação é baseada em JWT. Os tokens são gerados no login e devem ser enviados via `Authorization: Bearer <token>` nas rotas protegidas.
