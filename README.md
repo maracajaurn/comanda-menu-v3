@@ -44,18 +44,6 @@ REACT_APP_FAVICON_URL=
 ```bash
 npm start
 ```
-    
-## Rodando imagem Docker:
-1. Criando imagem Docker
-```bash
-docker build -t <nome_para_a_imagem>
-```
-
-2. Iniciando o container
-```bash
-docker run -p <porta_do_host>:<porta_do_container> <nome_da_imagem>
-```
-Use a flag `-d` para executar o container em background.
 
 ## 📁 Estrutura de Pastas
 ```
@@ -142,8 +130,20 @@ src/
 └── index.jsx
 ```
 
-## Licença
+### 🔐 Autenticação
+A autenticação é baseada em JWT. Os tokens são gerados no login e devem ser enviados via `Authorization: Bearer <token>` nas rotas protegidas.
 
+### 🧾 Pagamentos
+Integração com Mercado Pago para gerar links de pagamento e receber notificações de retorno via webhook.
+
+### 📲 Notificações Push 
+Usa o Firebase Cloud Messaging.
+Cada usuário pode registrar um `notify_id` para receber alertas personalizados.
+
+### 🧑‍💻 Autor
+[Jackson Souza da Silva](https://github.com/JackSSads)
+
+## Licença
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
-### [Link da api do projeto](https://github.com/JackSSads/comanda-api-v3)
+[API do projeto](https://github.com/JackSSads/comanda-api-v3)
