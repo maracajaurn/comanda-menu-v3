@@ -15,7 +15,7 @@ Aplicação **React** desenvolvida para gerenciar comandas e pedidos em bares e 
 - **React Hot Toast** (feedback de ações)
 - **HTML2Canvas** (captura de tela para impressão ou download)
 
-## Configuração do Ambiente
+## 👷‍♂️ Configuração do Ambiente
 1. Clone este repositório:
 ```bash
 git clone https://github.com/JackSSads/comanda-menu-v3
