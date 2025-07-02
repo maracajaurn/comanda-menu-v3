@@ -145,7 +145,7 @@ src/
 
 ### 📡 Endpoints Principais
 
-| Caminho                                       | Acesso  | Descrição                             |
+| Rota                                          | Acesso  | Descrição                             |
 | --------------------------------------------- | ------- | ------------------------------------- |
 | `/`                                           | Público | Página inicial                        |
 | `/login`                                      | Público | Tela de login                         |
