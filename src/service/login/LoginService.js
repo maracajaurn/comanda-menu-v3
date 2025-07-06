@@ -16,7 +16,7 @@ const login = async (data) => {
     };
 };
 
-const firt_access = async (data) => {
+const first_access = async (data) => {
     try {
         const res = await API.post("api/auth/first_access", data);
 
@@ -50,6 +50,6 @@ const Create_token_for_client = async (client) => {
 
 export const LoginService = {
     login,
-    firt_access,
+    first_access,
     Create_token_for_client,
 };

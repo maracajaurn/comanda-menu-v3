@@ -19,7 +19,6 @@ export const FirstAccess = () => {
         username: "",
         email: "",
         password: "",
-        func: "admin",
     });
 
     const handleInput = (field, event) => {
@@ -29,7 +28,7 @@ export const FirstAccess = () => {
     const create_user = useCallback(() => {
         setLoading(true);
 
-        LoginService.firt_access(value)
+        LoginService.first_access(value)
             .then((result) => {
                 if (result.status) {
                     toast.success(result.message);
