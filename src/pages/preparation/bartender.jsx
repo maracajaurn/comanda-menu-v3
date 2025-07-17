@@ -89,6 +89,7 @@ export const Bartender = () => {
                     setLoading(false);
                     toast.success(result.message);
                     socket.emit("order_ready", { client: name_client, product: name_product, check_id: check_id });
+                    setOrders({});
                     getOrders();
                     return
                 };
